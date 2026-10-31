@@ -23,7 +23,7 @@ Trace every node's reads/writes; run all routes; explain the fan-in barrier and 
 
 ## Captured `--check` output
 
-Real output of `uv run python labs/09_graph_workflows/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+Real, unedited stdout of `uv run python labs/09_graph_workflows/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
 
 ```json
 {
@@ -51,7 +51,102 @@ Real output of `uv run python labs/09_graph_workflows/main.py --check` (no crede
   }
 }
 {
-... (96 lines omitted)
+  "routes": [
+    {
+      "question": "What is the return policy?",
+      "updates": [
+        {
+          "classify": {
+            "route": "supported",
+            "events": [
+              "classify:supported"
+            ]
+          }
+        },
+        {
+          "constraints": {
+            "events": [
+              "constraint:read_only"
+            ]
+          }
+        },
+        {
+          "retrieve": {
+            "evidence": [],
+            "events": [
+              "retrieve"
+            ]
+          }
+        },
+        {
+          "draft": {
+            "draft": "Human routing exercise: review the retrieved policy before replying.",
+            "draft_origin": "human",
+            "status": "drafted",
+            "events": [
+              "draft"
+            ]
+          }
+        }
+      ],
+      "state": {
+        "question": "What is the return policy?",
+        "user_id": "alice",
+        "route": "supported",
+        "evidence": [],
+        "events": [
+          "classify:supported",
+          "constraint:read_only",
+          "retrieve",
+          "draft"
+        ],
+        "draft": "Human routing exercise: review the retrieved policy before replying.",
+        "draft_origin": "human",
+        "status": "drafted"
+      }
+    },
+    {
+      "question": "Please escalate this request",
+      "updates": [
+        {
+          "classify": {
+            "route": "review",
+            "events": [
+              "classify:review"
+            ]
+          }
+        },
+        {
+          "review": {
+            "status": "human_review_required",
+            "events": [
+              "review"
+            ]
+          }
+        }
+      ],
+      "state": {
+        "question": "Please escalate this request",
+        "user_id": "alice",
+        "route": "review",
+        "events": [
+          "classify:review",
+          "review"
+        ],
+        "status": "human_review_required"
+      }
+    },
+    {
+      "question": "Describe Saturn",
+      "updates": [
+        {
+          "classify": {
+            "route": "unsupported",
+            "events": [
+              "classify:unsupported"
+            ]
+          }
+        },
         {
           "unsupported": {
             "status": "unsupported",
@@ -77,5 +172,4 @@ Real output of `uv run python labs/09_graph_workflows/main.py --check` (no crede
   "termination_failure": "Actual nonterminating graph reached recursion limit",
   "live_gate": "Unverified: real model classification and grounded drafting require --live"
 }
-[+121 hidden: rtk recall 24ef82363e51]
 ```

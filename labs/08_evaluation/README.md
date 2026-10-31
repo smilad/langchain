@@ -62,9 +62,9 @@ A lexical miss is not automatically generation failure. Citation membership is n
 
 ## Captured `--check` output
 
-Real output of `uv run python labs/08_evaluation/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+Real, unedited stdout of `uv run python labs/08_evaluation/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Excerpt: first 150 lines only. Compare your own run against it.
 
-```json
+```text
 {
   "preflight": {
     "python": "3.14.0",
@@ -90,31 +90,129 @@ Real output of `uv run python labs/08_evaluation/main.py --check` (no credential
   }
 }
 {
-... (807 lines omitted)
+  "dataset_sha256": "c52d16db367b05d7cf5bc5c35c6dc21f665bd03c93a013101996704308764467",
+  "split": "dev",
+  "trials_declared": 1,
+  "mode": "deterministic retrieval only; no generated answers",
+  "comparison": null,
+  "cost": "No currency estimate: usage when reported is per-row; pricing/rates not assumed",
+  "limitations": [
+    "20 synthetic cases are not a production benchmark",
+    "held-out is review only; no tuning loop",
+    "semantic support requires human review; model grades are not an oracle",
+    "trials reflect provider variability, not statistically strong confidence intervals"
+  ],
+  "summary": {
+    "lexical": {
+      "rows": 12,
+      "mean_seconds": 0.002150034832690532,
+      "population_stdev_seconds": 0.0021311240792657397,
+      "failures": {},
+      "human_reviewed": 0
+    }
+  },
+  "cases": [
+    {
+      "case_id": "a01",
+      "category": "answerable",
+      "split": "dev",
+      "question": "How many calendar days do I have to return unused items with a receipt?",
+      "user_id": "alice",
+      "trial": 1,
+      "strategy": "lexical",
+      "human_rubric": "Must state 30 calendar days after delivery, unused items and receipt; do not repeat old 14-day rule.",
+      "human_review": null,
+      "model_grade": null,
+      "generated_answer": null,
+      "failure_categories": [],
+      "evidence": [
+        {
+          "text": "Returns are accepted within 30 calendar days of delivery with a receipt. Items must be unused. Final-sale items cannot be returned.",
+          "metadata": {
+            "source_id": "RETURN",
+            "version": 2,
+            "current": true,
+            "audience": "public",
+            "title": "Returns",
+            "trust": "policy",
+            "provenance": "Synthetic course author; approved policy",
+            "effective_date": "2026-10-01",
+            "path": "return-v2.json",
+            "content_sha256": "a31916496793af837c1cf1e63299cc8c0cf68259fd5e6d22632d504c86088a3f",
+            "chunk_id": "RETURN:v2:0",
+            "chunk": 0
+          }
+        },
+        {
+          "text": "Submit expense receipts within 45 calendar days of purchase through the expense portal. Receipts must show the date, amount and vendor.",
+          "metadata": {
+            "source_id": "EXPENSE",
+            "version": 1,
+            "current": true,
+            "audience": "public",
+            "title": "Expense submission",
+            "trust": "policy",
+            "provenance": "Synthetic course author; approved policy",
+            "effective_date": "2026-10-01",
+            "path": "expense-v1.json",
+            "content_sha256": "3a7e11574043528e1eb63ca808280663ea8cc8ae9135fcdd4f6384f940a9cc8c",
+            "chunk_id": "EXPENSE:v1:0",
+            "chunk": 0
+          }
+        },
+        {
+          "text": "The warranty covers manufacturing defects for 12 months from purchase. Accidental damage and normal wear are excluded. Keep the purchase receipt.",
+          "metadata": {
+            "source_id": "WARRANTY",
+            "version": 1,
+            "current": true,
+            "audience": "public",
+            "title": "Warranty",
+            "trust": "policy",
+            "provenance": "Synthetic course author; approved policy",
+            "effective_date": "2026-10-01",
+            "path": "warranty-v1.json",
+            "content_sha256": "c4abaacd69279dd007ccd06580778047dfbfe3e897072e0d95e3a901b2dbce47",
+            "chunk_id": "WARRANTY:v1:0",
+            "chunk": 0
+          }
+        }
+      ],
+      "deterministic": {
+        "authorized_current_only": true,
+        "expected_evidence_recall": 1.0,
+        "expected_evidence_missing": [],
+        "citation_membership": null,
         "abstention_matches_label": null,
         "semantic_support": "not a deterministic check"
       },
       "trace": {
-        "retrieval_seconds": 0.0017297079903073609,
+        "retrieval_seconds": 0.00918537494726479,
         "model_calls": 0,
         "usage": [],
         "corpus_sha256": "42dfb685e549233d2795a949c5296ec8f148498f616608b981e541d3ce972066"
       },
-      "elapsed_seconds": 0.0017349160043522716
-    }
-  ],
-  "configuration": {
-    "strategy": "lexical",
-    "k": 3,
-    "trials": 1,
-    "compare_strategy": null,
-    "live": false,
-    "judge": false,
-    "model": null,
-    "embedding_model": null,
-    "dataset_sha256": "c52d16db367b05d7cf5bc5c35c6dc21f665bd03c93a013101996704308764467",
-    "corpus_sha256": "42dfb685e549233d2795a949c5296ec8f148498f616608b981e541d3ce972066"
-  }
-}
-[+832 hidden: rtk recall 53d86df7a7d4]
+      "elapsed_seconds": 0.009193374949973077
+    },
+    {
+      "case_id": "a02",
+      "category": "answerable",
+      "split": "dev",
+      "question": "What is the standard shipping delivery time after dispatch?",
+      "user_id": "bob",
+      "trial": 1,
+      "strategy": "lexical",
+      "human_rubric": "3 to 5 business days after dispatch, not calendar days or time after order placement.",
+      "human_review": null,
+      "model_grade": null,
+      "generated_answer": null,
+      "failure_categories": [],
+      "evidence": [
+        {
+          "text": "Standard shipping takes 3 to 5 business days after dispatch. Order SHIP-42 qualifies for free standard shipping. Express shipping takes 1 business day after dispatch.",
+          "metadata": {
+            "source_id": "SHIPPING",
+            "version": 1,
+            "current": true,
+            "audience": "public",
 ```

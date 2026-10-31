@@ -32,7 +32,7 @@ uv run python labs/09_graph_workflows/main.py --live --question 'Describe Saturn
 <p>Trace every node's reads/writes; run all routes; explain the fan-in barrier and reducer; identify the two actual graph faults; complete <a href="../../exercises/09_graph_workflows.html">the independent variation</a>. Validate source support separately from schema shape. Parallel event order is not a semantic priority guarantee. The graph has bounded recursion and no side-effecting tool.</p>
 <p><strong>Evidence status:</strong> <a href="../../docs/VERIFICATION.html">verification</a> records actual local commands and outcomes separately from unavailable live proof. Installed baseline: Python 3.14.0, LangGraph 1.2.14, LangChain 1.4.4, langchain-openai 1.7.0, Pydantic 2.14.1. Live proof requires provider configuration, not a fake fallback. No learner progress is implied. This lab uses no persistent local state. <a href="../../solutions/09_graph_workflows.html">Solutions</a>.</p>
 <h2>Captured <code>--check</code> output</h2>
-<p>Real output of <code>uv run python labs/09_graph_workflows/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<p>Real, unedited stdout of <code>uv run python labs/09_graph_workflows/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
 <pre><code class="language-json">{
   &quot;preflight&quot;: {
     &quot;python&quot;: &quot;3.14.0&quot;,
@@ -58,7 +58,102 @@ uv run python labs/09_graph_workflows/main.py --live --question 'Describe Saturn
   }
 }
 {
-... (96 lines omitted)
+  &quot;routes&quot;: [
+    {
+      &quot;question&quot;: &quot;What is the return policy?&quot;,
+      &quot;updates&quot;: [
+        {
+          &quot;classify&quot;: {
+            &quot;route&quot;: &quot;supported&quot;,
+            &quot;events&quot;: [
+              &quot;classify:supported&quot;
+            ]
+          }
+        },
+        {
+          &quot;constraints&quot;: {
+            &quot;events&quot;: [
+              &quot;constraint:read_only&quot;
+            ]
+          }
+        },
+        {
+          &quot;retrieve&quot;: {
+            &quot;evidence&quot;: [],
+            &quot;events&quot;: [
+              &quot;retrieve&quot;
+            ]
+          }
+        },
+        {
+          &quot;draft&quot;: {
+            &quot;draft&quot;: &quot;Human routing exercise: review the retrieved policy before replying.&quot;,
+            &quot;draft_origin&quot;: &quot;human&quot;,
+            &quot;status&quot;: &quot;drafted&quot;,
+            &quot;events&quot;: [
+              &quot;draft&quot;
+            ]
+          }
+        }
+      ],
+      &quot;state&quot;: {
+        &quot;question&quot;: &quot;What is the return policy?&quot;,
+        &quot;user_id&quot;: &quot;alice&quot;,
+        &quot;route&quot;: &quot;supported&quot;,
+        &quot;evidence&quot;: [],
+        &quot;events&quot;: [
+          &quot;classify:supported&quot;,
+          &quot;constraint:read_only&quot;,
+          &quot;retrieve&quot;,
+          &quot;draft&quot;
+        ],
+        &quot;draft&quot;: &quot;Human routing exercise: review the retrieved policy before replying.&quot;,
+        &quot;draft_origin&quot;: &quot;human&quot;,
+        &quot;status&quot;: &quot;drafted&quot;
+      }
+    },
+    {
+      &quot;question&quot;: &quot;Please escalate this request&quot;,
+      &quot;updates&quot;: [
+        {
+          &quot;classify&quot;: {
+            &quot;route&quot;: &quot;review&quot;,
+            &quot;events&quot;: [
+              &quot;classify:review&quot;
+            ]
+          }
+        },
+        {
+          &quot;review&quot;: {
+            &quot;status&quot;: &quot;human_review_required&quot;,
+            &quot;events&quot;: [
+              &quot;review&quot;
+            ]
+          }
+        }
+      ],
+      &quot;state&quot;: {
+        &quot;question&quot;: &quot;Please escalate this request&quot;,
+        &quot;user_id&quot;: &quot;alice&quot;,
+        &quot;route&quot;: &quot;review&quot;,
+        &quot;events&quot;: [
+          &quot;classify:review&quot;,
+          &quot;review&quot;
+        ],
+        &quot;status&quot;: &quot;human_review_required&quot;
+      }
+    },
+    {
+      &quot;question&quot;: &quot;Describe Saturn&quot;,
+      &quot;updates&quot;: [
+        {
+          &quot;classify&quot;: {
+            &quot;route&quot;: &quot;unsupported&quot;,
+            &quot;events&quot;: [
+              &quot;classify:unsupported&quot;
+            ]
+          }
+        },
         {
           &quot;unsupported&quot;: {
             &quot;status&quot;: &quot;unsupported&quot;,
@@ -84,5 +179,4 @@ uv run python labs/09_graph_workflows/main.py --live --question 'Describe Saturn
   &quot;termination_failure&quot;: &quot;Actual nonterminating graph reached recursion limit&quot;,
   &quot;live_gate&quot;: &quot;Unverified: real model classification and grounded drafting require --live&quot;
 }
-[+121 hidden: rtk recall 24ef82363e51]
 </code></pre></main></body></html>

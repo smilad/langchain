@@ -39,7 +39,7 @@ Continue with [lessons](../../lessons/12_multi_agent/01.md), [exercise](../../ex
 
 ## Captured `--check` output
 
-Real output of `uv run python labs/12_multi_agent/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+Real, unedited stdout of `uv run python labs/12_multi_agent/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
 
 ```json
 {
@@ -67,7 +67,14 @@ Real output of `uv run python labs/12_multi_agent/main.py --check` (no credentia
   }
 }
 {
-... (8 lines omitted)
+  "contract_cases": [
+    {
+      "question": "What is the return policy?",
+      "user_id": "alice",
+      "evidence_ids": [],
+      "invalid_handoff_rejected": true
+    },
+    {
       "question": "How long does shipping take?",
       "user_id": "bob",
       "evidence_ids": [
@@ -93,5 +100,4 @@ Real output of `uv run python labs/12_multi_agent/main.py --check` (no credentia
   ],
   "live_gate": "Unverified: real single/specialist generation, quality, timing and usage."
 }
-[+33 hidden: rtk recall 48a71b4e8e8e]
 ```

@@ -93,9 +93,9 @@ After manual practice, stop the process before removing your **selected syntheti
 
 ## Captured `--check` output
 
-Real output of `uv run python labs/14_production/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+Real, unedited stdout of `uv run python labs/14_production/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Excerpt: first 150 lines only. Compare your own run against it.
 
-```json
+```text
 {
   "preflight": {
     "python": "3.14.0",
@@ -121,31 +121,129 @@ Real output of `uv run python labs/14_production/main.py --check` (no credential
   }
 }
 {
-... (461 lines omitted)
-      "event": "running",
-      "request_id": "171f76b9ac334fe99624231be6ce2433"
+  "concurrent_starts": [
+    {
+      "result": {
+        "thread_id": "alice-thread",
+        "user_id": "alice",
+        "status": "pending",
+        "state": {
+          "user_id": "alice",
+          "thread_id": "alice-thread",
+          "question": "What is the return policy?",
+          "draft": "Draft explicitly written by Alice",
+          "draft_origin": "human",
+          "source_ids": [],
+          "live": false,
+          "action_id": "51415f05112640f5961735ae26dea6cf",
+          "status": "pending"
+        },
+        "pending_review": [
+          {
+            "kind": "support_review",
+            "draft": "Draft explicitly written by Alice",
+            "draft_origin": "human",
+            "source_ids": [],
+            "allowed_decisions": [
+              "approve",
+              "reject",
+              "edit"
+            ]
+          }
+        ],
+        "actions": []
+      },
+      "request_id": "b74d382c37d74ffb81f488af51eac3df"
     },
     {
-      "event": "deadline_exceeded",
-      "request_id": "171f76b9ac334fe99624231be6ce2433",
-      "effects_may_have_committed": true
+      "result": {
+        "thread_id": "bob-thread",
+        "user_id": "bob",
+        "status": "pending",
+        "state": {
+          "user_id": "bob",
+          "thread_id": "bob-thread",
+          "question": "What is the return policy?",
+          "draft": "Draft explicitly written by Bob",
+          "draft_origin": "human",
+          "source_ids": [],
+          "live": false,
+          "action_id": "f3594685525e4c79b1aff839230f0de5",
+          "status": "pending"
+        },
+        "pending_review": [
+          {
+            "kind": "support_review",
+            "draft": "Draft explicitly written by Bob",
+            "draft_origin": "human",
+            "source_ids": [],
+            "allowed_decisions": [
+              "approve",
+              "reject",
+              "edit"
+            ]
+          }
+        ],
+        "actions": []
+      },
+      "request_id": "5f7fdf6afdf04d0481b162b59867e053"
+    }
+  ],
+  "body_identity_rejected": true,
+  "cross_identity_denied": true,
+  "cancellation": {
+    "request_outcome": {
+      "result": {
+        "request_id": "cancel-190e89eaa52c4ac882734029a76f1c13",
+        "user_id": "alice",
+        "status": "cancelled",
+        "effects_may_have_committed": true
+      },
+      "transient": true
+    },
+    "persisted_thread_http_status": 400,
+    "persisted_thread": {
+      "error": "invalid_request_or_state",
+      "error_type": "ValueError",
+      "request_id": "5064dc19f48b4ba78b6708c9a24f716f"
+    },
+    "interpretation": "Cancelled response is not a rollback guarantee."
+  }
+}
+{
+  "service_events": [
+    {
+      "event": "listening",
+      "host": "127.0.0.1",
+      "port": 52762,
+      "deadline_seconds": 30.0,
+      "max_workers": 4
     },
     {
       "event": "http_response",
-      "method": "POST"
+      "method": "GET"
     },
     {
-      "event": "stopping",
-      "signal": 15
+      "event": "http_response",
+      "method": "GET"
     },
     {
-      "event": "stopped"
-    }
-  ],
-  "exit_code": 0
-}
-{
-  "local_state": "Temporary lab state removed after service shutdown; persistent manual service state is untouched."
-}
-[+486 hidden: rtk recall de7066d83af1]
+      "event": "http_response",
+      "method": "GET"
+    },
+    {
+      "event": "running",
+      "request_id": "b74d382c37d74ffb81f488af51eac3df"
+    },
+    {
+      "event": "running",
+      "request_id": "5f7fdf6afdf04d0481b162b59867e053"
+    },
+    {
+      "event": "completed",
+      "request_id": "5f7fdf6afdf04d0481b162b59867e053",
+      "http_status": 200,
+      "elapsed_seconds": 0.5078666670015082,
+      "error_type": null
+    },
 ```

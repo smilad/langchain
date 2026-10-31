@@ -48,7 +48,7 @@ See [lessons](../../lessons/13_mcp/01.md), [exercise](../../exercises/13_mcp.md)
 
 ## Captured `--check` output
 
-Real output of `uv run python labs/13_mcp/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+Real, unedited stdout of `uv run python labs/13_mcp/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
 
 ```json
 {
@@ -76,7 +76,84 @@ Real output of `uv run python labs/13_mcp/main.py --check` (no credentials, no n
   },
   "api_note": "langchain.mcp is beta in LangChain>=1.4; lockfile is baseline."
 }
-... (78 lines omitted)
+{
+  "discovered_tools": [
+    "catalog_lookup",
+    "catalog_quote"
+  ],
+  "lookup": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"found\":true,\"item_id\":\"notebook\",\"name\":\"Recycled paper notebook\",\"price_cents\":1299,\"currency\":\"USD\",\"stock\":12}",
+        "id": "lc_87753f5a-5cce-4dc2-b80a-66fb19938bbe"
+      }
+    ],
+    "additional_kwargs": {},
+    "response_metadata": {},
+    "type": "tool",
+    "name": "catalog_lookup",
+    "id": null,
+    "tool_call_id": "found",
+    "artifact": {
+      "structured_content": {
+        "found": true,
+        "item_id": "notebook",
+        "name": "Recycled paper notebook",
+        "price_cents": 1299,
+        "currency": "USD",
+        "stock": 12
+      }
+    },
+    "status": "success"
+  },
+  "missing": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"found\":false,\"item_id\":\"absent\"}",
+        "id": "lc_5e1e8e5c-595f-40fe-86ab-e6d903550a6f"
+      }
+    ],
+    "additional_kwargs": {},
+    "response_metadata": {},
+    "type": "tool",
+    "name": "catalog_lookup",
+    "id": null,
+    "tool_call_id": "missing",
+    "artifact": {
+      "structured_content": {
+        "found": false,
+        "item_id": "absent"
+      }
+    },
+    "status": "success"
+  },
+  "quote": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"found\":true,\"quoted\":true,\"item_id\":\"notebook\",\"quantity\":2,\"unit_price_cents\":1299,\"total_cents\":2598,\"currency\":\"USD\",\"stock\":12}",
+        "id": "lc_1ec9353c-6234-41fc-8728-ad987fe16dc7"
+      }
+    ],
+    "additional_kwargs": {},
+    "response_metadata": {},
+    "type": "tool",
+    "name": "catalog_quote",
+    "id": null,
+    "tool_call_id": "quote",
+    "artifact": {
+      "structured_content": {
+        "found": true,
+        "quoted": true,
+        "item_id": "notebook",
+        "quantity": 2,
+        "unit_price_cents": 1299,
+        "total_cents": 2598,
+        "currency": "USD",
+        "stock": 12
+      }
     },
     "status": "success"
   },
@@ -85,7 +162,7 @@ Real output of `uv run python labs/13_mcp/main.py --check` (no credentials, no n
       {
         "type": "text",
         "text": "Error calling tool 'catalog_quote'",
-        "id": "lc_0a413475-3782-48bf-a558-1b72423912d0"
+        "id": "lc_9825722b-6caf-4bef-b026-b6bcc01f0ee2"
       }
     ],
     "additional_kwargs": {},
@@ -102,45 +179,4 @@ Real output of `uv run python labs/13_mcp/main.py --check` (no credentials, no n
   "lifecycle": "Adapter context exited; stdio connection released.",
   "live_gate": "Agent generation not exercised."
 }
-[+103 hidden: rtk recall bd7c5d57ea70]
-  from langchain.mcp import MCPAdapter
-
-
-╭──────────────────────────────────────────────────────────────────────────────╮
-│                                                                              │
-│                                                                              │
-│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
-│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
-│                                                                              │
-│                                                                              │
-│                                                                              │
-│                                FastMCP 4.1.0                                 │
-│                            https://gofastmcp.com                             │
-│                                                                              │
-│               🖥  Server:      Course synthetic catalog, 4.1.0                │
-│               🚀 Deploy free: https://horizon.prefect.io                     │
-│                                                                              │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭──────────────────────────────────────────────────────────────────────────────╮
-│                          🎉 Update available: 4.1.4                          │
-│                      Run: pip install --upgrade fastmcp                      │
-╰──────────────────────────────────────────────────────────────────────────────╯
-
-
-... (46 lines omitted)
-                    ╭─────────── Traceback (most recent call last) ────────────╮
-                    │ <repo>/.venv/li │
-                    │ b/python3.14/site-packages/fastmcp/server/server.py:1467 │
-                    │  in call_tool                                            │
-                    │                                                          │
-                    │ <repo>/.venv/li │
-                    │ b/python3.14/site-packages/fastmcp/tools/base.py:440 in  │
-                    │ _run                                                     │
-                    │                                                          │
-                    │                 ... 9 frames hidden ...                  │
-                    │                                                          │
-                    │ <repo>/.venv/li │
-                    │ b/python3.14/site-packages/fastmcp/tools/function_tool.p │
-                    │ y:96 in wrapper                                          │
-... (truncated)
 ```

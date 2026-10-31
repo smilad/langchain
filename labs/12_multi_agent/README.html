@@ -42,7 +42,7 @@ The middleware limits <strong>named business tools</strong>, not structured-resp
 <p>Missing consent/configuration is not a failed learner concept. Tool/model-budget errors require trace inspection; unauthorized source IDs require fixing the handoff boundary, not increasing context blindly. This lab creates no persistent workflow actions or model transcripts. It reuses the source corpus; do not delete shared policy data to “reset” an experiment. Live evidence must be supplied by an actual configured run.</p>
 <p>Continue with <a href="../../lessons/12_multi_agent/01.html">lessons</a>, <a href="../../exercises/12_multi_agent.html">exercise</a>, and <a href="../../solutions/12_multi_agent.html">reasoned solutions</a>.</p>
 <h2>Captured <code>--check</code> output</h2>
-<p>Real output of <code>uv run python labs/12_multi_agent/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<p>Real, unedited stdout of <code>uv run python labs/12_multi_agent/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
 <pre><code class="language-json">{
   &quot;preflight&quot;: {
     &quot;python&quot;: &quot;3.14.0&quot;,
@@ -68,7 +68,14 @@ The middleware limits <strong>named business tools</strong>, not structured-resp
   }
 }
 {
-... (8 lines omitted)
+  &quot;contract_cases&quot;: [
+    {
+      &quot;question&quot;: &quot;What is the return policy?&quot;,
+      &quot;user_id&quot;: &quot;alice&quot;,
+      &quot;evidence_ids&quot;: [],
+      &quot;invalid_handoff_rejected&quot;: true
+    },
+    {
       &quot;question&quot;: &quot;How long does shipping take?&quot;,
       &quot;user_id&quot;: &quot;bob&quot;,
       &quot;evidence_ids&quot;: [
@@ -94,5 +101,4 @@ The middleware limits <strong>named business tools</strong>, not structured-resp
   ],
   &quot;live_gate&quot;: &quot;Unverified: real single/specialist generation, quality, timing and usage.&quot;
 }
-[+33 hidden: rtk recall 48a71b4e8e8e]
 </code></pre></main></body></html>

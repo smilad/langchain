@@ -21,7 +21,7 @@ For each case record requested capability, trusted actor, exact synthetic source
 
 ## Captured `--check` output
 
-Real output of `uv run python labs/11_middleware_security/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+Real, unedited stdout of `uv run python labs/11_middleware_security/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
 
 ```json
 {
@@ -49,7 +49,30 @@ Real output of `uv run python labs/11_middleware_security/main.py --check` (no c
   }
 }
 {
-... (24 lines omitted)
+  "allowed": {
+    "thread_id": "alice-thread",
+    "status": "pending",
+    "pending_review_count": 1,
+    "action_count": 0
+  },
+  "denied": [
+    {
+      "tool": "inspect_thread",
+      "arguments": {
+        "thread_id": "bob-thread"
+      },
+      "outcome": "denied"
+    },
+    {
+      "tool": "inspect_thread",
+      "arguments": {
+        "thread_id": "bob-thread",
+        "user_id": "bob"
+      },
+      "outcome": "denied"
+    },
+    {
+      "tool": "read_secret",
       "arguments": {},
       "outcome": "denied"
     },
@@ -75,5 +98,4 @@ Real output of `uv run python labs/11_middleware_security/main.py --check` (no c
     "bob": 0
   }
 }
-[+49 hidden: rtk recall 6bf795ae9796]
 ```

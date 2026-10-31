@@ -45,9 +45,9 @@ Complete the [exercise](../../exercises/05_memory_context.md) before opening the
 
 ## Captured `--check` output
 
-Real output of `uv run python labs/05_memory_context/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+Real, unedited stdout of `uv run python labs/05_memory_context/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Excerpt: first 150 lines only. Compare your own run against it.
 
-```json
+```text
 {
   "python": "3.14.0",
   "interpreter": "<repo>/.venv/bin/python",
@@ -73,7 +73,112 @@ Real output of `uv run python labs/05_memory_context/main.py --check` (no creden
 {
   "alice_thread": {
     "messages": [
-... (106 lines omitted)
+      {
+        "content": "I prefer short replies.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "human",
+        "name": null,
+        "id": "1454fc1a-40be-4ed0-8bf1-50d13b34dbda"
+      },
+      {
+        "content": "Look up notebook.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "human",
+        "name": null,
+        "id": "f2877c5a-5556-4a53-bccd-d0827521e25d"
+      }
+    ],
+    "user_id": "alice",
+    "selected_preference": {
+      "style": "short"
+    }
+  },
+  "bob_thread": {
+    "messages": [
+      {
+        "content": "Look up desk-lamp.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "human",
+        "name": null,
+        "id": "896ba4cd-2b16-4485-bad3-a1305bd5c346"
+      }
+    ],
+    "user_id": "bob",
+    "selected_preference": {}
+  },
+  "alice_other_thread": {
+    "messages": [
+      {
+        "content": "A new conversation.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "human",
+        "name": null,
+        "id": "a00b02f1-c924-48cf-be7a-4b4b28266255"
+      }
+    ],
+    "user_id": "alice",
+    "selected_preference": {
+      "style": "short"
+    }
+  },
+  "ownership": "Cross-user thread reuse rejected before graph access",
+  "checkpoint_count": 6,
+  "context_comparison": {
+    "full": [
+      {
+        "content": "Synthetic preference: short replies. My old request concerned a notebook.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "human",
+        "name": null,
+        "id": "early"
+      },
+      {
+        "content": "Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. ",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "human",
+        "name": null,
+        "id": "irrelevant"
+      },
+      {
+        "content": "Quote 2 notebooks; use fresh catalog facts.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "human",
+        "name": null,
+        "id": "latest"
+      }
+    ],
+    "trimmed": [
+      {
+        "content": "Quote 2 notebooks; use fresh catalog facts.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "human",
+        "name": null,
+        "id": "latest"
+      }
+    ],
+    "human_summarized": [
+      {
+        "content": "Human-authored summary, not model output: user requested short replies and considered notebook.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "human",
+        "name": null,
+        "id": null
+      },
+      {
+        "content": "Quote 2 notebooks; use fresh catalog facts.",
+        "additional_kwargs": {},
+        "response_metadata": {},
+        "type": "human",
+        "name": null,
         "id": "latest"
       }
     ],
@@ -93,11 +198,4 @@ Real output of `uv run python labs/05_memory_context/main.py --check` (no creden
     "stock": 12
   }
 }
-{
-  "deleted_store_preference": true,
-  "old_checkpoint_still_contains_selected_preference": true,
-  "durability": "In-memory objects survive graph reconstruction, not process restart",
-  "live_gate": "Not exercised: model recall, generated summary accuracy, provider context validity"
-}
-[+131 hidden: rtk recall 2a3c5625bcf2]
 ```

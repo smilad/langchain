@@ -55,8 +55,8 @@ uv run python labs/08_evaluation/main.py --live --trials 2 --split held_out --co
 <p>A lexical miss is not automatically generation failure. Citation membership is not entailment. Outdated or forbidden evidence is a boundary defect, not something to average away. Distinguish target errors, retrieval relevance, unsupported claims, abstention decisions, grader errors, and missing environment configuration. Record usage only when actually reported; absent usage is not zero spend. Hosted traces require separate credentials and permission to upload content.</p>
 <p><strong>Acceptance:</strong> produce a registered per-case experiment, inspect errors and evidence, and justify the comparison without tuning on confirmatory results. With no provider, finish local retrieval/registration boundaries and mark generated semantic quality, model grades, embedding relevance, and hosted evaluation unverified.</p>
 <h2>Captured <code>--check</code> output</h2>
-<p>Real output of <code>uv run python labs/08_evaluation/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
-<pre><code class="language-json">{
+<p>Real, unedited stdout of <code>uv run python labs/08_evaluation/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Excerpt: first 150 lines only. Compare your own run against it.</p>
+<pre><code class="language-text">{
   &quot;preflight&quot;: {
     &quot;python&quot;: &quot;3.14.0&quot;,
     &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
@@ -81,31 +81,129 @@ uv run python labs/08_evaluation/main.py --live --trials 2 --split held_out --co
   }
 }
 {
-... (807 lines omitted)
+  &quot;dataset_sha256&quot;: &quot;c52d16db367b05d7cf5bc5c35c6dc21f665bd03c93a013101996704308764467&quot;,
+  &quot;split&quot;: &quot;dev&quot;,
+  &quot;trials_declared&quot;: 1,
+  &quot;mode&quot;: &quot;deterministic retrieval only; no generated answers&quot;,
+  &quot;comparison&quot;: null,
+  &quot;cost&quot;: &quot;No currency estimate: usage when reported is per-row; pricing/rates not assumed&quot;,
+  &quot;limitations&quot;: [
+    &quot;20 synthetic cases are not a production benchmark&quot;,
+    &quot;held-out is review only; no tuning loop&quot;,
+    &quot;semantic support requires human review; model grades are not an oracle&quot;,
+    &quot;trials reflect provider variability, not statistically strong confidence intervals&quot;
+  ],
+  &quot;summary&quot;: {
+    &quot;lexical&quot;: {
+      &quot;rows&quot;: 12,
+      &quot;mean_seconds&quot;: 0.002150034832690532,
+      &quot;population_stdev_seconds&quot;: 0.0021311240792657397,
+      &quot;failures&quot;: {},
+      &quot;human_reviewed&quot;: 0
+    }
+  },
+  &quot;cases&quot;: [
+    {
+      &quot;case_id&quot;: &quot;a01&quot;,
+      &quot;category&quot;: &quot;answerable&quot;,
+      &quot;split&quot;: &quot;dev&quot;,
+      &quot;question&quot;: &quot;How many calendar days do I have to return unused items with a receipt?&quot;,
+      &quot;user_id&quot;: &quot;alice&quot;,
+      &quot;trial&quot;: 1,
+      &quot;strategy&quot;: &quot;lexical&quot;,
+      &quot;human_rubric&quot;: &quot;Must state 30 calendar days after delivery, unused items and receipt; do not repeat old 14-day rule.&quot;,
+      &quot;human_review&quot;: null,
+      &quot;model_grade&quot;: null,
+      &quot;generated_answer&quot;: null,
+      &quot;failure_categories&quot;: [],
+      &quot;evidence&quot;: [
+        {
+          &quot;text&quot;: &quot;Returns are accepted within 30 calendar days of delivery with a receipt. Items must be unused. Final-sale items cannot be returned.&quot;,
+          &quot;metadata&quot;: {
+            &quot;source_id&quot;: &quot;RETURN&quot;,
+            &quot;version&quot;: 2,
+            &quot;current&quot;: true,
+            &quot;audience&quot;: &quot;public&quot;,
+            &quot;title&quot;: &quot;Returns&quot;,
+            &quot;trust&quot;: &quot;policy&quot;,
+            &quot;provenance&quot;: &quot;Synthetic course author; approved policy&quot;,
+            &quot;effective_date&quot;: &quot;2026-10-01&quot;,
+            &quot;path&quot;: &quot;return-v2.json&quot;,
+            &quot;content_sha256&quot;: &quot;a31916496793af837c1cf1e63299cc8c0cf68259fd5e6d22632d504c86088a3f&quot;,
+            &quot;chunk_id&quot;: &quot;RETURN:v2:0&quot;,
+            &quot;chunk&quot;: 0
+          }
+        },
+        {
+          &quot;text&quot;: &quot;Submit expense receipts within 45 calendar days of purchase through the expense portal. Receipts must show the date, amount and vendor.&quot;,
+          &quot;metadata&quot;: {
+            &quot;source_id&quot;: &quot;EXPENSE&quot;,
+            &quot;version&quot;: 1,
+            &quot;current&quot;: true,
+            &quot;audience&quot;: &quot;public&quot;,
+            &quot;title&quot;: &quot;Expense submission&quot;,
+            &quot;trust&quot;: &quot;policy&quot;,
+            &quot;provenance&quot;: &quot;Synthetic course author; approved policy&quot;,
+            &quot;effective_date&quot;: &quot;2026-10-01&quot;,
+            &quot;path&quot;: &quot;expense-v1.json&quot;,
+            &quot;content_sha256&quot;: &quot;3a7e11574043528e1eb63ca808280663ea8cc8ae9135fcdd4f6384f940a9cc8c&quot;,
+            &quot;chunk_id&quot;: &quot;EXPENSE:v1:0&quot;,
+            &quot;chunk&quot;: 0
+          }
+        },
+        {
+          &quot;text&quot;: &quot;The warranty covers manufacturing defects for 12 months from purchase. Accidental damage and normal wear are excluded. Keep the purchase receipt.&quot;,
+          &quot;metadata&quot;: {
+            &quot;source_id&quot;: &quot;WARRANTY&quot;,
+            &quot;version&quot;: 1,
+            &quot;current&quot;: true,
+            &quot;audience&quot;: &quot;public&quot;,
+            &quot;title&quot;: &quot;Warranty&quot;,
+            &quot;trust&quot;: &quot;policy&quot;,
+            &quot;provenance&quot;: &quot;Synthetic course author; approved policy&quot;,
+            &quot;effective_date&quot;: &quot;2026-10-01&quot;,
+            &quot;path&quot;: &quot;warranty-v1.json&quot;,
+            &quot;content_sha256&quot;: &quot;c4abaacd69279dd007ccd06580778047dfbfe3e897072e0d95e3a901b2dbce47&quot;,
+            &quot;chunk_id&quot;: &quot;WARRANTY:v1:0&quot;,
+            &quot;chunk&quot;: 0
+          }
+        }
+      ],
+      &quot;deterministic&quot;: {
+        &quot;authorized_current_only&quot;: true,
+        &quot;expected_evidence_recall&quot;: 1.0,
+        &quot;expected_evidence_missing&quot;: [],
+        &quot;citation_membership&quot;: null,
         &quot;abstention_matches_label&quot;: null,
         &quot;semantic_support&quot;: &quot;not a deterministic check&quot;
       },
       &quot;trace&quot;: {
-        &quot;retrieval_seconds&quot;: 0.0017297079903073609,
+        &quot;retrieval_seconds&quot;: 0.00918537494726479,
         &quot;model_calls&quot;: 0,
         &quot;usage&quot;: [],
         &quot;corpus_sha256&quot;: &quot;42dfb685e549233d2795a949c5296ec8f148498f616608b981e541d3ce972066&quot;
       },
-      &quot;elapsed_seconds&quot;: 0.0017349160043522716
-    }
-  ],
-  &quot;configuration&quot;: {
-    &quot;strategy&quot;: &quot;lexical&quot;,
-    &quot;k&quot;: 3,
-    &quot;trials&quot;: 1,
-    &quot;compare_strategy&quot;: null,
-    &quot;live&quot;: false,
-    &quot;judge&quot;: false,
-    &quot;model&quot;: null,
-    &quot;embedding_model&quot;: null,
-    &quot;dataset_sha256&quot;: &quot;c52d16db367b05d7cf5bc5c35c6dc21f665bd03c93a013101996704308764467&quot;,
-    &quot;corpus_sha256&quot;: &quot;42dfb685e549233d2795a949c5296ec8f148498f616608b981e541d3ce972066&quot;
-  }
-}
-[+832 hidden: rtk recall 53d86df7a7d4]
+      &quot;elapsed_seconds&quot;: 0.009193374949973077
+    },
+    {
+      &quot;case_id&quot;: &quot;a02&quot;,
+      &quot;category&quot;: &quot;answerable&quot;,
+      &quot;split&quot;: &quot;dev&quot;,
+      &quot;question&quot;: &quot;What is the standard shipping delivery time after dispatch?&quot;,
+      &quot;user_id&quot;: &quot;bob&quot;,
+      &quot;trial&quot;: 1,
+      &quot;strategy&quot;: &quot;lexical&quot;,
+      &quot;human_rubric&quot;: &quot;3 to 5 business days after dispatch, not calendar days or time after order placement.&quot;,
+      &quot;human_review&quot;: null,
+      &quot;model_grade&quot;: null,
+      &quot;generated_answer&quot;: null,
+      &quot;failure_categories&quot;: [],
+      &quot;evidence&quot;: [
+        {
+          &quot;text&quot;: &quot;Standard shipping takes 3 to 5 business days after dispatch. Order SHIP-42 qualifies for free standard shipping. Express shipping takes 1 business day after dispatch.&quot;,
+          &quot;metadata&quot;: {
+            &quot;source_id&quot;: &quot;SHIPPING&quot;,
+            &quot;version&quot;: 1,
+            &quot;current&quot;: true,
+            &quot;audience&quot;: &quot;public&quot;,
 </code></pre></main></body></html>

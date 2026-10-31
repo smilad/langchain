@@ -56,7 +56,7 @@ uv run python labs/10_durable_approval/main.py --operation decide --thread live-
 <p>Exactly-once means a single atomic owned <strong>local record</strong> under replay, not general email/network exactly-once delivery. Stable identity plus unique transaction handles a sink-commit/checkpoint crash window. File locking serializes local operations and limits throughput; this is not a distributed deployment. Synthetic drafts remain in private SQLite files.</p>
 <p>For reset, stop every using process, remove only dedicated experiment files (checkpoint DB, its <code>-wal</code>/<code>-shm</code>/<code>.lock</code>, action DB and its <code>-wal</code>/<code>-shm</code>), and use new paired files. Do not reset shared <code>.course</code> blindly. <strong>Evidence status:</strong> <a href="../../docs/VERIFICATION.html">verification</a> records actual local commands/outcomes separately from unavailable live proof. Installed baseline: Python 3.14.0, LangGraph 1.2.14, langgraph-checkpoint-sqlite 3.1.1. <a href="../../exercises/10_durable_approval.html">Exercise</a>, <a href="../../solutions/10_durable_approval.html">solutions</a>.</p>
 <h2>Captured <code>--check</code> output</h2>
-<p>Real output of <code>uv run python labs/10_durable_approval/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<p>Real, unedited stdout of <code>uv run python labs/10_durable_approval/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
 <pre><code class="language-json">{
   &quot;preflight&quot;: {
     &quot;python&quot;: &quot;3.14.0&quot;,
@@ -82,25 +82,76 @@ uv run python labs/10_durable_approval/main.py --operation decide --thread live-
   }
 }
 {
-... (52 lines omitted)
+  &quot;approved&quot;: {
+    &quot;thread_id&quot;: &quot;approve&quot;,
+    &quot;user_id&quot;: &quot;alice&quot;,
+    &quot;status&quot;: &quot;recorded&quot;,
+    &quot;state&quot;: {
+      &quot;user_id&quot;: &quot;alice&quot;,
+      &quot;thread_id&quot;: &quot;approve&quot;,
+      &quot;question&quot;: &quot;Return policy?&quot;,
+      &quot;draft&quot;: &quot;Human-authored original draft&quot;,
+      &quot;draft_origin&quot;: &quot;human&quot;,
+      &quot;source_ids&quot;: [],
+      &quot;live&quot;: false,
+      &quot;action_id&quot;: &quot;93cbe3441a2148ebabc7ab3d877567b8&quot;,
+      &quot;decision&quot;: &quot;approve&quot;,
+      &quot;status&quot;: &quot;recorded&quot;
+    },
+    &quot;pending_review&quot;: [],
+    &quot;actions&quot;: [
+      {
+        &quot;action_id&quot;: &quot;93cbe3441a2148ebabc7ab3d877567b8&quot;,
+        &quot;thread_id&quot;: &quot;approve&quot;,
+        &quot;user_id&quot;: &quot;alice&quot;,
+        &quot;draft&quot;: &quot;Human-authored original draft&quot;,
+        &quot;created_at&quot;: &quot;2026-10-31 10:03:31&quot;
+      }
+    ]
+  },
+  &quot;rejected&quot;: {
+    &quot;thread_id&quot;: &quot;reject&quot;,
+    &quot;user_id&quot;: &quot;alice&quot;,
+    &quot;status&quot;: &quot;rejected&quot;,
+    &quot;state&quot;: {
+      &quot;user_id&quot;: &quot;alice&quot;,
+      &quot;thread_id&quot;: &quot;reject&quot;,
+      &quot;question&quot;: &quot;Return policy?&quot;,
+      &quot;draft&quot;: &quot;Human-authored original draft&quot;,
+      &quot;draft_origin&quot;: &quot;human&quot;,
+      &quot;source_ids&quot;: [],
+      &quot;live&quot;: false,
+      &quot;action_id&quot;: &quot;4957f57d3515478b9ab4401a117a475b&quot;,
+      &quot;decision&quot;: &quot;reject&quot;,
+      &quot;status&quot;: &quot;rejected&quot;
+    },
+    &quot;pending_review&quot;: [],
+    &quot;actions&quot;: []
+  },
+  &quot;edited&quot;: {
+    &quot;thread_id&quot;: &quot;edit&quot;,
+    &quot;user_id&quot;: &quot;alice&quot;,
+    &quot;status&quot;: &quot;recorded&quot;,
+    &quot;state&quot;: {
+      &quot;user_id&quot;: &quot;alice&quot;,
       &quot;thread_id&quot;: &quot;edit&quot;,
       &quot;question&quot;: &quot;Return policy?&quot;,
       &quot;draft&quot;: &quot;Human-reviewed corrected text&quot;,
       &quot;draft_origin&quot;: &quot;human&quot;,
       &quot;source_ids&quot;: [],
       &quot;live&quot;: false,
-      &quot;action_id&quot;: &quot;68fe9530213747f4a0d92b81facaeb5f&quot;,
+      &quot;action_id&quot;: &quot;5fcd7572b241451990f70fc16e3955c1&quot;,
       &quot;decision&quot;: &quot;edit&quot;,
       &quot;status&quot;: &quot;recorded&quot;
     },
     &quot;pending_review&quot;: [],
     &quot;actions&quot;: [
       {
-        &quot;action_id&quot;: &quot;68fe9530213747f4a0d92b81facaeb5f&quot;,
+        &quot;action_id&quot;: &quot;5fcd7572b241451990f70fc16e3955c1&quot;,
         &quot;thread_id&quot;: &quot;edit&quot;,
         &quot;user_id&quot;: &quot;alice&quot;,
         &quot;draft&quot;: &quot;Human-reviewed corrected text&quot;,
-        &quot;created_at&quot;: &quot;2026-10-31 09:31:45&quot;
+        &quot;created_at&quot;: &quot;2026-10-31 10:03:31&quot;
       }
     ]
   },
@@ -108,5 +159,4 @@ uv run python labs/10_durable_approval/main.py --operation decide --thread live-
   &quot;limits&quot;: &quot;Close/reopen verified by this command; separate CLI invocations are the process-restart gate. Exactly-once concerns only atomic local SQLite records.&quot;,
   &quot;live_gate&quot;: &quot;Model drafting unverified without --live and provider consent&quot;
 }
-[+77 hidden: rtk recall 291c432d2022]
 </code></pre></main></body></html>

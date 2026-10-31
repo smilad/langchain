@@ -34,7 +34,7 @@ Sources: [uv](https://docs.astral.sh/uv/guides/projects/), [Pydantic](https://do
 
 ## Captured `--check` output
 
-Real output of `uv run python labs/00_setup/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+Real, unedited stdout of `uv run python labs/00_setup/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
 
 ```json
 {
@@ -62,7 +62,75 @@ Real output of `uv run python labs/00_setup/main.py --check` (no credentials, no
   },
   "configuration_present": {
     "OPENAI_API_KEY": false,
-... (69 lines omitted)
+    "COURSE_MODEL": false
+  }
+}
+{
+  "validated_request": {
+    "request_id": "REQ-01",
+    "quantity": 2
+  },
+  "json_round_trip": {
+    "request_id": "REQ-01",
+    "quantity": 2
+  }
+}
+{
+  "case": "invalid_json",
+  "error": "JSONDecodeError",
+  "line": 1,
+  "column": 13
+}
+{
+  "case": "missing_field",
+  "errors": [
+    {
+      "location": [
+        "request_id"
+      ],
+      "type": "missing"
+    }
+  ]
+}
+{
+  "case": "wrong_type",
+  "errors": [
+    {
+      "location": [
+        "quantity"
+      ],
+      "type": "int_type"
+    }
+  ]
+}
+{
+  "case": "out_of_range",
+  "errors": [
+    {
+      "location": [
+        "quantity"
+      ],
+      "type": "greater_than_equal"
+    }
+  ]
+}
+{
+  "case": "blank_id",
+  "errors": [
+    {
+      "location": [],
+      "type": "value_error"
+    }
+  ]
+}
+{
+  "traceback_frames": [
+    {
+      "function": "main",
+      "line": 83
+    },
+    {
+      "function": "read_request",
       "line": 29
     },
     {
@@ -88,5 +156,4 @@ Real output of `uv run python labs/00_setup/main.py --check` (no credentials, no
   "live_gate": "No model call belongs to setup; provider verification is in Module 01.",
   "mode": "check"
 }
-[+94 hidden: rtk recall 0b65e31ade19]
 ```

@@ -47,8 +47,8 @@ uv run python labs/05_memory_context/main.py --check
 <p>The token counter is approximate and does not guarantee fit for every provider. Complete tool-call/result pairing must survive selection. Summaries can omit facts, introduce mistakes or carry untrusted instructions; they cannot grant permission. Use synthetic data only and do not upload traces without considering consent/retention.</p>
 <p>Complete the <a href="../../exercises/05_memory_context.html">exercise</a> before opening the <a href="../../solutions/05_memory_context.html">solution</a>. No live run or learner mastery is claimed when model credentials/consent are unavailable. Sources consulted 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">short-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/long-term-memory">long-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/middleware/custom">custom middleware</a>.</p>
 <h2>Captured <code>--check</code> output</h2>
-<p>Real output of <code>uv run python labs/05_memory_context/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
-<pre><code class="language-json">{
+<p>Real, unedited stdout of <code>uv run python labs/05_memory_context/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Excerpt: first 150 lines only. Compare your own run against it.</p>
+<pre><code class="language-text">{
   &quot;python&quot;: &quot;3.14.0&quot;,
   &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
   &quot;packages&quot;: {
@@ -73,7 +73,112 @@ uv run python labs/05_memory_context/main.py --check
 {
   &quot;alice_thread&quot;: {
     &quot;messages&quot;: [
-... (106 lines omitted)
+      {
+        &quot;content&quot;: &quot;I prefer short replies.&quot;,
+        &quot;additional_kwargs&quot;: {},
+        &quot;response_metadata&quot;: {},
+        &quot;type&quot;: &quot;human&quot;,
+        &quot;name&quot;: null,
+        &quot;id&quot;: &quot;1454fc1a-40be-4ed0-8bf1-50d13b34dbda&quot;
+      },
+      {
+        &quot;content&quot;: &quot;Look up notebook.&quot;,
+        &quot;additional_kwargs&quot;: {},
+        &quot;response_metadata&quot;: {},
+        &quot;type&quot;: &quot;human&quot;,
+        &quot;name&quot;: null,
+        &quot;id&quot;: &quot;f2877c5a-5556-4a53-bccd-d0827521e25d&quot;
+      }
+    ],
+    &quot;user_id&quot;: &quot;alice&quot;,
+    &quot;selected_preference&quot;: {
+      &quot;style&quot;: &quot;short&quot;
+    }
+  },
+  &quot;bob_thread&quot;: {
+    &quot;messages&quot;: [
+      {
+        &quot;content&quot;: &quot;Look up desk-lamp.&quot;,
+        &quot;additional_kwargs&quot;: {},
+        &quot;response_metadata&quot;: {},
+        &quot;type&quot;: &quot;human&quot;,
+        &quot;name&quot;: null,
+        &quot;id&quot;: &quot;896ba4cd-2b16-4485-bad3-a1305bd5c346&quot;
+      }
+    ],
+    &quot;user_id&quot;: &quot;bob&quot;,
+    &quot;selected_preference&quot;: {}
+  },
+  &quot;alice_other_thread&quot;: {
+    &quot;messages&quot;: [
+      {
+        &quot;content&quot;: &quot;A new conversation.&quot;,
+        &quot;additional_kwargs&quot;: {},
+        &quot;response_metadata&quot;: {},
+        &quot;type&quot;: &quot;human&quot;,
+        &quot;name&quot;: null,
+        &quot;id&quot;: &quot;a00b02f1-c924-48cf-be7a-4b4b28266255&quot;
+      }
+    ],
+    &quot;user_id&quot;: &quot;alice&quot;,
+    &quot;selected_preference&quot;: {
+      &quot;style&quot;: &quot;short&quot;
+    }
+  },
+  &quot;ownership&quot;: &quot;Cross-user thread reuse rejected before graph access&quot;,
+  &quot;checkpoint_count&quot;: 6,
+  &quot;context_comparison&quot;: {
+    &quot;full&quot;: [
+      {
+        &quot;content&quot;: &quot;Synthetic preference: short replies. My old request concerned a notebook.&quot;,
+        &quot;additional_kwargs&quot;: {},
+        &quot;response_metadata&quot;: {},
+        &quot;type&quot;: &quot;human&quot;,
+        &quot;name&quot;: null,
+        &quot;id&quot;: &quot;early&quot;
+      },
+      {
+        &quot;content&quot;: &quot;Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. &quot;,
+        &quot;additional_kwargs&quot;: {},
+        &quot;response_metadata&quot;: {},
+        &quot;type&quot;: &quot;human&quot;,
+        &quot;name&quot;: null,
+        &quot;id&quot;: &quot;irrelevant&quot;
+      },
+      {
+        &quot;content&quot;: &quot;Quote 2 notebooks; use fresh catalog facts.&quot;,
+        &quot;additional_kwargs&quot;: {},
+        &quot;response_metadata&quot;: {},
+        &quot;type&quot;: &quot;human&quot;,
+        &quot;name&quot;: null,
+        &quot;id&quot;: &quot;latest&quot;
+      }
+    ],
+    &quot;trimmed&quot;: [
+      {
+        &quot;content&quot;: &quot;Quote 2 notebooks; use fresh catalog facts.&quot;,
+        &quot;additional_kwargs&quot;: {},
+        &quot;response_metadata&quot;: {},
+        &quot;type&quot;: &quot;human&quot;,
+        &quot;name&quot;: null,
+        &quot;id&quot;: &quot;latest&quot;
+      }
+    ],
+    &quot;human_summarized&quot;: [
+      {
+        &quot;content&quot;: &quot;Human-authored summary, not model output: user requested short replies and considered notebook.&quot;,
+        &quot;additional_kwargs&quot;: {},
+        &quot;response_metadata&quot;: {},
+        &quot;type&quot;: &quot;human&quot;,
+        &quot;name&quot;: null,
+        &quot;id&quot;: null
+      },
+      {
+        &quot;content&quot;: &quot;Quote 2 notebooks; use fresh catalog facts.&quot;,
+        &quot;additional_kwargs&quot;: {},
+        &quot;response_metadata&quot;: {},
+        &quot;type&quot;: &quot;human&quot;,
+        &quot;name&quot;: null,
         &quot;id&quot;: &quot;latest&quot;
       }
     ],
@@ -93,11 +198,4 @@ uv run python labs/05_memory_context/main.py --check
     &quot;stock&quot;: 12
   }
 }
-{
-  &quot;deleted_store_preference&quot;: true,
-  &quot;old_checkpoint_still_contains_selected_preference&quot;: true,
-  &quot;durability&quot;: &quot;In-memory objects survive graph reconstruction, not process restart&quot;,
-  &quot;live_gate&quot;: &quot;Not exercised: model recall, generated summary accuracy, provider context validity&quot;
-}
-[+131 hidden: rtk recall 2a3c5625bcf2]
 </code></pre></main></body></html>

@@ -50,7 +50,7 @@ uv run python labs/13_mcp/main.py --check --scenario disconnect
 <p>Normal mode releases its adapter context after all calls; disconnect mode releases a direct client context. Both exercise real transport cleanup. Neither asserts arbitrary remote-server process shutdown. Tools expose synthetic data only; no persistent state/reset is required. If an interpreter/import fails, run <code>uv sync --locked</code> and inspect the real server stderr rather than hiding it behind a model fallback.</p>
 <p>See <a href="../../lessons/13_mcp/01.html">lessons</a>, <a href="../../exercises/13_mcp.html">exercise</a>, and <a href="../../solutions/13_mcp.html">solutions</a>.</p>
 <h2>Captured <code>--check</code> output</h2>
-<p>Real output of <code>uv run python labs/13_mcp/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<p>Real, unedited stdout of <code>uv run python labs/13_mcp/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
 <pre><code class="language-json">{
   &quot;preflight&quot;: {
     &quot;python&quot;: &quot;3.14.0&quot;,
@@ -76,7 +76,84 @@ uv run python labs/13_mcp/main.py --check --scenario disconnect
   },
   &quot;api_note&quot;: &quot;langchain.mcp is beta in LangChain&gt;=1.4; lockfile is baseline.&quot;
 }
-... (78 lines omitted)
+{
+  &quot;discovered_tools&quot;: [
+    &quot;catalog_lookup&quot;,
+    &quot;catalog_quote&quot;
+  ],
+  &quot;lookup&quot;: {
+    &quot;content&quot;: [
+      {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;text&quot;: &quot;{\&quot;found\&quot;:true,\&quot;item_id\&quot;:\&quot;notebook\&quot;,\&quot;name\&quot;:\&quot;Recycled paper notebook\&quot;,\&quot;price_cents\&quot;:1299,\&quot;currency\&quot;:\&quot;USD\&quot;,\&quot;stock\&quot;:12}&quot;,
+        &quot;id&quot;: &quot;lc_87753f5a-5cce-4dc2-b80a-66fb19938bbe&quot;
+      }
+    ],
+    &quot;additional_kwargs&quot;: {},
+    &quot;response_metadata&quot;: {},
+    &quot;type&quot;: &quot;tool&quot;,
+    &quot;name&quot;: &quot;catalog_lookup&quot;,
+    &quot;id&quot;: null,
+    &quot;tool_call_id&quot;: &quot;found&quot;,
+    &quot;artifact&quot;: {
+      &quot;structured_content&quot;: {
+        &quot;found&quot;: true,
+        &quot;item_id&quot;: &quot;notebook&quot;,
+        &quot;name&quot;: &quot;Recycled paper notebook&quot;,
+        &quot;price_cents&quot;: 1299,
+        &quot;currency&quot;: &quot;USD&quot;,
+        &quot;stock&quot;: 12
+      }
+    },
+    &quot;status&quot;: &quot;success&quot;
+  },
+  &quot;missing&quot;: {
+    &quot;content&quot;: [
+      {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;text&quot;: &quot;{\&quot;found\&quot;:false,\&quot;item_id\&quot;:\&quot;absent\&quot;}&quot;,
+        &quot;id&quot;: &quot;lc_5e1e8e5c-595f-40fe-86ab-e6d903550a6f&quot;
+      }
+    ],
+    &quot;additional_kwargs&quot;: {},
+    &quot;response_metadata&quot;: {},
+    &quot;type&quot;: &quot;tool&quot;,
+    &quot;name&quot;: &quot;catalog_lookup&quot;,
+    &quot;id&quot;: null,
+    &quot;tool_call_id&quot;: &quot;missing&quot;,
+    &quot;artifact&quot;: {
+      &quot;structured_content&quot;: {
+        &quot;found&quot;: false,
+        &quot;item_id&quot;: &quot;absent&quot;
+      }
+    },
+    &quot;status&quot;: &quot;success&quot;
+  },
+  &quot;quote&quot;: {
+    &quot;content&quot;: [
+      {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;text&quot;: &quot;{\&quot;found\&quot;:true,\&quot;quoted\&quot;:true,\&quot;item_id\&quot;:\&quot;notebook\&quot;,\&quot;quantity\&quot;:2,\&quot;unit_price_cents\&quot;:1299,\&quot;total_cents\&quot;:2598,\&quot;currency\&quot;:\&quot;USD\&quot;,\&quot;stock\&quot;:12}&quot;,
+        &quot;id&quot;: &quot;lc_1ec9353c-6234-41fc-8728-ad987fe16dc7&quot;
+      }
+    ],
+    &quot;additional_kwargs&quot;: {},
+    &quot;response_metadata&quot;: {},
+    &quot;type&quot;: &quot;tool&quot;,
+    &quot;name&quot;: &quot;catalog_quote&quot;,
+    &quot;id&quot;: null,
+    &quot;tool_call_id&quot;: &quot;quote&quot;,
+    &quot;artifact&quot;: {
+      &quot;structured_content&quot;: {
+        &quot;found&quot;: true,
+        &quot;quoted&quot;: true,
+        &quot;item_id&quot;: &quot;notebook&quot;,
+        &quot;quantity&quot;: 2,
+        &quot;unit_price_cents&quot;: 1299,
+        &quot;total_cents&quot;: 2598,
+        &quot;currency&quot;: &quot;USD&quot;,
+        &quot;stock&quot;: 12
+      }
     },
     &quot;status&quot;: &quot;success&quot;
   },
@@ -85,7 +162,7 @@ uv run python labs/13_mcp/main.py --check --scenario disconnect
       {
         &quot;type&quot;: &quot;text&quot;,
         &quot;text&quot;: &quot;Error calling tool 'catalog_quote'&quot;,
-        &quot;id&quot;: &quot;lc_0a413475-3782-48bf-a558-1b72423912d0&quot;
+        &quot;id&quot;: &quot;lc_9825722b-6caf-4bef-b026-b6bcc01f0ee2&quot;
       }
     ],
     &quot;additional_kwargs&quot;: {},
@@ -102,45 +179,4 @@ uv run python labs/13_mcp/main.py --check --scenario disconnect
   &quot;lifecycle&quot;: &quot;Adapter context exited; stdio connection released.&quot;,
   &quot;live_gate&quot;: &quot;Agent generation not exercised.&quot;
 }
-[+103 hidden: rtk recall bd7c5d57ea70]
-  from langchain.mcp import MCPAdapter
-
-
-╭──────────────────────────────────────────────────────────────────────────────╮
-│                                                                              │
-│                                                                              │
-│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
-│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
-│                                                                              │
-│                                                                              │
-│                                                                              │
-│                                FastMCP 4.1.0                                 │
-│                            https://gofastmcp.com                             │
-│                                                                              │
-│               🖥  Server:      Course synthetic catalog, 4.1.0                │
-│               🚀 Deploy free: https://horizon.prefect.io                     │
-│                                                                              │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭──────────────────────────────────────────────────────────────────────────────╮
-│                          🎉 Update available: 4.1.4                          │
-│                      Run: pip install --upgrade fastmcp                      │
-╰──────────────────────────────────────────────────────────────────────────────╯
-
-
-... (46 lines omitted)
-                    ╭─────────── Traceback (most recent call last) ────────────╮
-                    │ &lt;repo&gt;/.venv/li │
-                    │ b/python3.14/site-packages/fastmcp/server/server.py:1467 │
-                    │  in call_tool                                            │
-                    │                                                          │
-                    │ &lt;repo&gt;/.venv/li │
-                    │ b/python3.14/site-packages/fastmcp/tools/base.py:440 in  │
-                    │ _run                                                     │
-                    │                                                          │
-                    │                 ... 9 frames hidden ...                  │
-                    │                                                          │
-                    │ &lt;repo&gt;/.venv/li │
-                    │ b/python3.14/site-packages/fastmcp/tools/function_tool.p │
-                    │ y:96 in wrapper                                          │
-... (truncated)
 </code></pre></main></body></html>

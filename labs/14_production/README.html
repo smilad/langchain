@@ -120,8 +120,8 @@ for name in names:
 <p>No automatic schema migration is claimed. If an incompatible change has occurred, restoring a matched backup is a recovery decision that can discard newer local state; preserve evidence and obtain an explicit data-recovery decision. Rehearse using synthetic lab state first. Rollback does not undo external email/payment; this course's sink records local actions only.</p>
 <p>After manual practice, stop the process before removing your <strong>selected synthetic state directory</strong>. Do not delete shared policy/catalog fixtures or another learner's state. Derive latency/cost targets from your measured workload, not from the worker count. Continue with <a href="../../lessons/14_production/01.html">lessons</a>, <a href="../../exercises/14_production.html">exercise</a>, and <a href="../../solutions/14_production.html">solutions</a>.</p>
 <h2>Captured <code>--check</code> output</h2>
-<p>Real output of <code>uv run python labs/14_production/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
-<pre><code class="language-json">{
+<p>Real, unedited stdout of <code>uv run python labs/14_production/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Excerpt: first 150 lines only. Compare your own run against it.</p>
+<pre><code class="language-text">{
   &quot;preflight&quot;: {
     &quot;python&quot;: &quot;3.14.0&quot;,
     &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
@@ -146,31 +146,129 @@ for name in names:
   }
 }
 {
-... (461 lines omitted)
-      &quot;event&quot;: &quot;running&quot;,
-      &quot;request_id&quot;: &quot;171f76b9ac334fe99624231be6ce2433&quot;
+  &quot;concurrent_starts&quot;: [
+    {
+      &quot;result&quot;: {
+        &quot;thread_id&quot;: &quot;alice-thread&quot;,
+        &quot;user_id&quot;: &quot;alice&quot;,
+        &quot;status&quot;: &quot;pending&quot;,
+        &quot;state&quot;: {
+          &quot;user_id&quot;: &quot;alice&quot;,
+          &quot;thread_id&quot;: &quot;alice-thread&quot;,
+          &quot;question&quot;: &quot;What is the return policy?&quot;,
+          &quot;draft&quot;: &quot;Draft explicitly written by Alice&quot;,
+          &quot;draft_origin&quot;: &quot;human&quot;,
+          &quot;source_ids&quot;: [],
+          &quot;live&quot;: false,
+          &quot;action_id&quot;: &quot;51415f05112640f5961735ae26dea6cf&quot;,
+          &quot;status&quot;: &quot;pending&quot;
+        },
+        &quot;pending_review&quot;: [
+          {
+            &quot;kind&quot;: &quot;support_review&quot;,
+            &quot;draft&quot;: &quot;Draft explicitly written by Alice&quot;,
+            &quot;draft_origin&quot;: &quot;human&quot;,
+            &quot;source_ids&quot;: [],
+            &quot;allowed_decisions&quot;: [
+              &quot;approve&quot;,
+              &quot;reject&quot;,
+              &quot;edit&quot;
+            ]
+          }
+        ],
+        &quot;actions&quot;: []
+      },
+      &quot;request_id&quot;: &quot;b74d382c37d74ffb81f488af51eac3df&quot;
     },
     {
-      &quot;event&quot;: &quot;deadline_exceeded&quot;,
-      &quot;request_id&quot;: &quot;171f76b9ac334fe99624231be6ce2433&quot;,
-      &quot;effects_may_have_committed&quot;: true
+      &quot;result&quot;: {
+        &quot;thread_id&quot;: &quot;bob-thread&quot;,
+        &quot;user_id&quot;: &quot;bob&quot;,
+        &quot;status&quot;: &quot;pending&quot;,
+        &quot;state&quot;: {
+          &quot;user_id&quot;: &quot;bob&quot;,
+          &quot;thread_id&quot;: &quot;bob-thread&quot;,
+          &quot;question&quot;: &quot;What is the return policy?&quot;,
+          &quot;draft&quot;: &quot;Draft explicitly written by Bob&quot;,
+          &quot;draft_origin&quot;: &quot;human&quot;,
+          &quot;source_ids&quot;: [],
+          &quot;live&quot;: false,
+          &quot;action_id&quot;: &quot;f3594685525e4c79b1aff839230f0de5&quot;,
+          &quot;status&quot;: &quot;pending&quot;
+        },
+        &quot;pending_review&quot;: [
+          {
+            &quot;kind&quot;: &quot;support_review&quot;,
+            &quot;draft&quot;: &quot;Draft explicitly written by Bob&quot;,
+            &quot;draft_origin&quot;: &quot;human&quot;,
+            &quot;source_ids&quot;: [],
+            &quot;allowed_decisions&quot;: [
+              &quot;approve&quot;,
+              &quot;reject&quot;,
+              &quot;edit&quot;
+            ]
+          }
+        ],
+        &quot;actions&quot;: []
+      },
+      &quot;request_id&quot;: &quot;5f7fdf6afdf04d0481b162b59867e053&quot;
+    }
+  ],
+  &quot;body_identity_rejected&quot;: true,
+  &quot;cross_identity_denied&quot;: true,
+  &quot;cancellation&quot;: {
+    &quot;request_outcome&quot;: {
+      &quot;result&quot;: {
+        &quot;request_id&quot;: &quot;cancel-190e89eaa52c4ac882734029a76f1c13&quot;,
+        &quot;user_id&quot;: &quot;alice&quot;,
+        &quot;status&quot;: &quot;cancelled&quot;,
+        &quot;effects_may_have_committed&quot;: true
+      },
+      &quot;transient&quot;: true
+    },
+    &quot;persisted_thread_http_status&quot;: 400,
+    &quot;persisted_thread&quot;: {
+      &quot;error&quot;: &quot;invalid_request_or_state&quot;,
+      &quot;error_type&quot;: &quot;ValueError&quot;,
+      &quot;request_id&quot;: &quot;5064dc19f48b4ba78b6708c9a24f716f&quot;
+    },
+    &quot;interpretation&quot;: &quot;Cancelled response is not a rollback guarantee.&quot;
+  }
+}
+{
+  &quot;service_events&quot;: [
+    {
+      &quot;event&quot;: &quot;listening&quot;,
+      &quot;host&quot;: &quot;127.0.0.1&quot;,
+      &quot;port&quot;: 52762,
+      &quot;deadline_seconds&quot;: 30.0,
+      &quot;max_workers&quot;: 4
     },
     {
       &quot;event&quot;: &quot;http_response&quot;,
-      &quot;method&quot;: &quot;POST&quot;
+      &quot;method&quot;: &quot;GET&quot;
     },
     {
-      &quot;event&quot;: &quot;stopping&quot;,
-      &quot;signal&quot;: 15
+      &quot;event&quot;: &quot;http_response&quot;,
+      &quot;method&quot;: &quot;GET&quot;
     },
     {
-      &quot;event&quot;: &quot;stopped&quot;
-    }
-  ],
-  &quot;exit_code&quot;: 0
-}
-{
-  &quot;local_state&quot;: &quot;Temporary lab state removed after service shutdown; persistent manual service state is untouched.&quot;
-}
-[+486 hidden: rtk recall de7066d83af1]
+      &quot;event&quot;: &quot;http_response&quot;,
+      &quot;method&quot;: &quot;GET&quot;
+    },
+    {
+      &quot;event&quot;: &quot;running&quot;,
+      &quot;request_id&quot;: &quot;b74d382c37d74ffb81f488af51eac3df&quot;
+    },
+    {
+      &quot;event&quot;: &quot;running&quot;,
+      &quot;request_id&quot;: &quot;5f7fdf6afdf04d0481b162b59867e053&quot;
+    },
+    {
+      &quot;event&quot;: &quot;completed&quot;,
+      &quot;request_id&quot;: &quot;5f7fdf6afdf04d0481b162b59867e053&quot;,
+      &quot;http_status&quot;: 200,
+      &quot;elapsed_seconds&quot;: 0.5078666670015082,
+      &quot;error_type&quot;: null
+    },
 </code></pre></main></body></html>

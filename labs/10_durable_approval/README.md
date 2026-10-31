@@ -59,7 +59,7 @@ For reset, stop every using process, remove only dedicated experiment files (che
 
 ## Captured `--check` output
 
-Real output of `uv run python labs/10_durable_approval/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+Real, unedited stdout of `uv run python labs/10_durable_approval/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
 
 ```json
 {
@@ -87,25 +87,76 @@ Real output of `uv run python labs/10_durable_approval/main.py --check` (no cred
   }
 }
 {
-... (52 lines omitted)
+  "approved": {
+    "thread_id": "approve",
+    "user_id": "alice",
+    "status": "recorded",
+    "state": {
+      "user_id": "alice",
+      "thread_id": "approve",
+      "question": "Return policy?",
+      "draft": "Human-authored original draft",
+      "draft_origin": "human",
+      "source_ids": [],
+      "live": false,
+      "action_id": "93cbe3441a2148ebabc7ab3d877567b8",
+      "decision": "approve",
+      "status": "recorded"
+    },
+    "pending_review": [],
+    "actions": [
+      {
+        "action_id": "93cbe3441a2148ebabc7ab3d877567b8",
+        "thread_id": "approve",
+        "user_id": "alice",
+        "draft": "Human-authored original draft",
+        "created_at": "2026-10-31 10:03:31"
+      }
+    ]
+  },
+  "rejected": {
+    "thread_id": "reject",
+    "user_id": "alice",
+    "status": "rejected",
+    "state": {
+      "user_id": "alice",
+      "thread_id": "reject",
+      "question": "Return policy?",
+      "draft": "Human-authored original draft",
+      "draft_origin": "human",
+      "source_ids": [],
+      "live": false,
+      "action_id": "4957f57d3515478b9ab4401a117a475b",
+      "decision": "reject",
+      "status": "rejected"
+    },
+    "pending_review": [],
+    "actions": []
+  },
+  "edited": {
+    "thread_id": "edit",
+    "user_id": "alice",
+    "status": "recorded",
+    "state": {
+      "user_id": "alice",
       "thread_id": "edit",
       "question": "Return policy?",
       "draft": "Human-reviewed corrected text",
       "draft_origin": "human",
       "source_ids": [],
       "live": false,
-      "action_id": "68fe9530213747f4a0d92b81facaeb5f",
+      "action_id": "5fcd7572b241451990f70fc16e3955c1",
       "decision": "edit",
       "status": "recorded"
     },
     "pending_review": [],
     "actions": [
       {
-        "action_id": "68fe9530213747f4a0d92b81facaeb5f",
+        "action_id": "5fcd7572b241451990f70fc16e3955c1",
         "thread_id": "edit",
         "user_id": "alice",
         "draft": "Human-reviewed corrected text",
-        "created_at": "2026-10-31 09:31:45"
+        "created_at": "2026-10-31 10:03:31"
       }
     ]
   },
@@ -113,5 +164,4 @@ Real output of `uv run python labs/10_durable_approval/main.py --check` (no cred
   "limits": "Close/reopen verified by this command; separate CLI invocations are the process-restart gate. Exactly-once concerns only atomic local SQLite records.",
   "live_gate": "Model drafting unverified without --live and provider consent"
 }
-[+77 hidden: rtk recall 291c432d2022]
 ```

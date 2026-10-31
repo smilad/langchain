@@ -69,7 +69,7 @@ uv run python labs/00_setup/main.py --check
 <p>3–5 hours is a suggested setup allocation for someone with relevant Python readiness, not a beginner deadline. If functions, environments or exceptions are new, work through the diagnostic's remediation sequence over additional sessions and reassess on fresh inputs. Delayed review belongs to the learner after actual evidence, not a prefilled progress checklist.</p>
 <p>Sources: <a href="https://docs.astral.sh/uv/guides/projects/">uv</a>, <a href="https://docs.pydantic.dev/latest/concepts/models/">Pydantic</a>, <a href="https://docs.python.org/3/library/asyncio-task.html">asyncio</a>, checked 2026-10-12.</p>
 <h2>Captured <code>--check</code> output</h2>
-<p>Real output of <code>uv run python labs/00_setup/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<p>Real, unedited stdout of <code>uv run python labs/00_setup/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
 <pre><code class="language-json">{
   &quot;preflight&quot;: {
     &quot;python&quot;: &quot;3.14.0&quot;,
@@ -95,7 +95,75 @@ uv run python labs/00_setup/main.py --check
   },
   &quot;configuration_present&quot;: {
     &quot;OPENAI_API_KEY&quot;: false,
-... (69 lines omitted)
+    &quot;COURSE_MODEL&quot;: false
+  }
+}
+{
+  &quot;validated_request&quot;: {
+    &quot;request_id&quot;: &quot;REQ-01&quot;,
+    &quot;quantity&quot;: 2
+  },
+  &quot;json_round_trip&quot;: {
+    &quot;request_id&quot;: &quot;REQ-01&quot;,
+    &quot;quantity&quot;: 2
+  }
+}
+{
+  &quot;case&quot;: &quot;invalid_json&quot;,
+  &quot;error&quot;: &quot;JSONDecodeError&quot;,
+  &quot;line&quot;: 1,
+  &quot;column&quot;: 13
+}
+{
+  &quot;case&quot;: &quot;missing_field&quot;,
+  &quot;errors&quot;: [
+    {
+      &quot;location&quot;: [
+        &quot;request_id&quot;
+      ],
+      &quot;type&quot;: &quot;missing&quot;
+    }
+  ]
+}
+{
+  &quot;case&quot;: &quot;wrong_type&quot;,
+  &quot;errors&quot;: [
+    {
+      &quot;location&quot;: [
+        &quot;quantity&quot;
+      ],
+      &quot;type&quot;: &quot;int_type&quot;
+    }
+  ]
+}
+{
+  &quot;case&quot;: &quot;out_of_range&quot;,
+  &quot;errors&quot;: [
+    {
+      &quot;location&quot;: [
+        &quot;quantity&quot;
+      ],
+      &quot;type&quot;: &quot;greater_than_equal&quot;
+    }
+  ]
+}
+{
+  &quot;case&quot;: &quot;blank_id&quot;,
+  &quot;errors&quot;: [
+    {
+      &quot;location&quot;: [],
+      &quot;type&quot;: &quot;value_error&quot;
+    }
+  ]
+}
+{
+  &quot;traceback_frames&quot;: [
+    {
+      &quot;function&quot;: &quot;main&quot;,
+      &quot;line&quot;: 83
+    },
+    {
+      &quot;function&quot;: &quot;read_request&quot;,
       &quot;line&quot;: 29
     },
     {
@@ -121,5 +189,4 @@ uv run python labs/00_setup/main.py --check
   &quot;live_gate&quot;: &quot;No model call belongs to setup; provider verification is in Module 01.&quot;,
   &quot;mode&quot;: &quot;check&quot;
 }
-[+94 hidden: rtk recall 0b65e31ade19]
 </code></pre></main></body></html>
