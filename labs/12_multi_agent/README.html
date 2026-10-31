@@ -40,4 +40,59 @@ The middleware limits <strong>named business tools</strong>, not structured-resp
 <p>Publish failures, variability, and usage limitations alongside median/range latency. Do not award quality for fluent unsupported prose. Keep the specialist only if its observed benefit outweighs cost, latency, and another failure boundary; deliberately rejecting it passes the architecture-decision gate.</p>
 <h2>Diagnosis and state</h2>
 <p>Missing consent/configuration is not a failed learner concept. Tool/model-budget errors require trace inspection; unauthorized source IDs require fixing the handoff boundary, not increasing context blindly. This lab creates no persistent workflow actions or model transcripts. It reuses the source corpus; do not delete shared policy data to “reset” an experiment. Live evidence must be supplied by an actual configured run.</p>
-<p>Continue with <a href="../../lessons/12_multi_agent/01.html">lessons</a>, <a href="../../exercises/12_multi_agent.html">exercise</a>, and <a href="../../solutions/12_multi_agent.html">reasoned solutions</a>.</p></main></body></html>
+<p>Continue with <a href="../../lessons/12_multi_agent/01.html">lessons</a>, <a href="../../exercises/12_multi_agent.html">exercise</a>, and <a href="../../solutions/12_multi_agent.html">reasoned solutions</a>.</p>
+<h2>Captured <code>--check</code> output</h2>
+<p>Real output of <code>uv run python labs/12_multi_agent/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<pre><code class="language-json">{
+  &quot;preflight&quot;: {
+    &quot;python&quot;: &quot;3.14.0&quot;,
+    &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
+    &quot;packages&quot;: {
+      &quot;langchain&quot;: &quot;1.4.4&quot;,
+      &quot;langchain-core&quot;: &quot;1.6.9&quot;,
+      &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
+      &quot;langgraph&quot;: &quot;1.2.14&quot;,
+      &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
+      &quot;fastmcp&quot;: &quot;4.1.0&quot;,
+      &quot;pydantic&quot;: &quot;2.14.1&quot;
+    },
+    &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
+    &quot;configured&quot;: {
+      &quot;api_key&quot;: false,
+      &quot;model&quot;: false,
+      &quot;live_consent&quot;: false,
+      &quot;custom_endpoint&quot;: false,
+      &quot;hosted_tracing&quot;: false
+    },
+    &quot;live_request_sent&quot;: false
+  }
+}
+{
+... (8 lines omitted)
+      &quot;question&quot;: &quot;How long does shipping take?&quot;,
+      &quot;user_id&quot;: &quot;bob&quot;,
+      &quot;evidence_ids&quot;: [
+        &quot;SHIPPING&quot;
+      ],
+      &quot;invalid_handoff_rejected&quot;: true
+    },
+    {
+      &quot;question&quot;: &quot;What is the policy for teleporting a parcel?&quot;,
+      &quot;user_id&quot;: &quot;alice&quot;,
+      &quot;evidence_ids&quot;: [],
+      &quot;invalid_handoff_rejected&quot;: true
+    },
+    {
+      &quot;question&quot;: &quot;What is the confidential finance reimbursement limit?&quot;,
+      &quot;user_id&quot;: &quot;bob&quot;,
+      &quot;evidence_ids&quot;: [
+        &quot;MALICIOUS&quot;,
+        &quot;MEAL&quot;
+      ],
+      &quot;invalid_handoff_rejected&quot;: true
+    }
+  ],
+  &quot;live_gate&quot;: &quot;Unverified: real single/specialist generation, quality, timing and usage.&quot;
+}
+[+33 hidden: rtk recall 48a71b4e8e8e]
+</code></pre></main></body></html>

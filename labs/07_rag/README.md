@@ -33,3 +33,62 @@ Baseline versus agentic is a one-question paired demonstration, not a benchmark 
 Choose one retrieval variable on development cases, freeze it, then use Module 08 held-out reporting. Never keep rewriting prompts based on held-out grades. If correct evidence is missing, diagnose ingestion/ranking before blaming generation. If IDs pass but claims fail, diagnose semantic support. Missing capabilities, configuration and provider failures remain explicit. This lab writes no persistent application state; saved output files can be removed individually. [Exercise](../../exercises/07_rag.md), [solution](../../solutions/07_rag.md).
 
 Primary sources checked 2026-10-12: [retrieval architectures](https://docs.langchain.com/oss/python/deepagents/retrieval), [models and structured output](https://docs.langchain.com/oss/python/langchain/models).
+
+## Captured `--check` output
+
+Real output of `uv run python labs/07_rag/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  }
+}
+{
+... (273 lines omitted)
+          "type": "Document"
+        }
+      ]
+    }
+  ],
+  "empty_evidence_abstention": {
+    "answer": "No authorized evidence was retrieved; I cannot answer this question.",
+    "source_ids": [],
+    "abstained": true
+  },
+  "empty_evidence_trace": {
+    "model_calls": 0,
+    "usage": [],
+    "generation_seconds": 0.0
+  },
+  "invalid_membership_rejected": true,
+  "human_authored_counterexample": {
+    "answer": "Human-authored unsupported example: the return deadline is 900 days.",
+    "source_ids": [
+      "RETURN"
+    ],
+    "abstained": false
+  },
+  "lesson": "900-day claim passes ID membership but fails semantic support. No model was called; supported answers, conflicts and injection behavior remain unverified."
+}
+[+298 hidden: rtk recall f4df565c4da3]
+```

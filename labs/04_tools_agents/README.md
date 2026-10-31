@@ -45,3 +45,62 @@ The invalid live prompt may trigger a clarification rather than an invalid tool 
 Create your own per-case worksheet only after running: input → requested call → executed function → result → final claim → failure category. No authored learner record or model transcript is supplied. Live gate remains unverified when credentials/model/consent are absent. Provider transport failures are errors, never an automatic fake fallback.
 
 No durable lab state is written, so restarting resets agent state. To change the catalog, edit only your synthetic fixture and rerun checks; restore intended records before sharing results. The loader reloads records each operation. Study the [independent exercise](../../exercises/04_tools_agents.md) before the [solution](../../solutions/04_tools_agents.md). Source: [official tools](https://docs.langchain.com/oss/python/langchain/tools), [agents](https://docs.langchain.com/oss/python/langchain/agents), consulted 2026-10-12.
+
+## Captured `--check` output
+
+Real output of `uv run python labs/04_tools_agents/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "python": "3.14.0",
+  "interpreter": "<repo>/.venv/bin/python",
+  "packages": {
+    "langchain": "1.4.4",
+    "langchain-core": "1.6.9",
+    "langchain-openai": "1.7.0",
+    "langgraph": "1.2.14",
+    "langgraph-checkpoint-sqlite": "3.1.1",
+    "fastmcp": "4.1.0",
+    "pydantic": "2.14.1"
+  },
+  "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+  "configured": {
+    "api_key": false,
+    "model": false,
+    "live_consent": false,
+    "custom_endpoint": false,
+    "hosted_tracing": false
+  },
+  "live_request_sent": false
+}
+{
+  "tool_schemas": {
+    "lookup_item": {
+... (124 lines omitted)
+      "error_types": [
+        "less_than_equal"
+      ]
+    },
+    {
+      "quantity": true,
+      "error_types": [
+        "int_type"
+      ]
+    },
+    {
+      "quantity": 1.5,
+      "error_types": [
+        "int_type"
+      ]
+    },
+    {
+      "quantity": "2",
+      "error_types": [
+        "int_type"
+      ]
+    }
+  ],
+  "live_gate": "Not exercised: real model tool choice, final factual answer, agent step bound"
+}
+[+149 hidden: rtk recall 974fc8a99ed2]
+```

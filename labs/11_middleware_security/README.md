@@ -18,3 +18,62 @@ For each case record requested capability, trusted actor, exact synthetic source
 `--check` proves deterministic boundaries but does not traverse live model middleware. `--live` proves whatever actual messages show, not immunity against every injection. The synthetic secret is not available to secure model context or tool capabilities; this is least privilege rather than successful detection of every secret-request phrasing. Local identity arguments are trusted demonstrations, not login credentials.
 
 **Evidence status:** [verification](../../docs/VERIFICATION.md) records actual local commands/outcomes separately from unavailable live proof. Installed baseline: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9, LangGraph 1.2.14, langchain-openai 1.7.0, Pydantic 2.14.1. Temporary state is removed after connections close. [Independent exercise](../../exercises/11_middleware_security.md), [reasoned solution](../../solutions/11_middleware_security.md).
+
+## Captured `--check` output
+
+Real output of `uv run python labs/11_middleware_security/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  }
+}
+{
+... (24 lines omitted)
+      "arguments": {},
+      "outcome": "denied"
+    },
+    {
+      "tool": "approve_thread",
+      "arguments": {
+        "thread_id": "alice-thread"
+      },
+      "outcome": "denied"
+    }
+  ],
+  "untrusted_source_ids": [
+    "MALICIOUS"
+  ],
+  "unsafe_counterexample": {
+    "granted_from_document_text": true,
+    "synthetic_secret": "SYNTHETIC-VAULT-NOT-A-REAL-CREDENTIAL"
+  },
+  "proof_scope": "Deterministic execution checks, not model injection immunity. Synthetic secret is absent from secure model context/tool capabilities.",
+  "live_gate": "Unverified: --live runs actual create_agent middleware with provider tool calling",
+  "action_counts": {
+    "alice": 0,
+    "bob": 0
+  }
+}
+[+49 hidden: rtk recall 6bf795ae9796]
+```

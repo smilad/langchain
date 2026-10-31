@@ -48,4 +48,99 @@ uv run python labs/13_mcp/main.py --check --scenario disconnect
 <h2>Lifecycle and failure cases</h2>
 <p><code>unavailable</code> attempts a real localhost connection at port 1 with a five-second timeout and reports the exception category. If that port unexpectedly hosts MCP, choose an unused endpoint before drawing conclusions. <code>disconnect</code> starts the actual stdio server with a direct FastMCP Client, calls lookup, exits its context, verifies disconnection, and demonstrates a failing direct call afterward. This differs from adapted tools: they can intentionally reconnect after discovery exits.</p>
 <p>Normal mode releases its adapter context after all calls; disconnect mode releases a direct client context. Both exercise real transport cleanup. Neither asserts arbitrary remote-server process shutdown. Tools expose synthetic data only; no persistent state/reset is required. If an interpreter/import fails, run <code>uv sync --locked</code> and inspect the real server stderr rather than hiding it behind a model fallback.</p>
-<p>See <a href="../../lessons/13_mcp/01.html">lessons</a>, <a href="../../exercises/13_mcp.html">exercise</a>, and <a href="../../solutions/13_mcp.html">solutions</a>.</p></main></body></html>
+<p>See <a href="../../lessons/13_mcp/01.html">lessons</a>, <a href="../../exercises/13_mcp.html">exercise</a>, and <a href="../../solutions/13_mcp.html">solutions</a>.</p>
+<h2>Captured <code>--check</code> output</h2>
+<p>Real output of <code>uv run python labs/13_mcp/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<pre><code class="language-json">{
+  &quot;preflight&quot;: {
+    &quot;python&quot;: &quot;3.14.0&quot;,
+    &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
+    &quot;packages&quot;: {
+      &quot;langchain&quot;: &quot;1.4.4&quot;,
+      &quot;langchain-core&quot;: &quot;1.6.9&quot;,
+      &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
+      &quot;langgraph&quot;: &quot;1.2.14&quot;,
+      &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
+      &quot;fastmcp&quot;: &quot;4.1.0&quot;,
+      &quot;pydantic&quot;: &quot;2.14.1&quot;
+    },
+    &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
+    &quot;configured&quot;: {
+      &quot;api_key&quot;: false,
+      &quot;model&quot;: false,
+      &quot;live_consent&quot;: false,
+      &quot;custom_endpoint&quot;: false,
+      &quot;hosted_tracing&quot;: false
+    },
+    &quot;live_request_sent&quot;: false
+  },
+  &quot;api_note&quot;: &quot;langchain.mcp is beta in LangChain&gt;=1.4; lockfile is baseline.&quot;
+}
+... (78 lines omitted)
+    },
+    &quot;status&quot;: &quot;success&quot;
+  },
+  &quot;invalid_quantity&quot;: {
+    &quot;content&quot;: [
+      {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;text&quot;: &quot;Error calling tool 'catalog_quote'&quot;,
+        &quot;id&quot;: &quot;lc_0a413475-3782-48bf-a558-1b72423912d0&quot;
+      }
+    ],
+    &quot;additional_kwargs&quot;: {},
+    &quot;response_metadata&quot;: {},
+    &quot;type&quot;: &quot;tool&quot;,
+    &quot;name&quot;: &quot;catalog_quote&quot;,
+    &quot;id&quot;: null,
+    &quot;tool_call_id&quot;: &quot;invalid&quot;,
+    &quot;artifact&quot;: null,
+    &quot;status&quot;: &quot;error&quot;
+  }
+}
+{
+  &quot;lifecycle&quot;: &quot;Adapter context exited; stdio connection released.&quot;,
+  &quot;live_gate&quot;: &quot;Agent generation not exercised.&quot;
+}
+[+103 hidden: rtk recall bd7c5d57ea70]
+  from langchain.mcp import MCPAdapter
+
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│                                                                              │
+│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
+│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                FastMCP 4.1.0                                 │
+│                            https://gofastmcp.com                             │
+│                                                                              │
+│               🖥  Server:      Course synthetic catalog, 4.1.0                │
+│               🚀 Deploy free: https://horizon.prefect.io                     │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                          🎉 Update available: 4.1.4                          │
+│                      Run: pip install --upgrade fastmcp                      │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+... (46 lines omitted)
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ &lt;repo&gt;/.venv/li │
+                    │ b/python3.14/site-packages/fastmcp/server/server.py:1467 │
+                    │  in call_tool                                            │
+                    │                                                          │
+                    │ &lt;repo&gt;/.venv/li │
+                    │ b/python3.14/site-packages/fastmcp/tools/base.py:440 in  │
+                    │ _run                                                     │
+                    │                                                          │
+                    │                 ... 9 frames hidden ...                  │
+                    │                                                          │
+                    │ &lt;repo&gt;/.venv/li │
+                    │ b/python3.14/site-packages/fastmcp/tools/function_tool.p │
+                    │ y:96 in wrapper                                          │
+... (truncated)
+</code></pre></main></body></html>

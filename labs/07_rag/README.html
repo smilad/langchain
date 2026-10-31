@@ -42,4 +42,59 @@ uv run python labs/07_rag/main.py --live --strategy hybrid
 <h2>Experiments and failure investigation</h2>
 <p>Baseline versus agentic is a one-question paired demonstration, not a benchmark win. Compare model/search calls, actual reported usage, elapsed time and human semantic support. Query rewriting preserves the original generation question; reranking selects only authorized supplied chunk IDs from a ten-candidate pool. Their extra requests are <strong>not</strong> included in generation_trace usage. Measure them separately or explicitly permit hosted tracing before enabling upload. No currency costs are invented.</p>
 <p>Choose one retrieval variable on development cases, freeze it, then use Module 08 held-out reporting. Never keep rewriting prompts based on held-out grades. If correct evidence is missing, diagnose ingestion/ranking before blaming generation. If IDs pass but claims fail, diagnose semantic support. Missing capabilities, configuration and provider failures remain explicit. This lab writes no persistent application state; saved output files can be removed individually. <a href="../../exercises/07_rag.html">Exercise</a>, <a href="../../solutions/07_rag.html">solution</a>.</p>
-<p>Primary sources checked 2026-10-12: <a href="https://docs.langchain.com/oss/python/deepagents/retrieval">retrieval architectures</a>, <a href="https://docs.langchain.com/oss/python/langchain/models">models and structured output</a>.</p></main></body></html>
+<p>Primary sources checked 2026-10-12: <a href="https://docs.langchain.com/oss/python/deepagents/retrieval">retrieval architectures</a>, <a href="https://docs.langchain.com/oss/python/langchain/models">models and structured output</a>.</p>
+<h2>Captured <code>--check</code> output</h2>
+<p>Real output of <code>uv run python labs/07_rag/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<pre><code class="language-json">{
+  &quot;preflight&quot;: {
+    &quot;python&quot;: &quot;3.14.0&quot;,
+    &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
+    &quot;packages&quot;: {
+      &quot;langchain&quot;: &quot;1.4.4&quot;,
+      &quot;langchain-core&quot;: &quot;1.6.9&quot;,
+      &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
+      &quot;langgraph&quot;: &quot;1.2.14&quot;,
+      &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
+      &quot;fastmcp&quot;: &quot;4.1.0&quot;,
+      &quot;pydantic&quot;: &quot;2.14.1&quot;
+    },
+    &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
+    &quot;configured&quot;: {
+      &quot;api_key&quot;: false,
+      &quot;model&quot;: false,
+      &quot;live_consent&quot;: false,
+      &quot;custom_endpoint&quot;: false,
+      &quot;hosted_tracing&quot;: false
+    },
+    &quot;live_request_sent&quot;: false
+  }
+}
+{
+... (273 lines omitted)
+          &quot;type&quot;: &quot;Document&quot;
+        }
+      ]
+    }
+  ],
+  &quot;empty_evidence_abstention&quot;: {
+    &quot;answer&quot;: &quot;No authorized evidence was retrieved; I cannot answer this question.&quot;,
+    &quot;source_ids&quot;: [],
+    &quot;abstained&quot;: true
+  },
+  &quot;empty_evidence_trace&quot;: {
+    &quot;model_calls&quot;: 0,
+    &quot;usage&quot;: [],
+    &quot;generation_seconds&quot;: 0.0
+  },
+  &quot;invalid_membership_rejected&quot;: true,
+  &quot;human_authored_counterexample&quot;: {
+    &quot;answer&quot;: &quot;Human-authored unsupported example: the return deadline is 900 days.&quot;,
+    &quot;source_ids&quot;: [
+      &quot;RETURN&quot;
+    ],
+    &quot;abstained&quot;: false
+  },
+  &quot;lesson&quot;: &quot;900-day claim passes ID membership but fails semantic support. No model was called; supported answers, conflicts and injection behavior remain unverified.&quot;
+}
+[+298 hidden: rtk recall f4df565c4da3]
+</code></pre></main></body></html>

@@ -27,3 +27,62 @@ Batch responses retain input order, not completion order. Only whole-batch durat
 Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0. [Verification](../../docs/VERIFICATION.md) records actual gateway-mediated invoke, stream aggregation, async, and batch. The gateway buffers streams; real-time delivery and interactive input remain unverified. Exact versions live in `uv.lock` and actual preflight. No state is written, so there is nothing to reset. Configure compatible private access/consent; disable/review hosted tracing before sending private content.
 
 Sources checked 2026-10-12: [models](https://docs.langchain.com/oss/python/langchain/models), [messages](https://docs.langchain.com/oss/python/langchain/messages), [ChatOpenAI](https://docs.langchain.com/oss/python/integrations/chat/openai).
+
+## Captured `--check` output
+
+Real output of `uv run python labs/02_models_messages/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  }
+}
+{
+... (70 lines omitted)
+      "output_tokens": 2,
+      "total_tokens": 5
+    }
+  },
+  "live_verification": "Pending: these hand-authored data fixtures exercise message operations, not model generation."
+}
+{
+  "rejected_response": {
+    "text": "billing because it concerns payment",
+    "content": "billing because it concerns payment",
+    "content_blocks": [
+      {
+        "type": "text",
+        "text": "billing because it concerns payment"
+      }
+    ],
+    "tool_calls": [],
+    "usage": null,
+    "response_metadata": {},
+    "elapsed_seconds": null
+  }
+}
+{
+  "rejected_authored_label_fixture": "explanation is not the exact-label contract"
+}
+[+95 hidden: rtk recall 7757fc1eadb2]
+```

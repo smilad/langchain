@@ -76,4 +76,59 @@ uv run python labs/04_tools_agents/main.py --live --case bounded
 <p>The invalid live prompt may trigger a clarification rather than an invalid tool call. The deterministic check is the reproducible proof of schema rejection; do not force an LLM to make a particular mistake.</p>
 <h2>Review, evidence and limitations</h2>
 <p>Create your own per-case worksheet only after running: input → requested call → executed function → result → final claim → failure category. No authored learner record or model transcript is supplied. Live gate remains unverified when credentials/model/consent are absent. Provider transport failures are errors, never an automatic fake fallback.</p>
-<p>No durable lab state is written, so restarting resets agent state. To change the catalog, edit only your synthetic fixture and rerun checks; restore intended records before sharing results. The loader reloads records each operation. Study the <a href="../../exercises/04_tools_agents.html">independent exercise</a> before the <a href="../../solutions/04_tools_agents.html">solution</a>. Source: <a href="https://docs.langchain.com/oss/python/langchain/tools">official tools</a>, <a href="https://docs.langchain.com/oss/python/langchain/agents">agents</a>, consulted 2026-10-12.</p></main></body></html>
+<p>No durable lab state is written, so restarting resets agent state. To change the catalog, edit only your synthetic fixture and rerun checks; restore intended records before sharing results. The loader reloads records each operation. Study the <a href="../../exercises/04_tools_agents.html">independent exercise</a> before the <a href="../../solutions/04_tools_agents.html">solution</a>. Source: <a href="https://docs.langchain.com/oss/python/langchain/tools">official tools</a>, <a href="https://docs.langchain.com/oss/python/langchain/agents">agents</a>, consulted 2026-10-12.</p>
+<h2>Captured <code>--check</code> output</h2>
+<p>Real output of <code>uv run python labs/04_tools_agents/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<pre><code class="language-json">{
+  &quot;python&quot;: &quot;3.14.0&quot;,
+  &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
+  &quot;packages&quot;: {
+    &quot;langchain&quot;: &quot;1.4.4&quot;,
+    &quot;langchain-core&quot;: &quot;1.6.9&quot;,
+    &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
+    &quot;langgraph&quot;: &quot;1.2.14&quot;,
+    &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
+    &quot;fastmcp&quot;: &quot;4.1.0&quot;,
+    &quot;pydantic&quot;: &quot;2.14.1&quot;
+  },
+  &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
+  &quot;configured&quot;: {
+    &quot;api_key&quot;: false,
+    &quot;model&quot;: false,
+    &quot;live_consent&quot;: false,
+    &quot;custom_endpoint&quot;: false,
+    &quot;hosted_tracing&quot;: false
+  },
+  &quot;live_request_sent&quot;: false
+}
+{
+  &quot;tool_schemas&quot;: {
+    &quot;lookup_item&quot;: {
+... (124 lines omitted)
+      &quot;error_types&quot;: [
+        &quot;less_than_equal&quot;
+      ]
+    },
+    {
+      &quot;quantity&quot;: true,
+      &quot;error_types&quot;: [
+        &quot;int_type&quot;
+      ]
+    },
+    {
+      &quot;quantity&quot;: 1.5,
+      &quot;error_types&quot;: [
+        &quot;int_type&quot;
+      ]
+    },
+    {
+      &quot;quantity&quot;: &quot;2&quot;,
+      &quot;error_types&quot;: [
+        &quot;int_type&quot;
+      ]
+    }
+  ],
+  &quot;live_gate&quot;: &quot;Not exercised: real model tool choice, final factual answer, agent step bound&quot;
+}
+[+149 hidden: rtk recall 974fc8a99ed2]
+</code></pre></main></body></html>

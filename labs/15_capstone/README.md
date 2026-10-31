@@ -57,3 +57,62 @@ Record model IDs, exact resolved versions, trial count, timings, reported usage,
 Observed local evidence and any inaccessible live prerequisites are recorded in [docs/VERIFICATION.md](../../docs/VERIFICATION.md). This runbook makes no claim that live model quality or an advisor review has passed.
 
 The action sink is a real local SQLite record—not email, a payment, or a production ticket. Its unique transactional action identity prevents duplicated **local records**; it does not promise exactly-once distributed delivery. Cancellation can occur after commit: inspect before retrying. Never delete a persistence directory while a workflow/server is running; use a fresh isolated `COURSE_STATE_DIR` for disposable experiments.
+
+## Captured `--check` output
+
+Real output of `uv run python labs/15_capstone/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "environment": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  },
+  "integration": {
+    "mode": "local integration with human-authored draft, not generated-agent proof",
+... (10 lines omitted)
+        "source_id": "CANCEL",
+        "text": "An order can be cancelled before dispatch. After dispatch use the returns process. Cancellation requests go to the support portal."
+      }
+    ],
+    "persisted_pending_recovered": "pending",
+    "edited_action": [
+      {
+        "action_id": "5cf98027ef984ba1bad54942b2551f5d",
+        "thread_id": "capstone-approved",
+        "user_id": "alice",
+        "draft": "Human-approved exercise draft: include the verified source and applicable conditions.",
+        "created_at": "2026-10-31 09:32:03"
+      }
+    ],
+    "retry_status": "recorded",
+    "rejection_status": "rejected",
+    "cross_user_denied": true,
+    "model_request_sent": false,
+    "remaining_live_gates": [
+      "model-grounded draft quality",
+      "held-out generated answers",
+      "prompt-injection response behavior"
+    ]
+  }
+}
+[+35 hidden: rtk recall a115f091b57d]
+```

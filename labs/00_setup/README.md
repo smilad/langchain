@@ -31,3 +31,62 @@ This lab is stateless and creates no database or learning record. There is nothi
 3–5 hours is a suggested setup allocation for someone with relevant Python readiness, not a beginner deadline. If functions, environments or exceptions are new, work through the diagnostic's remediation sequence over additional sessions and reassess on fresh inputs. Delayed review belongs to the learner after actual evidence, not a prefilled progress checklist.
 
 Sources: [uv](https://docs.astral.sh/uv/guides/projects/), [Pydantic](https://docs.pydantic.dev/latest/concepts/models/), [asyncio](https://docs.python.org/3/library/asyncio-task.html), checked 2026-10-12.
+
+## Captured `--check` output
+
+Real output of `uv run python labs/00_setup/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  },
+  "configuration_present": {
+    "OPENAI_API_KEY": false,
+... (69 lines omitted)
+      "line": 29
+    },
+    {
+      "function": "model_validate",
+      "line": 790
+    }
+  ],
+  "diagnosis": "Read the final validation location, then follow main -> read_request."
+}
+{
+  "async": {
+    "results_in_input_order": [
+      "A",
+      "B"
+    ],
+    "scheduling_events": [
+      "A:start",
+      "B:start",
+      "A:end",
+      "B:end"
+    ]
+  },
+  "live_gate": "No model call belongs to setup; provider verification is in Module 01.",
+  "mode": "check"
+}
+[+94 hidden: rtk recall 0b65e31ade19]
+```

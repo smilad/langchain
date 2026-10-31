@@ -56,3 +56,62 @@ No `--draft` here: actual `rag.answer` produces a source-grounded proposal. Expl
 Exactly-once means a single atomic owned **local record** under replay, not general email/network exactly-once delivery. Stable identity plus unique transaction handles a sink-commit/checkpoint crash window. File locking serializes local operations and limits throughput; this is not a distributed deployment. Synthetic drafts remain in private SQLite files.
 
 For reset, stop every using process, remove only dedicated experiment files (checkpoint DB, its `-wal`/`-shm`/`.lock`, action DB and its `-wal`/`-shm`), and use new paired files. Do not reset shared `.course` blindly. **Evidence status:** [verification](../../docs/VERIFICATION.md) records actual local commands/outcomes separately from unavailable live proof. Installed baseline: Python 3.14.0, LangGraph 1.2.14, langgraph-checkpoint-sqlite 3.1.1. [Exercise](../../exercises/10_durable_approval.md), [solutions](../../solutions/10_durable_approval.md).
+
+## Captured `--check` output
+
+Real output of `uv run python labs/10_durable_approval/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  }
+}
+{
+... (52 lines omitted)
+      "thread_id": "edit",
+      "question": "Return policy?",
+      "draft": "Human-reviewed corrected text",
+      "draft_origin": "human",
+      "source_ids": [],
+      "live": false,
+      "action_id": "68fe9530213747f4a0d92b81facaeb5f",
+      "decision": "edit",
+      "status": "recorded"
+    },
+    "pending_review": [],
+    "actions": [
+      {
+        "action_id": "68fe9530213747f4a0d92b81facaeb5f",
+        "thread_id": "edit",
+        "user_id": "alice",
+        "draft": "Human-reviewed corrected text",
+        "created_at": "2026-10-31 09:31:45"
+      }
+    ]
+  },
+  "cross_owner": "inspection/resumption/restart denied",
+  "limits": "Close/reopen verified by this command; separate CLI invocations are the process-restart gate. Exactly-once concerns only atomic local SQLite records.",
+  "live_gate": "Model drafting unverified without --live and provider consent"
+}
+[+77 hidden: rtk recall 291c432d2022]
+```

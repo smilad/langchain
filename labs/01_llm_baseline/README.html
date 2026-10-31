@@ -42,4 +42,59 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p>Elapsed time includes the SDK/network and allowed retry. Usage may be null. No dollar estimate is invented; calculate cost only with dated pricing and the reported usage categories. Full output may include reasoning or refusal items, so <code>output[0]</code> is not assumed to contain text. Only synthetic inputs belong in this printable report.</p>
 <h2>Evidence, compatibility, state</h2>
 <p>Installed authoring snapshot: Python 3.14.0/OpenAI SDK 3.29.0; exact dependencies are in <code>uv.lock</code>. <a href="../../docs/VERIFICATION.html">Verification</a> records actual gateway-mediated Responses classification (<code>billing</code>, 79 reported tokens) and direct-public-endpoint limits. No state is persisted and no reset is needed. Check mode does not contact a remote endpoint; live requires privately configured Responses-capable access and consent. Review data-retention and optional hosted-tracing configuration before using real data.</p>
-<p>Primary references checked 2026-10-12: <a href="https://github.com/openai/openai-python">SDK</a>, <a href="https://platform.openai.com/docs/guides/text">text generation</a>, <a href="https://platform.openai.com/docs/api-reference/responses">Responses</a>.</p></main></body></html>
+<p>Primary references checked 2026-10-12: <a href="https://github.com/openai/openai-python">SDK</a>, <a href="https://platform.openai.com/docs/guides/text">text generation</a>, <a href="https://platform.openai.com/docs/api-reference/responses">Responses</a>.</p>
+<h2>Captured <code>--check</code> output</h2>
+<p>Real output of <code>uv run python labs/01_llm_baseline/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<pre><code class="language-json">{
+  &quot;preflight&quot;: {
+    &quot;python&quot;: &quot;3.14.0&quot;,
+    &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
+    &quot;packages&quot;: {
+      &quot;langchain&quot;: &quot;1.4.4&quot;,
+      &quot;langchain-core&quot;: &quot;1.6.9&quot;,
+      &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
+      &quot;langgraph&quot;: &quot;1.2.14&quot;,
+      &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
+      &quot;fastmcp&quot;: &quot;4.1.0&quot;,
+      &quot;pydantic&quot;: &quot;2.14.1&quot;
+    },
+    &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
+    &quot;configured&quot;: {
+      &quot;api_key&quot;: false,
+      &quot;model&quot;: false,
+      &quot;live_consent&quot;: false,
+      &quot;custom_endpoint&quot;: false,
+      &quot;hosted_tracing&quot;: false
+    },
+    &quot;live_request_sent&quot;: false
+  }
+}
+{
+... (19 lines omitted)
+}
+{
+  &quot;rejected_parser_fixture&quot;: &quot;Billing&quot;
+}
+{
+  &quot;rejected_parser_fixture&quot;: &quot;billing because payment&quot;
+}
+{
+  &quot;rejected_parser_fixture&quot;: &quot;&quot;
+}
+{
+  &quot;rejected_parser_fixture&quot;: &quot;{\&quot;label\&quot;:\&quot;billing\&quot;}&quot;
+}
+{
+  &quot;rejected_input_length&quot;: 0
+}
+{
+  &quot;rejected_input_length&quot;: 1
+}
+{
+  &quot;rejected_input_length&quot;: 4001
+}
+{
+  &quot;live_verification&quot;: &quot;Pending: deterministic request/parser checks do not classify any text with a model.&quot;
+}
+[+44 hidden: rtk recall 6ddee080d564]
+</code></pre></main></body></html>

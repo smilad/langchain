@@ -45,3 +45,102 @@ The live agent uses discovered MCP tools, is bounded to four model/three tool ca
 Normal mode releases its adapter context after all calls; disconnect mode releases a direct client context. Both exercise real transport cleanup. Neither asserts arbitrary remote-server process shutdown. Tools expose synthetic data only; no persistent state/reset is required. If an interpreter/import fails, run `uv sync --locked` and inspect the real server stderr rather than hiding it behind a model fallback.
 
 See [lessons](../../lessons/13_mcp/01.md), [exercise](../../exercises/13_mcp.md), and [solutions](../../solutions/13_mcp.md).
+
+## Captured `--check` output
+
+Real output of `uv run python labs/13_mcp/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  },
+  "api_note": "langchain.mcp is beta in LangChain>=1.4; lockfile is baseline."
+}
+... (78 lines omitted)
+    },
+    "status": "success"
+  },
+  "invalid_quantity": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Error calling tool 'catalog_quote'",
+        "id": "lc_0a413475-3782-48bf-a558-1b72423912d0"
+      }
+    ],
+    "additional_kwargs": {},
+    "response_metadata": {},
+    "type": "tool",
+    "name": "catalog_quote",
+    "id": null,
+    "tool_call_id": "invalid",
+    "artifact": null,
+    "status": "error"
+  }
+}
+{
+  "lifecycle": "Adapter context exited; stdio connection released.",
+  "live_gate": "Agent generation not exercised."
+}
+[+103 hidden: rtk recall bd7c5d57ea70]
+  from langchain.mcp import MCPAdapter
+
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│                                                                              │
+│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
+│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                FastMCP 4.1.0                                 │
+│                            https://gofastmcp.com                             │
+│                                                                              │
+│               🖥  Server:      Course synthetic catalog, 4.1.0                │
+│               🚀 Deploy free: https://horizon.prefect.io                     │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                          🎉 Update available: 4.1.4                          │
+│                      Run: pip install --upgrade fastmcp                      │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+... (46 lines omitted)
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ <repo>/.venv/li │
+                    │ b/python3.14/site-packages/fastmcp/server/server.py:1467 │
+                    │  in call_tool                                            │
+                    │                                                          │
+                    │ <repo>/.venv/li │
+                    │ b/python3.14/site-packages/fastmcp/tools/base.py:440 in  │
+                    │ _run                                                     │
+                    │                                                          │
+                    │                 ... 9 frames hidden ...                  │
+                    │                                                          │
+                    │ <repo>/.venv/li │
+                    │ b/python3.14/site-packages/fastmcp/tools/function_tool.p │
+                    │ y:96 in wrapper                                          │
+... (truncated)
+```

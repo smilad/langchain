@@ -11,7 +11,8 @@ Build a detailed, reusable learning repository that teaches LangChain from the b
 
 ## Constraints
 - Repository: Python `>=3.14`, `uv_build`, locked LangChain/provider/LangGraph/MCP dependencies; course package `langchain_learning`, distinct from the external library.
-- The course content and applications are implemented. [Verification](docs/VERIFICATION.md) distinguishes local execution, actual gateway-mediated OpenAI-Codex requests, and remaining provider-capability gates.- Prior Python knowledge, weekly availability, and a numeric API budget are not established. The user selected OpenAI API verification and approved bounded billable runs; authenticated OpenAI-Codex access is exercised, but no public API/embedding credentials or hard spending cap are invented.
+- The course content and applications are implemented. [Verification](docs/VERIFICATION.md) distinguishes local execution, actual gateway-mediated OpenAI-Codex requests, and remaining provider-capability gates.
+- Prior Python knowledge, weekly availability, and a numeric API budget are not established. No public API/embedding credentials or hard spending cap are assumed; live runs need your own key and consent.
 - Authoring defaults: English Markdown, runnable Python labs, small lessons, official documentation first. Learning records require learner evidence; installed software and authored lessons are not demonstrated mastery.
 
 ## Out of scope for the core course

@@ -30,3 +30,62 @@ Elapsed time includes the SDK/network and allowed retry. Usage may be null. No d
 Installed authoring snapshot: Python 3.14.0/OpenAI SDK 3.29.0; exact dependencies are in `uv.lock`. [Verification](../../docs/VERIFICATION.md) records actual gateway-mediated Responses classification (`billing`, 79 reported tokens) and direct-public-endpoint limits. No state is persisted and no reset is needed. Check mode does not contact a remote endpoint; live requires privately configured Responses-capable access and consent. Review data-retention and optional hosted-tracing configuration before using real data.
 
 Primary references checked 2026-10-12: [SDK](https://github.com/openai/openai-python), [text generation](https://platform.openai.com/docs/guides/text), [Responses](https://platform.openai.com/docs/api-reference/responses).
+
+## Captured `--check` output
+
+Real output of `uv run python labs/01_llm_baseline/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  }
+}
+{
+... (19 lines omitted)
+}
+{
+  "rejected_parser_fixture": "Billing"
+}
+{
+  "rejected_parser_fixture": "billing because payment"
+}
+{
+  "rejected_parser_fixture": ""
+}
+{
+  "rejected_parser_fixture": "{\"label\":\"billing\"}"
+}
+{
+  "rejected_input_length": 0
+}
+{
+  "rejected_input_length": 1
+}
+{
+  "rejected_input_length": 4001
+}
+{
+  "live_verification": "Pending: deterministic request/parser checks do not classify any text with a model."
+}
+[+44 hidden: rtk recall 6ddee080d564]
+```

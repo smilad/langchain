@@ -118,4 +118,59 @@ for name in names:
 </code></pre>
 <p>Record the current revision, lockfile, and backup location locally. For a code rollback, use a separate known-good checkout/worktree and <code>uv sync --locked</code>; do not destructively reset unrelated user changes. Start that revision on port 8766 against <strong>copies</strong> of a matched, schema-compatible checkpoint/action backup using <code>--db</code> and <code>--actions</code>. Probe readiness, inspect a known pending thread with its owner token, and verify owner-filtered action counts before selecting it as the serving process. Then stop the failed version. Never restore only one file or silently erase already committed actions.</p>
 <p>No automatic schema migration is claimed. If an incompatible change has occurred, restoring a matched backup is a recovery decision that can discard newer local state; preserve evidence and obtain an explicit data-recovery decision. Rehearse using synthetic lab state first. Rollback does not undo external email/payment; this course's sink records local actions only.</p>
-<p>After manual practice, stop the process before removing your <strong>selected synthetic state directory</strong>. Do not delete shared policy/catalog fixtures or another learner's state. Derive latency/cost targets from your measured workload, not from the worker count. Continue with <a href="../../lessons/14_production/01.html">lessons</a>, <a href="../../exercises/14_production.html">exercise</a>, and <a href="../../solutions/14_production.html">solutions</a>.</p></main></body></html>
+<p>After manual practice, stop the process before removing your <strong>selected synthetic state directory</strong>. Do not delete shared policy/catalog fixtures or another learner's state. Derive latency/cost targets from your measured workload, not from the worker count. Continue with <a href="../../lessons/14_production/01.html">lessons</a>, <a href="../../exercises/14_production.html">exercise</a>, and <a href="../../solutions/14_production.html">solutions</a>.</p>
+<h2>Captured <code>--check</code> output</h2>
+<p>Real output of <code>uv run python labs/14_production/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<pre><code class="language-json">{
+  &quot;preflight&quot;: {
+    &quot;python&quot;: &quot;3.14.0&quot;,
+    &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
+    &quot;packages&quot;: {
+      &quot;langchain&quot;: &quot;1.4.4&quot;,
+      &quot;langchain-core&quot;: &quot;1.6.9&quot;,
+      &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
+      &quot;langgraph&quot;: &quot;1.2.14&quot;,
+      &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
+      &quot;fastmcp&quot;: &quot;4.1.0&quot;,
+      &quot;pydantic&quot;: &quot;2.14.1&quot;
+    },
+    &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
+    &quot;configured&quot;: {
+      &quot;api_key&quot;: false,
+      &quot;model&quot;: false,
+      &quot;live_consent&quot;: false,
+      &quot;custom_endpoint&quot;: false,
+      &quot;hosted_tracing&quot;: false
+    },
+    &quot;live_request_sent&quot;: false
+  }
+}
+{
+... (461 lines omitted)
+      &quot;event&quot;: &quot;running&quot;,
+      &quot;request_id&quot;: &quot;171f76b9ac334fe99624231be6ce2433&quot;
+    },
+    {
+      &quot;event&quot;: &quot;deadline_exceeded&quot;,
+      &quot;request_id&quot;: &quot;171f76b9ac334fe99624231be6ce2433&quot;,
+      &quot;effects_may_have_committed&quot;: true
+    },
+    {
+      &quot;event&quot;: &quot;http_response&quot;,
+      &quot;method&quot;: &quot;POST&quot;
+    },
+    {
+      &quot;event&quot;: &quot;stopping&quot;,
+      &quot;signal&quot;: 15
+    },
+    {
+      &quot;event&quot;: &quot;stopped&quot;
+    }
+  ],
+  &quot;exit_code&quot;: 0
+}
+{
+  &quot;local_state&quot;: &quot;Temporary lab state removed after service shutdown; persistent manual service state is untouched.&quot;
+}
+[+486 hidden: rtk recall de7066d83af1]
+</code></pre></main></body></html>

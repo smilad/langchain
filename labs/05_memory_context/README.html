@@ -45,4 +45,59 @@ uv run python labs/05_memory_context/main.py --check
 <h2>Retention, reset and caveats</h2>
 <p>All state is held in process memory. Ending the process releases these local objects; no <code>.course</code> database is created by this lab. Do not confuse that with deletion of provider/optional hosted-trace records. Trimming selects a request copy, not stored-history erasure. Long-term describes cross-thread store scope here, not restart durability. Preference deletion does not erase old checkpoint snapshots.</p>
 <p>The token counter is approximate and does not guarantee fit for every provider. Complete tool-call/result pairing must survive selection. Summaries can omit facts, introduce mistakes or carry untrusted instructions; they cannot grant permission. Use synthetic data only and do not upload traces without considering consent/retention.</p>
-<p>Complete the <a href="../../exercises/05_memory_context.html">exercise</a> before opening the <a href="../../solutions/05_memory_context.html">solution</a>. No live run or learner mastery is claimed when model credentials/consent are unavailable. Sources consulted 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">short-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/long-term-memory">long-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/middleware/custom">custom middleware</a>.</p></main></body></html>
+<p>Complete the <a href="../../exercises/05_memory_context.html">exercise</a> before opening the <a href="../../solutions/05_memory_context.html">solution</a>. No live run or learner mastery is claimed when model credentials/consent are unavailable. Sources consulted 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">short-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/long-term-memory">long-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/middleware/custom">custom middleware</a>.</p>
+<h2>Captured <code>--check</code> output</h2>
+<p>Real output of <code>uv run python labs/05_memory_context/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<pre><code class="language-json">{
+  &quot;python&quot;: &quot;3.14.0&quot;,
+  &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
+  &quot;packages&quot;: {
+    &quot;langchain&quot;: &quot;1.4.4&quot;,
+    &quot;langchain-core&quot;: &quot;1.6.9&quot;,
+    &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
+    &quot;langgraph&quot;: &quot;1.2.14&quot;,
+    &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
+    &quot;fastmcp&quot;: &quot;4.1.0&quot;,
+    &quot;pydantic&quot;: &quot;2.14.1&quot;
+  },
+  &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
+  &quot;configured&quot;: {
+    &quot;api_key&quot;: false,
+    &quot;model&quot;: false,
+    &quot;live_consent&quot;: false,
+    &quot;custom_endpoint&quot;: false,
+    &quot;hosted_tracing&quot;: false
+  },
+  &quot;live_request_sent&quot;: false
+}
+{
+  &quot;alice_thread&quot;: {
+    &quot;messages&quot;: [
+... (106 lines omitted)
+        &quot;id&quot;: &quot;latest&quot;
+      }
+    ],
+    &quot;discarded_by_trim&quot;: [
+      &quot;early&quot;,
+      &quot;irrelevant&quot;
+    ]
+  },
+  &quot;real_tool_result&quot;: {
+    &quot;found&quot;: true,
+    &quot;quoted&quot;: true,
+    &quot;item_id&quot;: &quot;notebook&quot;,
+    &quot;quantity&quot;: 2,
+    &quot;unit_price_cents&quot;: 1299,
+    &quot;total_cents&quot;: 2598,
+    &quot;currency&quot;: &quot;USD&quot;,
+    &quot;stock&quot;: 12
+  }
+}
+{
+  &quot;deleted_store_preference&quot;: true,
+  &quot;old_checkpoint_still_contains_selected_preference&quot;: true,
+  &quot;durability&quot;: &quot;In-memory objects survive graph reconstruction, not process restart&quot;,
+  &quot;live_gate&quot;: &quot;Not exercised: model recall, generated summary accuracy, provider context validity&quot;
+}
+[+131 hidden: rtk recall 2a3c5625bcf2]
+</code></pre></main></body></html>

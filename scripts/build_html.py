@@ -8,7 +8,7 @@ from pathlib import Path
 import markdown
 
 ROOT = Path(__file__).resolve().parent.parent
-SKIP = {".venv", ".git", "node_modules", ".pytest_cache"}
+SKIP = {"superpowers", ".venv", ".git", "node_modules", ".pytest_cache"}
 
 CSS = """
 :root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}

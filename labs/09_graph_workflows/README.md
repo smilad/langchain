@@ -20,3 +20,62 @@ Live uses runtime configuration `OPENAI_API_KEY`, `COURSE_MODEL`, `COURSE_ALLOW_
 Trace every node's reads/writes; run all routes; explain the fan-in barrier and reducer; identify the two actual graph faults; complete [the independent variation](../../exercises/09_graph_workflows.md). Validate source support separately from schema shape. Parallel event order is not a semantic priority guarantee. The graph has bounded recursion and no side-effecting tool.
 
 **Evidence status:** [verification](../../docs/VERIFICATION.md) records actual local commands and outcomes separately from unavailable live proof. Installed baseline: Python 3.14.0, LangGraph 1.2.14, LangChain 1.4.4, langchain-openai 1.7.0, Pydantic 2.14.1. Live proof requires provider configuration, not a fake fallback. No learner progress is implied. This lab uses no persistent local state. [Solutions](../../solutions/09_graph_workflows.md).
+
+## Captured `--check` output
+
+Real output of `uv run python labs/09_graph_workflows/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  }
+}
+{
+... (96 lines omitted)
+        {
+          "unsupported": {
+            "status": "unsupported",
+            "events": [
+              "unsupported"
+            ]
+          }
+        }
+      ],
+      "state": {
+        "question": "Describe Saturn",
+        "user_id": "alice",
+        "route": "unsupported",
+        "events": [
+          "classify:unsupported",
+          "unsupported"
+        ],
+        "status": "unsupported"
+      }
+    }
+  ],
+  "reducer_failure": "Actual parallel writes without reducer rejected",
+  "termination_failure": "Actual nonterminating graph reached recursion limit",
+  "live_gate": "Unverified: real model classification and grounded drafting require --live"
+}
+[+121 hidden: rtk recall 24ef82363e51]
+```

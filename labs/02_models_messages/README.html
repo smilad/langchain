@@ -37,4 +37,59 @@ uv run python labs/02_models_messages/main.py --live --mode batch
 <p>Batch responses retain input order, not completion order. Only whole-batch duration is measured; per-response duration is null. Client-side batch is not a provider Batch API or cost discount. Async awaits native model I/O; it does not make CPU-heavy Python nonblocking. Report missing usage as unavailable, especially with custom compatible endpoints. Common interfaces do not imply identical multimodal or provider-specific fields.</p>
 <h2>Evidence and state</h2>
 <p>Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0. <a href="../../docs/VERIFICATION.html">Verification</a> records actual gateway-mediated invoke, stream aggregation, async, and batch. The gateway buffers streams; real-time delivery and interactive input remain unverified. Exact versions live in <code>uv.lock</code> and actual preflight. No state is written, so there is nothing to reset. Configure compatible private access/consent; disable/review hosted tracing before sending private content.</p>
-<p>Sources checked 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/models">models</a>, <a href="https://docs.langchain.com/oss/python/langchain/messages">messages</a>, <a href="https://docs.langchain.com/oss/python/integrations/chat/openai">ChatOpenAI</a>.</p></main></body></html>
+<p>Sources checked 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/models">models</a>, <a href="https://docs.langchain.com/oss/python/langchain/messages">messages</a>, <a href="https://docs.langchain.com/oss/python/integrations/chat/openai">ChatOpenAI</a>.</p>
+<h2>Captured <code>--check</code> output</h2>
+<p>Real output of <code>uv run python labs/02_models_messages/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<pre><code class="language-json">{
+  &quot;preflight&quot;: {
+    &quot;python&quot;: &quot;3.14.0&quot;,
+    &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
+    &quot;packages&quot;: {
+      &quot;langchain&quot;: &quot;1.4.4&quot;,
+      &quot;langchain-core&quot;: &quot;1.6.9&quot;,
+      &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
+      &quot;langgraph&quot;: &quot;1.2.14&quot;,
+      &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
+      &quot;fastmcp&quot;: &quot;4.1.0&quot;,
+      &quot;pydantic&quot;: &quot;2.14.1&quot;
+    },
+    &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
+    &quot;configured&quot;: {
+      &quot;api_key&quot;: false,
+      &quot;model&quot;: false,
+      &quot;live_consent&quot;: false,
+      &quot;custom_endpoint&quot;: false,
+      &quot;hosted_tracing&quot;: false
+    },
+    &quot;live_request_sent&quot;: false
+  }
+}
+{
+... (70 lines omitted)
+      &quot;output_tokens&quot;: 2,
+      &quot;total_tokens&quot;: 5
+    }
+  },
+  &quot;live_verification&quot;: &quot;Pending: these hand-authored data fixtures exercise message operations, not model generation.&quot;
+}
+{
+  &quot;rejected_response&quot;: {
+    &quot;text&quot;: &quot;billing because it concerns payment&quot;,
+    &quot;content&quot;: &quot;billing because it concerns payment&quot;,
+    &quot;content_blocks&quot;: [
+      {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;text&quot;: &quot;billing because it concerns payment&quot;
+      }
+    ],
+    &quot;tool_calls&quot;: [],
+    &quot;usage&quot;: null,
+    &quot;response_metadata&quot;: {},
+    &quot;elapsed_seconds&quot;: null
+  }
+}
+{
+  &quot;rejected_authored_label_fixture&quot;: &quot;explanation is not the exact-label contract&quot;
+}
+[+95 hidden: rtk recall 7757fc1eadb2]
+</code></pre></main></body></html>

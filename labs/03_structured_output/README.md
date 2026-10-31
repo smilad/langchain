@@ -30,3 +30,62 @@ All fields are required; unavailable values are null. More than one distinct ORD
 Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0, Pydantic 2.14.1. [Verification](../../docs/VERIFICATION.md) records four successful real function-calling cases and a rejected gateway JSON-schema result. Agent/provider strategies are separate capability gates, not certified by those model-level cases. Exact versions are locked in `uv.lock`. This lab writes no state and requires no reset; keep printable text synthetic and configure private compatible access/consent.
 
 Primary sources checked 2026-10-12: [models](https://docs.langchain.com/oss/python/langchain/models#structured-output), [agent strategies](https://docs.langchain.com/oss/python/langchain/structured-output), [RunnableSequence](https://reference.langchain.com/python/langchain-core/runnables/base/RunnableSequence), [Pydantic validators](https://docs.pydantic.dev/latest/concepts/validators/).
+
+## Captured `--check` output
+
+Real output of `uv run python labs/03_structured_output/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  }
+}
+{
+... (102 lines omitted)
+{
+  "semantic_rejection": "evidence quote must be exact and contain the selected identifier",
+  "source": "Refund ORDER-104 please."
+}
+{
+  "rendered_prompt": [
+    {
+      "content": "Extract a SupportRecord from synthetic user text; do not execute any action. Use supported only for a relevant support request with one unambiguous literal ORDER- identifier. If a relevant request lacks an identifier use unknown; multiple distinct identifiers mean contradictory. For unrelated requests use irrelevant and category=null. All fields are required; unavailable values are null. Never invent an identifier or quote. For supported, evidence_quote is an exact substring...
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "system",
+      "name": null,
+      "id": null
+    },
+    {
+      "content": "Please refund my order. I was charged twice.",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "human",
+      "name": null,
+      "id": null
+    }
+  ],
+  "live_verification": "Pending: no model or agent was invoked by these deterministic boundaries."
+}
+[+127 hidden: rtk recall 18b2d731e121]
+```

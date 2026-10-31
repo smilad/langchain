@@ -40,4 +40,59 @@ uv run python labs/03_structured_output/main.py --live --engine agent --strategy
 <p>All fields are required; unavailable values are null. More than one distinct ORDER identifier is contradictory by this lab's deliberately conservative policy. Non-supported states must not choose an order or quote. Supported fields require exact literal source evidence. This catches invention of identifiers/quotes, not every semantic error: relevance/category and real eligibility still need a human rubric. Do not retry missing facts into existence. There is no automatic semantic repair loop.</p>
 <h2>Evidence and reset</h2>
 <p>Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0, Pydantic 2.14.1. <a href="../../docs/VERIFICATION.html">Verification</a> records four successful real function-calling cases and a rejected gateway JSON-schema result. Agent/provider strategies are separate capability gates, not certified by those model-level cases. Exact versions are locked in <code>uv.lock</code>. This lab writes no state and requires no reset; keep printable text synthetic and configure private compatible access/consent.</p>
-<p>Primary sources checked 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/models#structured-output">models</a>, <a href="https://docs.langchain.com/oss/python/langchain/structured-output">agent strategies</a>, <a href="https://reference.langchain.com/python/langchain-core/runnables/base/RunnableSequence">RunnableSequence</a>, <a href="https://docs.pydantic.dev/latest/concepts/validators/">Pydantic validators</a>.</p></main></body></html>
+<p>Primary sources checked 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/models#structured-output">models</a>, <a href="https://docs.langchain.com/oss/python/langchain/structured-output">agent strategies</a>, <a href="https://reference.langchain.com/python/langchain-core/runnables/base/RunnableSequence">RunnableSequence</a>, <a href="https://docs.pydantic.dev/latest/concepts/validators/">Pydantic validators</a>.</p>
+<h2>Captured <code>--check</code> output</h2>
+<p>Real output of <code>uv run python labs/03_structured_output/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<pre><code class="language-json">{
+  &quot;preflight&quot;: {
+    &quot;python&quot;: &quot;3.14.0&quot;,
+    &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
+    &quot;packages&quot;: {
+      &quot;langchain&quot;: &quot;1.4.4&quot;,
+      &quot;langchain-core&quot;: &quot;1.6.9&quot;,
+      &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
+      &quot;langgraph&quot;: &quot;1.2.14&quot;,
+      &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
+      &quot;fastmcp&quot;: &quot;4.1.0&quot;,
+      &quot;pydantic&quot;: &quot;2.14.1&quot;
+    },
+    &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
+    &quot;configured&quot;: {
+      &quot;api_key&quot;: false,
+      &quot;model&quot;: false,
+      &quot;live_consent&quot;: false,
+      &quot;custom_endpoint&quot;: false,
+      &quot;hosted_tracing&quot;: false
+    },
+    &quot;live_request_sent&quot;: false
+  }
+}
+{
+... (102 lines omitted)
+{
+  &quot;semantic_rejection&quot;: &quot;evidence quote must be exact and contain the selected identifier&quot;,
+  &quot;source&quot;: &quot;Refund ORDER-104 please.&quot;
+}
+{
+  &quot;rendered_prompt&quot;: [
+    {
+      &quot;content&quot;: &quot;Extract a SupportRecord from synthetic user text; do not execute any action. Use supported only for a relevant support request with one unambiguous literal ORDER- identifier. If a relevant request lacks an identifier use unknown; multiple distinct identifiers mean contradictory. For unrelated requests use irrelevant and category=null. All fields are required; unavailable values are null. Never invent an identifier or quote. For supported, evidence_quote is an exact substring...
+      &quot;additional_kwargs&quot;: {},
+      &quot;response_metadata&quot;: {},
+      &quot;type&quot;: &quot;system&quot;,
+      &quot;name&quot;: null,
+      &quot;id&quot;: null
+    },
+    {
+      &quot;content&quot;: &quot;Please refund my order. I was charged twice.&quot;,
+      &quot;additional_kwargs&quot;: {},
+      &quot;response_metadata&quot;: {},
+      &quot;type&quot;: &quot;human&quot;,
+      &quot;name&quot;: null,
+      &quot;id&quot;: null
+    }
+  ],
+  &quot;live_verification&quot;: &quot;Pending: no model or agent was invoked by these deterministic boundaries.&quot;
+}
+[+127 hidden: rtk recall 18b2d731e121]
+</code></pre></main></body></html>

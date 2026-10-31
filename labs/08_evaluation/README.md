@@ -59,3 +59,62 @@ This command annotates the saved report without retrieval, generation, or judge 
 A lexical miss is not automatically generation failure. Citation membership is not entailment. Outdated or forbidden evidence is a boundary defect, not something to average away. Distinguish target errors, retrieval relevance, unsupported claims, abstention decisions, grader errors, and missing environment configuration. Record usage only when actually reported; absent usage is not zero spend. Hosted traces require separate credentials and permission to upload content.
 
 **Acceptance:** produce a registered per-case experiment, inspect errors and evidence, and justify the comparison without tuning on confirmatory results. With no provider, finish local retrieval/registration boundaries and mark generated semantic quality, model grades, embedding relevance, and hosted evaluation unverified.
+
+## Captured `--check` output
+
+Real output of `uv run python labs/08_evaluation/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  }
+}
+{
+... (807 lines omitted)
+        "abstention_matches_label": null,
+        "semantic_support": "not a deterministic check"
+      },
+      "trace": {
+        "retrieval_seconds": 0.0017297079903073609,
+        "model_calls": 0,
+        "usage": [],
+        "corpus_sha256": "42dfb685e549233d2795a949c5296ec8f148498f616608b981e541d3ce972066"
+      },
+      "elapsed_seconds": 0.0017349160043522716
+    }
+  ],
+  "configuration": {
+    "strategy": "lexical",
+    "k": 3,
+    "trials": 1,
+    "compare_strategy": null,
+    "live": false,
+    "judge": false,
+    "model": null,
+    "embedding_model": null,
+    "dataset_sha256": "c52d16db367b05d7cf5bc5c35c6dc21f665bd03c93a013101996704308764467",
+    "corpus_sha256": "42dfb685e549233d2795a949c5296ec8f148498f616608b981e541d3ce972066"
+  }
+}
+[+832 hidden: rtk recall 53d86df7a7d4]
+```

@@ -90,3 +90,62 @@ Record the current revision, lockfile, and backup location locally. For a code r
 No automatic schema migration is claimed. If an incompatible change has occurred, restoring a matched backup is a recovery decision that can discard newer local state; preserve evidence and obtain an explicit data-recovery decision. Rehearse using synthetic lab state first. Rollback does not undo external email/payment; this course's sink records local actions only.
 
 After manual practice, stop the process before removing your **selected synthetic state directory**. Do not delete shared policy/catalog fixtures or another learner's state. Derive latency/cost targets from your measured workload, not from the worker count. Continue with [lessons](../../lessons/14_production/01.md), [exercise](../../exercises/14_production.md), and [solutions](../../solutions/14_production.md).
+
+## Captured `--check` output
+
+Real output of `uv run python labs/14_production/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  }
+}
+{
+... (461 lines omitted)
+      "event": "running",
+      "request_id": "171f76b9ac334fe99624231be6ce2433"
+    },
+    {
+      "event": "deadline_exceeded",
+      "request_id": "171f76b9ac334fe99624231be6ce2433",
+      "effects_may_have_committed": true
+    },
+    {
+      "event": "http_response",
+      "method": "POST"
+    },
+    {
+      "event": "stopping",
+      "signal": 15
+    },
+    {
+      "event": "stopped"
+    }
+  ],
+  "exit_code": 0
+}
+{
+  "local_state": "Temporary lab state removed after service shutdown; persistent manual service state is untouched."
+}
+[+486 hidden: rtk recall de7066d83af1]
+```

@@ -53,4 +53,59 @@ uv run python labs/08_evaluation/main.py --live --trials 2 --split held_out --co
 <p>This command annotates the saved report without retrieval, generation, or judge calls. Partial review is allowed; report how many rows remain unreviewed. Unknown case/strategy/trial keys, duplicate case keys, and grading a row with no generated answer fail visibly. <code>--human-review</code> without <code>--review-report</code> is rejected: rerunning a stochastic target would associate the old grade with a different observation. An inappropriate abstention is a human semantic failure even if the three numeric grades are high.</p>
 <h2>Diagnose before changing anything</h2>
 <p>A lexical miss is not automatically generation failure. Citation membership is not entailment. Outdated or forbidden evidence is a boundary defect, not something to average away. Distinguish target errors, retrieval relevance, unsupported claims, abstention decisions, grader errors, and missing environment configuration. Record usage only when actually reported; absent usage is not zero spend. Hosted traces require separate credentials and permission to upload content.</p>
-<p><strong>Acceptance:</strong> produce a registered per-case experiment, inspect errors and evidence, and justify the comparison without tuning on confirmatory results. With no provider, finish local retrieval/registration boundaries and mark generated semantic quality, model grades, embedding relevance, and hosted evaluation unverified.</p></main></body></html>
+<p><strong>Acceptance:</strong> produce a registered per-case experiment, inspect errors and evidence, and justify the comparison without tuning on confirmatory results. With no provider, finish local retrieval/registration boundaries and mark generated semantic quality, model grades, embedding relevance, and hosted evaluation unverified.</p>
+<h2>Captured <code>--check</code> output</h2>
+<p>Real output of <code>uv run python labs/08_evaluation/main.py --check</code> (no credentials, no network; machine paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<pre><code class="language-json">{
+  &quot;preflight&quot;: {
+    &quot;python&quot;: &quot;3.14.0&quot;,
+    &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
+    &quot;packages&quot;: {
+      &quot;langchain&quot;: &quot;1.4.4&quot;,
+      &quot;langchain-core&quot;: &quot;1.6.9&quot;,
+      &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
+      &quot;langgraph&quot;: &quot;1.2.14&quot;,
+      &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
+      &quot;fastmcp&quot;: &quot;4.1.0&quot;,
+      &quot;pydantic&quot;: &quot;2.14.1&quot;
+    },
+    &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
+    &quot;configured&quot;: {
+      &quot;api_key&quot;: false,
+      &quot;model&quot;: false,
+      &quot;live_consent&quot;: false,
+      &quot;custom_endpoint&quot;: false,
+      &quot;hosted_tracing&quot;: false
+    },
+    &quot;live_request_sent&quot;: false
+  }
+}
+{
+... (807 lines omitted)
+        &quot;abstention_matches_label&quot;: null,
+        &quot;semantic_support&quot;: &quot;not a deterministic check&quot;
+      },
+      &quot;trace&quot;: {
+        &quot;retrieval_seconds&quot;: 0.0017297079903073609,
+        &quot;model_calls&quot;: 0,
+        &quot;usage&quot;: [],
+        &quot;corpus_sha256&quot;: &quot;42dfb685e549233d2795a949c5296ec8f148498f616608b981e541d3ce972066&quot;
+      },
+      &quot;elapsed_seconds&quot;: 0.0017349160043522716
+    }
+  ],
+  &quot;configuration&quot;: {
+    &quot;strategy&quot;: &quot;lexical&quot;,
+    &quot;k&quot;: 3,
+    &quot;trials&quot;: 1,
+    &quot;compare_strategy&quot;: null,
+    &quot;live&quot;: false,
+    &quot;judge&quot;: false,
+    &quot;model&quot;: null,
+    &quot;embedding_model&quot;: null,
+    &quot;dataset_sha256&quot;: &quot;c52d16db367b05d7cf5bc5c35c6dc21f665bd03c93a013101996704308764467&quot;,
+    &quot;corpus_sha256&quot;: &quot;42dfb685e549233d2795a949c5296ec8f148498f616608b981e541d3ce972066&quot;
+  }
+}
+[+832 hidden: rtk recall 53d86df7a7d4]
+</code></pre></main></body></html>

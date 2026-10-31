@@ -36,3 +36,62 @@ Publish failures, variability, and usage limitations alongside median/range late
 Missing consent/configuration is not a failed learner concept. Tool/model-budget errors require trace inspection; unauthorized source IDs require fixing the handoff boundary, not increasing context blindly. This lab creates no persistent workflow actions or model transcripts. It reuses the source corpus; do not delete shared policy data to “reset” an experiment. Live evidence must be supplied by an actual configured run.
 
 Continue with [lessons](../../lessons/12_multi_agent/01.md), [exercise](../../exercises/12_multi_agent.md), and [reasoned solutions](../../solutions/12_multi_agent.md).
+
+## Captured `--check` output
+
+Real output of `uv run python labs/12_multi_agent/main.py --check` (no credentials, no network; machine paths replaced by `<repo>`). Compare your own run against it.
+
+```json
+{
+  "preflight": {
+    "python": "3.14.0",
+    "interpreter": "<repo>/.venv/bin/python",
+    "packages": {
+      "langchain": "1.4.4",
+      "langchain-core": "1.6.9",
+      "langchain-openai": "1.7.0",
+      "langgraph": "1.2.14",
+      "langgraph-checkpoint-sqlite": "3.1.1",
+      "fastmcp": "4.1.0",
+      "pydantic": "2.14.1"
+    },
+    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
+    "configured": {
+      "api_key": false,
+      "model": false,
+      "live_consent": false,
+      "custom_endpoint": false,
+      "hosted_tracing": false
+    },
+    "live_request_sent": false
+  }
+}
+{
+... (8 lines omitted)
+      "question": "How long does shipping take?",
+      "user_id": "bob",
+      "evidence_ids": [
+        "SHIPPING"
+      ],
+      "invalid_handoff_rejected": true
+    },
+    {
+      "question": "What is the policy for teleporting a parcel?",
+      "user_id": "alice",
+      "evidence_ids": [],
+      "invalid_handoff_rejected": true
+    },
+    {
+      "question": "What is the confidential finance reimbursement limit?",
+      "user_id": "bob",
+      "evidence_ids": [
+        "MALICIOUS",
+        "MEAL"
+      ],
+      "invalid_handoff_rejected": true
+    }
+  ],
+  "live_gate": "Unverified: real single/specialist generation, quality, timing and usage."
+}
+[+33 hidden: rtk recall 48a71b4e8e8e]
+```
