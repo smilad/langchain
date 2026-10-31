@@ -12,7 +12,7 @@ uv run python labs/14_production/main.py --check
 
 That lab starts **actual service subprocesses** and uses real HTTP clients. It exercises public health/readiness, bearer authentication, two concurrent identities, body-identity rejection, cross-user denial, human-authored drafts, client disconnect visibility, clean process restart with pending review, approval replay/idempotent local action, rejection, missing live permission, and a short deadline trial. Temporary lab files are removed only after all launched servers stop; existing `.course/service` data is untouched.
 
-`--live` additionally executes source-grounded RAG and an unreachable configured provider endpoint with genuine credentials. It needs a valid JSON-schema-capable endpoint/model and `COURSE_ALLOW_LIVE=1`. The live question matches current returns evidence so an empty-evidence abstention cannot masquerade as generation/outage proof. The available gateway failed JSON-schema output validation; see [observed results](../../docs/VERIFICATION.md). A model-free human draft is not generated text.
+`--live` additionally executes source-grounded RAG and an unreachable configured provider endpoint with genuine credentials. It needs a valid JSON-schema-capable endpoint/model and `COURSE_ALLOW_LIVE=1`. The live question matches current returns evidence so an empty-evidence abstention cannot masquerade as generation/outage proof. The author's endpoint failed JSON-schema output validation; see [observed results](../../docs/VERIFICATION.md). A model-free human draft is not generated text.
 
 ## Manual start: private token bindings
 Run from repository root. Generate throwaway tokens without printing their values. Do not enable shell tracing (`set -x`), commit these values, or use them as production credentials:
@@ -93,33 +93,9 @@ After manual practice, stop the process before removing your **selected syntheti
 
 ## Captured `--check` output
 
-Real, unedited stdout of `uv run python labs/14_production/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Excerpt: first 150 lines only. Compare your own run against it.
+Output of `uv run python labs/14_production/main.py --check` (no credentials, no network), re-formatted as indented JSON; local paths are replaced by `<repo>`. The environment `preflight` block is omitted here; Module 00 shows it in full. The middle of the output is omitted for length. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.
 
 ```text
-{
-  "preflight": {
-    "python": "3.14.0",
-    "interpreter": "<repo>/.venv/bin/python",
-    "packages": {
-      "langchain": "1.4.4",
-      "langchain-core": "1.6.9",
-      "langchain-openai": "1.7.0",
-      "langgraph": "1.2.14",
-      "langgraph-checkpoint-sqlite": "3.1.1",
-      "fastmcp": "4.1.0",
-      "pydantic": "2.14.1"
-    },
-    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
-    "configured": {
-      "api_key": false,
-      "model": false,
-      "live_consent": false,
-      "custom_endpoint": false,
-      "hosted_tracing": false
-    },
-    "live_request_sent": false
-  }
-}
 {
   "concurrent_starts": [
     {
@@ -135,7 +111,7 @@ Real, unedited stdout of `uv run python labs/14_production/main.py --check` (no 
           "draft_origin": "human",
           "source_ids": [],
           "live": false,
-          "action_id": "51415f05112640f5961735ae26dea6cf",
+          "action_id": "d4497cef47df4214bc385cdfab0d77bd",
           "status": "pending"
         },
         "pending_review": [
@@ -153,7 +129,7 @@ Real, unedited stdout of `uv run python labs/14_production/main.py --check` (no 
         ],
         "actions": []
       },
-      "request_id": "b74d382c37d74ffb81f488af51eac3df"
+      "request_id": "4fc6021530a24a38b06bf8f807dc7e9d"
     },
     {
       "result": {
@@ -168,7 +144,7 @@ Real, unedited stdout of `uv run python labs/14_production/main.py --check` (no 
           "draft_origin": "human",
           "source_ids": [],
           "live": false,
-          "action_id": "f3594685525e4c79b1aff839230f0de5",
+          "action_id": "76cd827b92e34518b50f1fdb9f83c97d",
           "status": "pending"
         },
         "pending_review": [
@@ -186,37 +162,19 @@ Real, unedited stdout of `uv run python labs/14_production/main.py --check` (no 
         ],
         "actions": []
       },
-      "request_id": "5f7fdf6afdf04d0481b162b59867e053"
+      "request_id": "8e61249dcba14e0e94c3f2f7c016444e"
     }
   ],
   "body_identity_rejected": true,
-  "cross_identity_denied": true,
-  "cancellation": {
-    "request_outcome": {
-      "result": {
-        "request_id": "cancel-190e89eaa52c4ac882734029a76f1c13",
-        "user_id": "alice",
-        "status": "cancelled",
-        "effects_may_have_committed": true
-      },
-      "transient": true
-    },
-    "persisted_thread_http_status": 400,
-    "persisted_thread": {
-      "error": "invalid_request_or_state",
-      "error_type": "ValueError",
-      "request_id": "5064dc19f48b4ba78b6708c9a24f716f"
-    },
-    "interpretation": "Cancelled response is not a rollback guarantee."
-  }
+... (middle omitted for length) ...
 }
 {
   "service_events": [
     {
       "event": "listening",
       "host": "127.0.0.1",
-      "port": 52762,
-      "deadline_seconds": 30.0,
+      "port": 53385,
+      "deadline_seconds": 0.1,
       "max_workers": 4
     },
     {
@@ -224,26 +182,29 @@ Real, unedited stdout of `uv run python labs/14_production/main.py --check` (no 
       "method": "GET"
     },
     {
-      "event": "http_response",
-      "method": "GET"
-    },
-    {
-      "event": "http_response",
-      "method": "GET"
-    },
-    {
       "event": "running",
-      "request_id": "b74d382c37d74ffb81f488af51eac3df"
+      "request_id": "047d879c2de64b929b3f53a572b04274"
     },
     {
-      "event": "running",
-      "request_id": "5f7fdf6afdf04d0481b162b59867e053"
+      "event": "deadline_exceeded",
+      "request_id": "047d879c2de64b929b3f53a572b04274",
+      "effects_may_have_committed": true
     },
     {
-      "event": "completed",
-      "request_id": "5f7fdf6afdf04d0481b162b59867e053",
-      "http_status": 200,
-      "elapsed_seconds": 0.5078666670015082,
-      "error_type": null
+      "event": "http_response",
+      "method": "POST"
     },
+    {
+      "event": "stopping",
+      "signal": 15
+    },
+    {
+      "event": "stopped"
+    }
+  ],
+  "exit_code": 0
+}
+{
+  "local_state": "Temporary lab state removed after service shutdown; persistent manual service state is untouched."
+}
 ```

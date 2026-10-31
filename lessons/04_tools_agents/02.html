@@ -18,18 +18,19 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>04.2 — Separate requested calls from executed calls</h1>
-<h2>Objective and prerequisites</h2>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="01.html">&larr; Previous</a> · <a href="03.html">Next &rarr;</a></nav><h1 id="042--separate-requested-calls-from-executed-calls">04.2 — Separate requested calls from executed calls</h1>
+<p><strong>In plain words:</strong> The model only asks for a tool call; your code decides whether to run it and what comes back. "Not found" is a normal result, not an error, and a model saying it checked something is not proof that it did.</p>
+<h2 id="objective-and-prerequisites">Objective and prerequisites</h2>
 <p>Advance the <a href="../../MISSION.html">mission</a> by tracing a model's requested tool arguments to actual local data access. Prerequisite: <a href="01.html">tool schemas</a> and Module 02 message roles. Warm-up: which message role carries a tool result? Can a model's proposed function call prove the function executed? Attempt first; corrections appear in the exit section.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/tools">Tools</a> and <a href="https://docs.langchain.com/oss/python/langchain/models#tool-calling">model tool calling</a>, consulted 2026-10-12. Python 3.14/locked integration and actual model-selected quoting are exercised in <a href="../../docs/VERIFICATION.html">verification</a>. Local tool invocation is offline; live requires privately configured tool-capable access, explicit consent, and provider budget.</p>
-<h2>Mental model and flow</h2>
+<h2 id="mental-model-and-flow">Mental model and flow</h2>
 <p>The model does not open <code>data/catalog.json</code>. It proposes a named operation with structured arguments. LangChain resolves that name to a Python tool; the tool validates arguments and executes its function. Its result is returned as a tool message correlated with a call ID. Another model step can then interpret the result.</p>
 <pre><code class="language-text">HumanMessage → AIMessage.tool_calls → schema validation
              → lookup_item → validated catalog.json → ToolMessage
              → next model response
 </code></pre>
 <p>A proposed call that failed validation has not performed a successful catalog operation. A final sentence saying “I checked stock” is not evidence either. Inspect the intermediate messages and the actual tool result before evaluating that sentence.</p>
-<h2>Worked example: unavailable is a useful result</h2>
+<h2 id="worked-example-unavailable-is-a-useful-result">Worked example: unavailable is a useful result</h2>
 <pre><code class="language-python">from langchain_learning.catalog import catalog_tools
 lookup, quote = catalog_tools()
 print(lookup.invoke({&quot;item_id&quot;: &quot;invisible-widget&quot;}))
@@ -37,9 +38,9 @@ print(quote.invoke({&quot;item_id&quot;: &quot;invisible-widget&quot;, &quot;qua
 </code></pre>
 <p>The implemented contract returns <code>found=false</code>; the quote additionally returns <code>quoted=false</code> and <code>reason="item_unavailable"</code>. These describe <strong>absence in this fixture</strong>, not worldwide product availability. The catalog is explicitly synthetic, but results come from genuine JSON reads—not fabricated function strings standing in for data access.</p>
 <p>Found-but-sold-out is different. <code>sold-out</code> is an existing item with stock zero. Its lookup succeeds; its positive-quantity quote fails the stock check. Our tools do not reserve inventory, deduct stock or include tax/shipping. A successful quote is not a purchase confirmation.</p>
-<h2>Guided and independent work</h2>
+<h2 id="guided-and-independent-work">Guided and independent work</h2>
 <p>Guided completion: annotate each event in the lab's <code>--live --case normal</code> output as request, execution result or interpretation. Supply the missing link between a call ID and its tool result. Independent variation: use <code>sold-out</code> rather than an absent item and explain why the result shapes differ; continue in the <a href="../../exercises/04_tools_agents.html">exercise</a>.</p>
 <p>Failure investigation: predict how an ID containing <code>../</code> fails. It is rejected by the identifier schema; the string is never used as a path. A valid-but-unknown ID follows the missing-item path instead. If the agent invents a substitute after a failed lookup, preserve the trace and classify this as unsupported generation—not a failed JSON parser.</p>
-<h2>Exit and delayed review</h2>
+<h2 id="exit-and-delayed-review">Exit and delayed review</h2>
 <p>Show the supplied arguments, resolved function and returned data for one call, then justify an unavailable-item answer from evidence. Corrections: a <code>ToolMessage</code> carries the result; proposing a call proves neither execution nor success. Review these distinctions in Module 08 evaluation and Module 13 transport debugging. See the <a href="../../labs/04_tools_agents/README.html">lab runbook</a> and <a href="../../reference/API_MAP.html">API map</a>. Focused follow-up: what evidence would disprove the assistant's claim that it purchased an item?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/04_tools_agents/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

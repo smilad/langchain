@@ -18,18 +18,18 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 12 exercises — justify the specialist</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-12-exercises--justify-the-specialist">Module 12 exercises — justify the specialist</h1>
 <p>Read <a href="../lessons/12_multi_agent/01.html">the lessons</a>, <a href="../labs/12_multi_agent/README.html">the comparison runbook</a>, and <a href="../src/langchain_learning/advanced.py">the source APIs</a>. Attempt before <a href="../solutions/12_multi_agent.html">solutions</a>.</p>
-<h2>1. Choose an architecture deliberately</h2>
+<h2 id="1-choose-an-architecture-deliberately">1. Choose an architecture deliberately</h2>
 <p>For the support draft, compare a single tool-using agent, router, handoff, and one delegated specialist. Identify context ownership, where identity is bound, and termination at every boundary. Explain why a skill loaded into one agent is not automatically another autonomous agent.</p>
-<h2>2. Inspect the local handoff boundary</h2>
+<h2 id="2-inspect-the-local-handoff-boundary">2. Inspect the local handoff boundary</h2>
 <p>Run <code>uv run python labs/12_multi_agent/main.py --check</code>. For each case, inspect request-scoped evidence IDs and the rejected outside-source fixture. This is authored schema/evidence validation, not a model-quality score. Explain which claims still require semantic review even after <code>validate_handoff</code> passes.</p>
-<h2>3. Declare a real comparison</h2>
+<h2 id="3-declare-a-real-comparison">3. Declare a real comparison</h2>
 <p>With an accessible model, consent, and budget, run <code>--live --trials 2</code>. Count the total runs before starting (four cases × two patterns × two trials). Explain why alternating pattern order reduces one ordering bias without establishing a strong statistical result. Keep corpus, identity, evidence scope, and question fixed between patterns.</p>
-<h2>4. Interpret cost and failure evidence</h2>
+<h2 id="4-interpret-cost-and-failure-evidence">4. Interpret cost and failure evidence</h2>
 <p>Read model/tool call counts, nested boundary counts, reported usage, missing usage, elapsed time, and explicit failure categories. Logical call limits are not an exact monetary ceiling: retries and token lengths matter. A faster unsupported answer is not automatically a better architecture.</p>
-<h2>5. Investigate a specialist contract failure</h2>
+<h2 id="5-investigate-a-specialist-contract-failure">5. Investigate a specialist contract failure</h2>
 <p>Run the explicit <code>--live --fail-specialist</code> experiment only with real provider access. It corrupts the handoff after an actual specialist result; explain why this is fault injection, not evidence that the model naturally produced that defect. The boundary must stop that trial without pretending to deliver a successful replacement answer.</p>
-<h2>6. Make a retention decision</h2>
+<h2 id="6-make-a-retention-decision">6. Make a retention decision</h2>
 <p>Apply the support/abstention/security rubric to actual outputs and justify retaining or rejecting the specialist. If no provider is available, publish only the local contract evidence and a planned comparison protocol. Do not invent latency/token/quality results.</p>
 <p><strong>Gate:</strong> explain an appropriate pattern, demonstrate a bounded invalid handoff, and justify complexity from measured results or explicitly leave that comparison unverified. Revisit with one changed corpus constraint in the capstone.</p></main></body></html>

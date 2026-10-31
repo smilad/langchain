@@ -18,12 +18,13 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>15.3 — Evaluate the baseline, then justify one improvement</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="02.html">&larr; Previous</a> · <a href="04.html">Next &rarr;</a></nav><h1 id="153--evaluate-the-baseline-then-justify-one-improvement">15.3 — Evaluate the baseline, then justify one improvement</h1>
+<p><strong>In plain words:</strong> Evaluate the baseline on development cases, freeze it, then test one improvement on held-out cases. Read per-case results and keep security failures visible instead of averaging them away.</p>
 <p><strong>Objective:</strong> produce a failure-aware comparison that separates retrieval quality, answer support, authorization, operational behavior, and cost.</p>
 <p><strong>Prerequisites:</strong> <a href="../08_evaluation/01.html">evaluation</a> and <a href="02.html">the capstone execution</a>. See <a href="../../docs/VERIFICATION.html">the verification report</a> for exercised versions and proof limits. Provider-dependent runs require explicit model/embedding configuration and consent; never publish a synthetic score as a generated-answer result.</p>
-<h2>Retrieval warm-up</h2>
+<h2 id="retrieval-warm-up">Retrieval warm-up</h2>
 <p>Why is a development-set improvement not evidence of held-out improvement? Which evaluator can detect a valid source ID attached to an unsupported claim? Answer before reading your earlier evaluation notes.</p>
-<h2>Establish the comparison protocol</h2>
+<h2 id="establish-the-comparison-protocol">Establish the comparison protocol</h2>
 <p>The course dataset has 20 stable cases: eight answerable, four unanswerable, four conflicting/outdated, and four adversarial/access-boundary cases. Twelve are development cases; eight are held out. This is an instructional benchmark, not a strong estimate of production reliability.</p>
 <p>Run the deterministic development checks first:</p>
 <pre><code class="language-bash">uv run python labs/08_evaluation/main.py --check
@@ -35,10 +36,10 @@ uv run python labs/08_evaluation/main.py --live --split held_out \
   --config .course/rag-config.json --output .course/rag-heldout.json
 </code></pre>
 <p>Do not use the held-out answers to adjust the prompt, chunking, or model settings while calling that split independent. If you inspect failures and tune on them, they have become development evidence; a fresh holdout is needed for the next confirmatory comparison.</p>
-<h2>Read per-case evidence</h2>
+<h2 id="read-per-case-evidence">Read per-case evidence</h2>
 <p>For an answerable return-policy question, inspect the retrieved current passage, the generated claim, and the cited ID. A correct ID is a structural check; a reviewer still needs to determine whether the period, start date, and eligibility conditions are supported.</p>
 <p>For remote-work contradictions, assess whether the answer acknowledges incompatible current evidence. For a finance question, verify the access boundary before interpreting the answer. For malicious-source content, ask whether it influenced instructions or attempted unauthorized behavior. Do not average a security leak away because most ordinary questions passed.</p>
-<h2>One-variable experiment</h2>
+<h2 id="one-variable-experiment">One-variable experiment</h2>
 <p>Use development cases to compare lexical retrieval with the semantic strategy, configuring the actual embedding model. Keep model, prompt, dataset, trial count, and other retrieval settings fixed. Record latency and reported token usage; estimated price requires named pricing assumptions. More relevant passages may improve support while extra model calls worsen latency/cost. Either outcome is useful.</p>
 <p>For guided practice, classify one failed case as ingestion, retrieval, generation, evaluator, or environment failure. Then independently diagnose a different case. A provider outage is not a failed knowledge objective, but it leaves the live behavior unverified.</p>
 <p>For a failure investigation, make a hypothetical grader award points for citation presence alone. Explain the plausible false positive and replace that criterion with actual claim-to-evidence support review.</p>

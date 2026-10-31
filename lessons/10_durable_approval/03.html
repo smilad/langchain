@@ -18,13 +18,14 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>10.3 — Replay-safe effects need a stable identity and atomic sink</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="02.html">&larr; Previous</a> · <a href="04.html">Next &rarr;</a></nav><h1 id="103--replay-safe-effects-need-a-stable-identity-and-atomic-sink">10.3 — Replay-safe effects need a stable identity and atomic sink</h1>
+<p><strong>In plain words:</strong> After a crash a step can run twice. Give each action a stable id and write it in one database transaction, so a repeat reuses the same record instead of creating another.</p>
 <p><a href="../../MISSION.html">Mission</a>. <strong>Objective:</strong> demonstrate one committed local action despite repeated approval and actual record-node replay.</p>
-<h2>Prerequisites and recall</h2>
+<h2 id="prerequisites-and-recall">Prerequisites and recall</h2>
 <p><a href="02.html">Interrupt/resume</a>. Why can code run again after restart? Does a checkpointer make external email exactly once? Which values must stay stable across a replay? Answer first; do not infer guarantees from a successful single run.</p>
-<h2>Source and version note</h2>
+<h2 id="source-and-version-note">Source and version note</h2>
 <p><a href="https://docs.langchain.com/oss/python/langgraph/durable-execution">Durable execution</a> and <a href="https://docs.langchain.com/oss/python/langgraph/interrupts">interrupt rules</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangGraph 1.2.14, langgraph-checkpoint-sqlite 3.1.1; <a href="../../uv.lock">lockfile</a>, <a href="../../docs/VERIFICATION.html">exercised evidence</a>. The effect is an actual local SQLite record, not email, payment or a mock network response.</p>
-<h2>Mental model and failure window</h2>
+<h2 id="mental-model-and-failure-window">Mental model and failure window</h2>
 <p>A process can die after an effect commits but before the next checkpoint records completion. On restart, a pending node can repeat. The remedy here is not to prohibit replay: it is to make the local operation idempotent.</p>
 <p>Thread creation generates one action ID and persists it before graph execution. Record inserts using a unique action ID and unique thread ID, inside a SQLite transaction. It then validates any existing row's owner, thread and text. Replaying an identical action reuses the committed row. An identity collision with different content fails instead of overwriting history.</p>
 <table>
@@ -54,10 +55,10 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tbody>
 </table>
 <p>SQLite uniqueness and committed atomic insertion cover the sink/checkpoint crash window: a committed row remains singular even if the graph repeats record. This is an exactly-once local-record claim under intact private databases and cooperating local workflow callers. It is not a general distributed exactly-once guarantee. External effects would require their own idempotency contract or transactional outbox plus delivery semantics.</p>
-<h2>Worked example and guided investigation</h2>
-<p>Repeat the approve command in <a href="../../labs/10_durable_approval/README.html">the README</a>. Count rows, not printed success messages. <a href="../../tests/test_workflow.py">Regression coverage</a> also selects a real saved checkpoint whose next node is record and reexecutes the actual graph node. Parent verification runs it; this lesson does not fabricate an observed result.</p>
+<h2 id="worked-example-and-guided-investigation">Worked example and guided investigation</h2>
+<p>Repeat the approve command in <a href="../../labs/10_durable_approval/README.html">the README</a>. Count rows, not printed success messages. <a href="../../tests/test_workflow.py">Regression coverage</a> also selects a real saved checkpoint whose next node is record and reexecutes the actual graph node.</p>
 <p>Predict what happens if the action ID is generated inside record instead. Every replay could produce another identity; uniqueness would no longer represent the same business action. Explain this failure before modifying an exercise copy.</p>
-<h2>Exit and delayed review</h2>
+<h2 id="exit-and-delayed-review">Exit and delayed review</h2>
 <p><a href="../../exercises/10_durable_approval.html">Exercise</a>: approve after restart, repeat resume, show unchanged text/count and deny conflicting decision. Teach the exact guarantee and one external-system counterexample. Revisit during Module 14 crash analysis. <a href="../../solutions/10_durable_approval.html">Solutions</a>.</p>
 <p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: what additional contract would your proposed external sink need?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/10_durable_approval/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

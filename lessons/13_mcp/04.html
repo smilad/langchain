@@ -18,13 +18,14 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>13.4 — Unavailable is not the same as disconnected</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="03.html">&larr; Previous</a> · <a href="../14_production/01.html">Next &rarr;</a></nav><h1 id="134--unavailable-is-not-the-same-as-disconnected">13.4 — Unavailable is not the same as disconnected</h1>
+<p><strong>In plain words:</strong> An unavailable item, a bad argument, a missing server and a closed connection are four different failures. Identify which one you have before deciding whether to retry.</p>
 <p><strong>Mission/objective:</strong> support <a href="../../MISSION.html">the mission</a> by observing unavailable-server and disconnected-client failures, releasing real resources, and classifying errors before attempting recovery.</p>
 <p><strong>Prerequisites:</strong> <a href="03.html">capability boundaries</a>, async context managers, and timeouts. Check: distinguish a domain unavailable-item result from a failed transport connection.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/mcp/connections">LangChain connection lifecycle</a>, <a href="https://docs.langchain.com/oss/python/langchain/mcp/tools#errors">MCP tool errors</a>, and <a href="https://gofastmcp.com/clients/client">FastMCP Client</a>, checked 2026-10-12. Python 3.14.0, LangChain 1.4.4, FastMCP 4.1.0. Adapter APIs are beta; <a href="../../docs/VERIFICATION.html">verification</a> records actual runs rather than borrowing documentation outputs.</p>
-<h2>Recall</h2>
+<h2 id="recall">Recall</h2>
 <p>Can a model repair a broken TCP socket? Does exiting adapter discovery make every adapted tool permanently unusable? After an attempt: transport repair belongs to the client/application; adapted tools can reconnect because they hold a reentrant client.</p>
-<h2>Failure taxonomy</h2>
+<h2 id="failure-taxonomy">Failure taxonomy</h2>
 <table>
 <thead>
 <tr>
@@ -62,14 +63,14 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tbody>
 </table>
 <p>The lab does not retry a new server or silently fall back to direct Python. Such a fallback would hide the fact that the required integration never worked.</p>
-<h2>Worked lifecycle</h2>
+<h2 id="worked-lifecycle">Worked lifecycle</h2>
 <p>Run:</p>
 <pre><code class="language-sh">uv run python labs/13_mcp/main.py --check --scenario unavailable
 uv run python labs/13_mcp/main.py --check --scenario disconnect
 </code></pre>
 <p>The first attempts a real localhost HTTP MCP connection at port 1, bounded by five seconds. It records the actual exception class. The second starts the real stdio server with <code>fastmcp.Client</code>, performs a real lookup, exits the context, verifies disconnection, and attempts another direct call. Using the direct client here intentionally distinguishes released transport from the adapter tool's reconnect behavior. Normal mode uses MCPAdapter, not an in-memory server.</p>
-<h2>Guided completion and independent variation</h2>
+<h2 id="guided-completion-and-independent-variation">Guided completion and independent variation</h2>
 <p>Predict which context owns the subprocess before running either case. Supply the explanation for why an invalid-tool error reaches a model while a transport exception stops execution. Use <a href="../../exercises/13_mcp.html">the exercise</a> to reconnect explicitly and inspect the refreshed capability catalog.</p>
-<h2>Exit and review</h2>
+<h2 id="exit-and-review">Exit and review</h2>
 <p>Show the real before-disconnect result, disconnected status, and sanitized error category. Observe clean context exit; do not claim that it proves arbitrary remote infrastructure shuts down. Revisit lifecycle handling in <a href="../14_production/02.html">HTTP cancellation</a> and consult <a href="../../reference/TROUBLESHOOTING.html">troubleshooting</a> for interpreter/path failures.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/13_mcp/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

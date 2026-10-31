@@ -18,12 +18,13 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>02.2 — A message is an envelope, not always a string</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="01.html">&larr; Previous</a> · <a href="03.html">Next &rarr;</a></nav><h1 id="022--a-message-is-an-envelope-not-always-a-string">02.2 — A message is an envelope, not always a string</h1>
+<p><strong>In plain words:</strong> A message has a role (system, human, AI or tool) and content that can be plain text or several blocks. You will learn to pull out only the text meant for the user.</p>
 <p><strong>Mission/objective:</strong> Support the <a href="../../MISSION.html">mission</a> by explaining a message sequence and distinguishing displayed text, content blocks, tool results and metadata. Prerequisite: <a href="01.html">02.1</a>; identify the package providing a provider client.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/messages">official messages guide</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0/langchain-core 1.6.9. Exact resolution is in <code>uv.lock</code>; actual execution evidence is in <a href="../../docs/VERIFICATION.html">verification</a>. Local message inspection needs no credential. Tool-call and multimodal capabilities vary by provider.</p>
-<h2>Recall before reading</h2>
+<h2 id="recall-before-reading">Recall before reading</h2>
 <p>Can the provider output array contain more than text? Where does application conversation history live? Attempt before <a href="../../solutions/02_models_messages.html">corrections</a>.</p>
-<h2>Mental model and worked sequence</h2>
+<h2 id="mental-model-and-worked-sequence">Mental model and worked sequence</h2>
 <p>System messages carry instructions, human messages carry user input, AI messages carry model responses or explicit application-authored history, and tool messages carry execution results linked to a tool-call ID. A tool message is not evidence that the assistant's prose is true. A message role is not an authorization decision.</p>
 <table>
 <thead>
@@ -56,15 +57,15 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tbody>
 </table>
 <p>The <a href="../../labs/02_models_messages/main.py">lab</a> builds an explicitly hand-authored AIMessage with a text block and a reasoning block, then checks that only visible text is displayed. This is a data-structure fixture, not a fake model. It also constructs a ToolMessage with a call ID and JSON text; nothing executes a tool in this module.</p>
-<h2>Worked example and guided completion</h2>
+<h2 id="worked-example-and-guided-completion">Worked example and guided completion</h2>
 <pre><code class="language-python">message = AIMessage(content=[
     {&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;Visible text&quot;},
     {&quot;type&quot;: &quot;reasoning&quot;, &quot;reasoning&quot;: &quot;Authored example&quot;},
 ])
 </code></pre>
 <p>Use the setup check to inspect the raw content and text projection. Predict why <code>str(message.content)</code> is unsuitable as a user-facing answer. Complete an inspection table for one real response, if live access is available, without assuming reasoning blocks or usage will be present. Null usage means unavailable, not zero.</p>
-<h2>Failure investigation and variation</h2>
+<h2 id="failure-investigation-and-variation">Failure investigation and variation</h2>
 <p>A renderer that concatenates every dictionary could expose metadata or produce nonsense; a renderer that treats a tool call as prose misses execution semantics. In the <a href="../../exercises/02_models_messages.html">exercise</a>, introduce an empty text block and a tool-result envelope. Explain each object's provenance. Do not label an authored AIMessage as observed generation.</p>
-<h2>Exit and delayed review</h2>
+<h2 id="exit-and-delayed-review">Exit and delayed review</h2>
 <p>Explain the system/human sequence rendered by this classifier, show the difference between content and text, and connect a ToolMessage to its call ID. Review next week with an unfamiliar block type; Module 04 uses real tool calls and Module 05 stores selected messages. Reference: <a href="../../reference/GLOSSARY.html">glossary</a>, <a href="../../labs/02_models_messages/README.html">runbook</a>. A focused question names a block type and the display contract it violates.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/02_models_messages/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

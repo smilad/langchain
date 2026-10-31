@@ -18,13 +18,13 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 03 lab — typed extraction without invented records</h1>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1 id="module-03-lab--typed-extraction-without-invented-records">Module 03 lab — typed extraction without invented records</h1>
 <p>SupportRecord is extracted from synthetic support text; <strong>no refund or external action executes</strong>. A typed consumer receives validated data or an explicit error/unknown/contradiction/irrelevance. See <a href="../../lessons/03_structured_output/01.html">lessons</a>, <a href="../../exercises/03_structured_output.html">independent exercise</a>, and <a href="../../solutions/03_structured_output.html">reasoned solutions</a>.</p>
-<h2>Real deterministic boundaries</h2>
+<h2 id="real-deterministic-boundaries">Real deterministic boundaries</h2>
 <pre><code class="language-sh">uv run python labs/03_structured_output/main.py --check
 </code></pre>
 <p>The lab exercises PydanticOutputParser and an actual LCEL sequence on authored JSON, all four status fixtures, exact input keys/nonblank limits, missing required fields, cross-field consistency, source-ID membership and exact quotation. It rejects well-shaped data against missing, contradictory and mismatched-quote source texts. Fixture data is labeled authored; no model is created or imitated.</p>
-<h2>Real model and agent paths</h2>
+<h2 id="real-model-and-agent-paths">Real model and agent paths</h2>
 <p>After explicit credential/model/budget configuration:</p>
 <pre><code class="language-sh">uv run python labs/03_structured_output/main.py --live --case complete
 uv run python labs/03_structured_output/main.py --live --case missing
@@ -36,38 +36,14 @@ uv run python labs/03_structured_output/main.py --live --engine agent --strategy
 </code></pre>
 <p>Run only the paths your approved model supports. Default engine is model with <code>json_schema</code>; <code>--method</code> affects that engine only. <code>--strategy</code> affects the agent engine only. <code>--text</code> overrides the selected case (including an explicitly empty string, which is rejected). These are separate requests, not one bundled experiment. Models must accept runtime temperature zero. The model pipeline retains source alongside the prompt→structured-model branch and inspects <code>raw</code>, <code>parsed</code>, <code>parsing_error</code> before the source guard. An unsupported capability, refusal or parse error is not replaced with fake success.</p>
 <p>The agent uses <code>create_agent</code>, no business tools, explicit ProviderStrategy or ToolStrategy, recursion limit eight and tool-strategy <code>handle_errors=False</code>. Actual message/profile inspection matters: requested strategy is not proof of provider mechanism. The agent may take multiple model turns; provider transport retry is limited to one. Generation uses provider defaults; no fixed dollar ceiling is claimed.</p>
-<h2>Semantics and limits</h2>
+<h2 id="semantics-and-limits">Semantics and limits</h2>
 <p>All fields are required; unavailable values are null. More than one distinct ORDER identifier is contradictory by this lab's deliberately conservative policy. Non-supported states must not choose an order or quote. Supported fields require exact literal source evidence. This catches invention of identifiers/quotes, not every semantic error: relevance/category and real eligibility still need a human rubric. Do not retry missing facts into existence. There is no automatic semantic repair loop.</p>
-<h2>Evidence and reset</h2>
-<p>Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0, Pydantic 2.14.1. <a href="../../docs/VERIFICATION.html">Verification</a> records four successful real function-calling cases and a rejected gateway JSON-schema result. Agent/provider strategies are separate capability gates, not certified by those model-level cases. Exact versions are locked in <code>uv.lock</code>. This lab writes no state and requires no reset; keep printable text synthetic and configure private compatible access/consent.</p>
+<h2 id="evidence-and-reset">Evidence and reset</h2>
+<p>Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0, Pydantic 2.14.1. <a href="../../docs/VERIFICATION.html">Verification</a> records four successful real function-calling cases and a JSON-schema request the author's endpoint rejected. Agent/provider strategies are separate capability gates, not certified by those model-level cases. Exact versions are locked in <code>uv.lock</code>. This lab writes no state and requires no reset; keep printable text synthetic and configure private compatible access/consent.</p>
 <p>Primary sources checked 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/models#structured-output">models</a>, <a href="https://docs.langchain.com/oss/python/langchain/structured-output">agent strategies</a>, <a href="https://reference.langchain.com/python/langchain-core/runnables/base/RunnableSequence">RunnableSequence</a>, <a href="https://docs.pydantic.dev/latest/concepts/validators/">Pydantic validators</a>.</p>
-<h2>Captured <code>--check</code> output</h2>
-<p>Real, unedited stdout of <code>uv run python labs/03_structured_output/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Excerpt: first 150 lines only. Compare your own run against it.</p>
+<h2 id="captured---check-output">Captured <code>--check</code> output</h2>
+<p>Output of <code>uv run python labs/03_structured_output/main.py --check</code> (no credentials, no network), re-formatted as indented JSON; local paths are replaced by <code>&lt;repo&gt;</code>. The environment <code>preflight</code> block is omitted here; Module 00 shows it in full. The middle of the output is omitted for length. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.</p>
 <pre><code class="language-text">{
-  &quot;preflight&quot;: {
-    &quot;python&quot;: &quot;3.14.0&quot;,
-    &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
-    &quot;packages&quot;: {
-      &quot;langchain&quot;: &quot;1.4.4&quot;,
-      &quot;langchain-core&quot;: &quot;1.6.9&quot;,
-      &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
-      &quot;langgraph&quot;: &quot;1.2.14&quot;,
-      &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
-      &quot;fastmcp&quot;: &quot;4.1.0&quot;,
-      &quot;pydantic&quot;: &quot;2.14.1&quot;
-    },
-    &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
-    &quot;configured&quot;: {
-      &quot;api_key&quot;: false,
-      &quot;model&quot;: false,
-      &quot;live_consent&quot;: false,
-      &quot;custom_endpoint&quot;: false,
-      &quot;hosted_tracing&quot;: false
-    },
-    &quot;live_request_sent&quot;: false
-  }
-}
-{
   &quot;authored_parser_fixture&quot;: {
     &quot;status&quot;: &quot;supported&quot;,
     &quot;order_id&quot;: &quot;ORDER-104&quot;,
@@ -137,24 +113,7 @@ uv run python labs/03_structured_output/main.py --live --engine agent --strategy
     {
       &quot;location&quot;: [
         &quot;category&quot;
-      ],
-      &quot;type&quot;: &quot;missing&quot;
-    },
-    {
-      &quot;location&quot;: [
-        &quot;evidence_quote&quot;
-      ],
-      &quot;type&quot;: &quot;missing&quot;
-    },
-    {
-      &quot;location&quot;: [
-        &quot;reason&quot;
-      ],
-      &quot;type&quot;: &quot;missing&quot;
-    }
-  ]
-}
-{
+... (middle omitted for length) ...
   &quot;shape_or_consistency_errors&quot;: [
     {
       &quot;location&quot;: [],
@@ -193,4 +152,6 @@ uv run python labs/03_structured_output/main.py --live --engine agent --strategy
       &quot;id&quot;: null
     }
   ],
+  &quot;live_verification&quot;: &quot;Pending: no model or agent was invoked by these deterministic boundaries.&quot;
+}
 </code></pre></main></body></html>

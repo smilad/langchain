@@ -18,11 +18,12 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>05.3 — Select, trim and summarize context visibly</h1>
-<h2>Objective and prerequisites</h2>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="02.html">&larr; Previous</a> · <a href="04.html">Next &rarr;</a></nav><h1 id="053--select-trim-and-summarize-context-visibly">05.3 — Select, trim and summarize context visibly</h1>
+<p><strong>In plain words:</strong> You can send the full history, only the recent part, or a summary. Each choice drops something, and summaries can be wrong, so you compare what each strategy kept and lost.</p>
+<h2 id="objective-and-prerequisites">Objective and prerequisites</h2>
 <p>Serve the <a href="../../MISSION.html">mission</a> by comparing what information three context strategies retain and discard. Prerequisites: <a href="01.html">thread history</a>, <a href="02.html">explicit preference store</a> and tool-message pairing. Warm-up: does dropping messages from a request delete checkpoints? Can a summary preserve every detail? Attempt before reading the corrections.</p>
-<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">Short-term memory strategies</a> and <a href="https://reference.langchain.com/python/langchain-core/messages/utils/trim_messages">message trimming API</a>, consulted 2026-10-12. Python &gt;=3.14 target; exact dependency versions in the lockfile, exercised verification pending. Offline trimming is local. A generated summary and comparison agents require credentials, consent and several potentially paid model calls.</p>
-<h2>Mental model and tradeoffs</h2>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">Short-term memory strategies</a> and <a href="https://reference.langchain.com/python/langchain-core/messages/utils/trim_messages">message trimming API</a>, consulted 2026-10-12. Python &gt;=3.14 target; exact dependency versions are in the lockfile. Offline trimming is local. A generated summary and comparison agents require credentials, consent and several potentially paid model calls.</p>
+<h2 id="mental-model-and-tradeoffs">Mental model and tradeoffs</h2>
 <p>Context engineering is selecting the information supplied now. Storage policy decides what remains available later. These can differ: the lab trims a <strong>copy</strong> for a fresh invocation and leaves the original checkpoint untouched.</p>
 <table>
 <thead>
@@ -51,12 +52,12 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tbody>
 </table>
 <p>The helper uses <code>trim_messages</code> with a last-message strategy, <code>start_on="human"</code>, and <code>end_on=("human", "tool")</code>. Complete boundaries matter: an assistant tool call without its correlated result is not valid conversation structure. <code>count_tokens_approximately</code> is a local estimate, not the provider's exact tokenizer or a guaranteed fit for every model. The latest question must fit by itself.</p>
-<h2>Worked comparison</h2>
+<h2 id="worked-comparison">Worked comparison</h2>
 <p>Run the <a href="../../labs/05_memory_context/README.html">lab</a>. Its deterministic path trims three actual human inputs: an early preference, a long unrelated discussion and a recent quote request. It prints full, trimmed and <strong>human-authored summarized</strong> contexts. That last text is expressly not a generated model response.</p>
 <p>The live path obtains a real summary of actual Alice checkpoint messages through <code>get_model().invoke</code>. It then runs three fresh real catalog agents on full, trimmed and summarized versions of the same follow-up. Their exact selected input messages are emitted before invocation. Fresh agents prevent hidden old checkpoint state from invalidating the comparison. Current prices/stock must still come from new tool results, not a stale summary.</p>
-<h2>Complete, vary, diagnose</h2>
+<h2 id="complete-vary-diagnose">Complete, vary, diagnose</h2>
 <p>Guided completion: list every fact in the original history, then mark which survives trimming and which the summary preserves. Supply a missing “discarded” annotation before seeing model answers. Independent variation: move the budget into the oldest message and lower the trim budget; use the <a href="../../exercises/05_memory_context.html">exercise</a>.</p>
 <p>Predict a failure when a summary omits “cents” or changes 3000 to 300. Inspect summary content before blaming quote arithmetic. A valid schema cannot restore discarded meaning. Treat generated summaries as fallible data, not instructions or authorization. Comparing one run teaches mechanisms; it is not a statistically meaningful quality claim.</p>
-<h2>Exit and review</h2>
+<h2 id="exit-and-review">Exit and review</h2>
 <p>Show exactly what was supplied, retained and discarded, and identify one lost detail. Corrections: request trimming is not checkpoint erasure; summaries are lossy and may be wrong. Review tradeoffs with held-out evaluation in Module 08 and middleware in Module 11. Reference: <a href="../../reference/API_MAP.html">API map</a>. Focused follow-up: why might summarization cost more than full history on a short conversation?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/05_memory_context/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

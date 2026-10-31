@@ -18,9 +18,9 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 00 — prerequisite diagnostic and independent work</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-00--prerequisite-diagnostic-and-independent-work">Module 00 — prerequisite diagnostic and independent work</h1>
 <p><strong>Objective:</strong> Decide which prerequisites you can actually demonstrate before a paid call. Start with <a href="../lessons/00_setup/01.html">lessons</a> and the <a href="../labs/00_setup/README.html">lab runbook</a>, but attempt the diagnostic without an AI-written solution. Documentation lookup is allowed. Keep your evidence private/local until you decide to share; this repository contains no fictional learning record.</p>
-<h2>First attempt: six diagnostic tasks</h2>
+<h2 id="first-attempt-six-diagnostic-tasks">First attempt: six diagnostic tasks</h2>
 <ol>
 <li>Write a typed function that accepts a JSON string describing <code>ticket_id</code> and <code>priority</code>, requires both fields, and reports malformed syntax and invalid records distinctly. Try a valid record, missing ID and an out-of-range priority. Explain what annotations guarantee.</li>
 <li>Reproduce the locked environment from the root. Show the running interpreter and external <code>langchain</code> import origin. Select that interpreter in your IDE. Explain project metadata versus lockfile versus installed files.</li>
@@ -30,12 +30,12 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <li>Write two coroutines with an explicit yielding point, gather their results, and distinguish execution order from result order. Identify why a blocking SDK call inside <code>async def</code> still blocks. Locate the application frame in one genuine validation traceback.</li>
 </ol>
 <p>Do not score by confidence. Supply actual code/output, a teach-back, a failure diagnosis and a fresh input variation. Paid credentials are not necessary for any task.</p>
-<h2>Guided fading</h2>
+<h2 id="guided-fading">Guided fading</h2>
 <p>Read the lab's <code>read_request</code> and then close it. Recreate the JSON→schema boundary for the ticket domain, supplying the missing schema validation step yourself. Require integer priority 1–3; decide explicitly whether <code>"2"</code> should be accepted. Explain the policy before running it.</p>
-<h2>Independent variation and failure investigation</h2>
+<h2 id="independent-variation-and-failure-investigation">Independent variation and failure investigation</h2>
 <p>Change the domain again to a stock reservation with a positive bounded quantity. Include an unknown key and a blank identifier. Predict the rejecting stage before execution. Diagnose a deliberately mismatched IDE interpreter without reinstalling all dependencies. Submit the hypothesis and the interpreter-path evidence that confirms or refutes it.</p>
-<h2>Remediation, not a deadline</h2>
+<h2 id="remediation-not-a-deadline">Remediation, not a deadline</h2>
 <p>If tasks 1–3 are unfamiliar, pause paid/model work. Use the <a href="https://docs.python.org/3/tutorial/">Python tutorial</a> to study functions/dictionaries, JSON/exceptions and virtual environments in separate sessions; implement a tiny file-reading utility between sessions. Then reassess with a new record schema, not the supplied solution. This can require substantial additional study beyond the suggested 3–5-hour setup module. For HTTP, Pydantic or async gaps, remediate that specific boundary before its dependent lab. Ask a coach for one hint at a time: stage → relevant trace/documentation → concept → smaller analogy → worked solution.</p>
-<h2>Gate and delayed review</h2>
+<h2 id="gate-and-delayed-review">Gate and delayed review</h2>
 <p>Gate: reproducible environment, external import origin, secret-safe missing-configuration reporting, and demonstrated Python boundaries. Next session repeat a changed JSON input from memory. Roughly a week later explain interpreter/lock/async without notes, using API docs only for coding. Adjust review timing after actual errors; do not record mastery merely because the check ran.</p>
 <p><a href="../solutions/00_setup.html">Solutions</a> provide corrections after an attempt. Source/version limits follow the linked lessons; runtime proof is tracked in <a href="../docs/VERIFICATION.html">verification</a>.</p></main></body></html>

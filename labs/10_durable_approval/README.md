@@ -59,33 +59,9 @@ For reset, stop every using process, remove only dedicated experiment files (che
 
 ## Captured `--check` output
 
-Real, unedited stdout of `uv run python labs/10_durable_approval/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
+Output of `uv run python labs/10_durable_approval/main.py --check` (no credentials, no network), re-formatted as indented JSON; local paths are replaced by `<repo>`. The environment `preflight` block is omitted here; Module 00 shows it in full. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.
 
 ```json
-{
-  "preflight": {
-    "python": "3.14.0",
-    "interpreter": "<repo>/.venv/bin/python",
-    "packages": {
-      "langchain": "1.4.4",
-      "langchain-core": "1.6.9",
-      "langchain-openai": "1.7.0",
-      "langgraph": "1.2.14",
-      "langgraph-checkpoint-sqlite": "3.1.1",
-      "fastmcp": "4.1.0",
-      "pydantic": "2.14.1"
-    },
-    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
-    "configured": {
-      "api_key": false,
-      "model": false,
-      "live_consent": false,
-      "custom_endpoint": false,
-      "hosted_tracing": false
-    },
-    "live_request_sent": false
-  }
-}
 {
   "approved": {
     "thread_id": "approve",
@@ -99,18 +75,18 @@ Real, unedited stdout of `uv run python labs/10_durable_approval/main.py --check
       "draft_origin": "human",
       "source_ids": [],
       "live": false,
-      "action_id": "93cbe3441a2148ebabc7ab3d877567b8",
+      "action_id": "f45cf46b5d7d47279fa6520047c3fe08",
       "decision": "approve",
       "status": "recorded"
     },
     "pending_review": [],
     "actions": [
       {
-        "action_id": "93cbe3441a2148ebabc7ab3d877567b8",
+        "action_id": "f45cf46b5d7d47279fa6520047c3fe08",
         "thread_id": "approve",
         "user_id": "alice",
         "draft": "Human-authored original draft",
-        "created_at": "2026-10-31 10:03:31"
+        "created_at": "2026-10-31 10:12:40"
       }
     ]
   },
@@ -126,7 +102,7 @@ Real, unedited stdout of `uv run python labs/10_durable_approval/main.py --check
       "draft_origin": "human",
       "source_ids": [],
       "live": false,
-      "action_id": "4957f57d3515478b9ab4401a117a475b",
+      "action_id": "56a2dc7ae72e4465b8318de3d17e8d13",
       "decision": "reject",
       "status": "rejected"
     },
@@ -145,18 +121,18 @@ Real, unedited stdout of `uv run python labs/10_durable_approval/main.py --check
       "draft_origin": "human",
       "source_ids": [],
       "live": false,
-      "action_id": "5fcd7572b241451990f70fc16e3955c1",
+      "action_id": "b462ef3fb3cd4b738b68be9e41edf847",
       "decision": "edit",
       "status": "recorded"
     },
     "pending_review": [],
     "actions": [
       {
-        "action_id": "5fcd7572b241451990f70fc16e3955c1",
+        "action_id": "b462ef3fb3cd4b738b68be9e41edf847",
         "thread_id": "edit",
         "user_id": "alice",
         "draft": "Human-reviewed corrected text",
-        "created_at": "2026-10-31 10:03:31"
+        "created_at": "2026-10-31 10:12:40"
       }
     ]
   },

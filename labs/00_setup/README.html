@@ -18,15 +18,15 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 00 lab — setup and Python readiness</h1>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1 id="module-00-lab--setup-and-python-readiness">Module 00 lab — setup and Python readiness</h1>
 <p>This entrypoint exercises real local Python/Pydantic/async behavior and checks the external LangChain import origin. It sends <strong>no model request</strong>, even if <code>--live</code> is selected. Read <a href="../../lessons/00_setup/01.html">the four lessons</a> and attempt <a href="../../exercises/00_setup.html">the diagnostic</a> before opening <a href="../../solutions/00_setup.html">solutions</a>.</p>
-<h2>Prerequisites and commands</h2>
+<h2 id="prerequisites-and-commands">Prerequisites and commands</h2>
 <p>From the repository root, with <code>uv</code> and a Python ≥3.14 installation available:</p>
 <pre><code class="language-sh">uv sync --locked
 uv run python labs/00_setup/main.py --check
 </code></pre>
 <p>The distribution/import names are <code>langchain-learning</code> / <code>langchain_learning</code>; <code>langchain</code> belongs to the external dependency. The repository folder can retain its existing name. Use the reported interpreter for your IDE. Metadata/lock/environment/CLI are maintained at the course root, not by this lab.</p>
-<h2>Cases and expected boundaries</h2>
+<h2 id="cases-and-expected-boundaries">Cases and expected boundaries</h2>
 <table>
 <thead>
 <tr>
@@ -62,14 +62,14 @@ uv run python labs/00_setup/main.py --check
 </tbody>
 </table>
 <p>The lab asserts each invalid boundary rather than merely printing examples. Missing model/key configuration is reported as false, not printed or treated as model success. Importing <code>langchain</code> from repository <code>src</code> is rejected. If a dependency import fails, first inspect the running interpreter, then synchronize the locked environment. Package installation is not a provider capability check.</p>
-<h2>Evidence and limits</h2>
+<h2 id="evidence-and-limits">Evidence and limits</h2>
 <p>Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, Pydantic 2.14.1. Exact versions come from <code>uv.lock</code> and your actual preflight; consult <a href="../../docs/VERIFICATION.html">verification</a> for exercised local checks and integration limits. No authored example is an observed model result. No credential is needed for this lab. A green check would not verify authentication, billing, network access or selected model support; Module 01 performs that separate gate.</p>
 <p>This lab is stateless and creates no database or learning record. There is nothing to reset. Keep <code>.env</code> private; do not delete another module's <code>.course</code> state while diagnosing setup.</p>
-<h2>Diagnostic pacing</h2>
+<h2 id="diagnostic-pacing">Diagnostic pacing</h2>
 <p>3–5 hours is a suggested setup allocation for someone with relevant Python readiness, not a beginner deadline. If functions, environments or exceptions are new, work through the diagnostic's remediation sequence over additional sessions and reassess on fresh inputs. Delayed review belongs to the learner after actual evidence, not a prefilled progress checklist.</p>
 <p>Sources: <a href="https://docs.astral.sh/uv/guides/projects/">uv</a>, <a href="https://docs.pydantic.dev/latest/concepts/models/">Pydantic</a>, <a href="https://docs.python.org/3/library/asyncio-task.html">asyncio</a>, checked 2026-10-12.</p>
-<h2>Captured <code>--check</code> output</h2>
-<p>Real, unedited stdout of <code>uv run python labs/00_setup/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<h2 id="captured---check-output">Captured <code>--check</code> output</h2>
+<p>Output of <code>uv run python labs/00_setup/main.py --check</code> (no credentials, no network), re-formatted as indented JSON; local paths are replaced by <code>&lt;repo&gt;</code>. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.</p>
 <pre><code class="language-json">{
   &quot;preflight&quot;: {
     &quot;python&quot;: &quot;3.14.0&quot;,

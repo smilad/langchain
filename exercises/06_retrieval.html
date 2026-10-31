@@ -18,18 +18,18 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 06 exercises — retrieval before generation</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-06-exercises--retrieval-before-generation">Module 06 exercises — retrieval before generation</h1>
 <p>Start with <a href="../lessons/06_retrieval/01.html">the lessons</a>, <a href="../labs/06_retrieval/README.html">lab commands</a>, and <a href="../reference/GLOSSARY.html">the glossary</a>. Attempt these before <a href="../solutions/06_retrieval.html">solutions</a>. The installed versions and actual smoke limits are recorded in <a href="../docs/VERIFICATION.html">verification</a>.</p>
-<h2>1. Trace ingestion and provenance</h2>
+<h2 id="1-trace-ingestion-and-provenance">1. Trace ingestion and provenance</h2>
 <p>Run <code>uv run python labs/06_retrieval/main.py --check</code>. Select a retrieved <code>Document</code> and explain <code>source_id</code>, <code>version</code>, <code>current</code>, <code>audience</code>, <code>trust</code>, <code>chunk_id</code>, and <code>content_sha256</code>. Map its text back to a file. Explain which metadata identifies an original source, a source version, and one chunk. Do not confuse the chunk ordinal with an authority ranking.</p>
-<h2>2. Predict four retrieval outcomes</h2>
+<h2 id="2-predict-four-retrieval-outcomes">2. Predict four retrieval outcomes</h2>
 <p>Before executing, predict the evidence for <code>returns deadline</code>, <code>SHIP-42</code>, <code>money back for dinner while travelling</code>, and <code>quasar lunar habitat</code>. Then compare the actual passages with your prediction. Which miss follows from lexical token overlap? Which no-match must not be repaired by fabricating a document? Explain why a semantic top-k result may still be irrelevant.</p>
-<h2>3. Vary chunk boundaries</h2>
+<h2 id="3-vary-chunk-boundaries">3. Vary chunk boundaries</h2>
 <p>Use a disposable copy of the corpus and construct <code>PolicyIndex(directory=copy, chunk_size=200, overlap=40)</code>. Inspect the chunks and retrieved evidence for a question requiring an eligibility condition. Compare against the default split. Keep source provenance through both versions; explain why finding a deadline without its conditions can lead to a misleading answer.</p>
-<h2>4. Update and remove a source</h2>
+<h2 id="4-update-and-remove-a-source">4. Update and remove a source</h2>
 <p>In the disposable copy, change the current return text, search again, and demonstrate that the old text is gone. Remove that current source file and search again. The obsolete version must not become current merely because the current one disappeared. Finally create two current versions with the same source ID: ingestion must reject the ambiguous active source rather than silently pick one.</p>
-<h2>5. Test permissions before relevance</h2>
+<h2 id="5-test-permissions-before-relevance">5. Test permissions before relevance</h2>
 <p>Query the finance reserve as Alice, Bob, and finance. Show which source IDs each identity can retrieve; unknown identities must raise <code>PermissionError</code>. Explain why filtering after a provider has embedded confidential text is too late. CLI user selection is a synthetic exercise, not production authentication.</p>
-<h2>6. Optional real semantic comparison</h2>
+<h2 id="6-optional-real-semantic-comparison">6. Optional real semantic comparison</h2>
 <p>With explicit provider consent and an actual configured embedding model, run <code>--live --strategy semantic</code>. Compare a paraphrase and an exact identifier against lexical retrieval. Change only retrieval strategy and record evidence, latency, and usage limits. Without credentials, complete the local work and mark learned semantic-search behavior unverified—not mocked or replaced.</p>
 <p><strong>Gate:</strong> identify provenance, diagnose a lexical miss, demonstrate edit/removal without stale sources, enforce access boundaries, and explain the semantic comparison's remaining prerequisites. Revisit with a fresh question during RAG evaluation; record hints used rather than marking reading as mastery.</p></main></body></html>

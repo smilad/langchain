@@ -18,20 +18,21 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>13.1 — MCP is a protocol boundary, not a trust certificate</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../12_multi_agent/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="131--mcp-is-a-protocol-boundary-not-a-trust-certificate">13.1 — MCP is a protocol boundary, not a trust certificate</h1>
+<p><strong>In plain words:</strong> MCP is a standard way for a program to offer tools to a model. A server exposes tools, a client discovers and calls them, and connecting to a server does not make it trustworthy.</p>
 <p><strong>Mission/objective:</strong> advance <a href="../../MISSION.html">the mission</a> by tracing a real catalog lookup across MCP and separating client, server, model, and tool responsibilities.</p>
 <p><strong>Prerequisites:</strong> <a href="../04_tools_agents/01.html">catalog tools</a>, <a href="../11_middleware_security/04.html">security boundaries</a>, and basic async. Check: explain what code actually executes after a model requests a tool.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/mcp">LangChain MCP</a> and <a href="https://gofastmcp.com/servers/server">FastMCP server</a>, checked 2026-10-12. Authoring baseline: LangChain 1.4.4 with <code>mcp</code> extra and FastMCP 4.1.0 on Python 3.14.0; <a href="../../docs/VERIFICATION.html">verification</a> separates installed packages from exercised behavior. <code>langchain.mcp</code> is beta and may change. Local checks need no model credentials; live mode incurs provider calls.</p>
-<h2>Retrieve prior knowledge</h2>
+<h2 id="retrieve-prior-knowledge">Retrieve prior knowledge</h2>
 <p>Does a tool docstring authorize access? Is a tool result a model answer? Correction after an attempt: descriptions help selection, while authorization is code; a result is external data, not a guarantee of a supported final reply.</p>
-<h2>Mental model and flow</h2>
+<h2 id="mental-model-and-flow">Mental model and flow</h2>
 <p>The <strong>server</strong> advertises read-only catalog capabilities and executes typed functions. The <strong>client</strong> negotiates protocol support, discovers tools, and sends calls. <code>MCPAdapter</code> converts the discovered tools into LangChain tools. A model is optional: ordinary Python can choose and invoke an adapted tool directly.</p>
 <p><code>Python/agent → adapted tool → stdio client → FastMCP subprocess → catalog JSON → MCP result → ToolMessage</code></p>
 <p>Tools are invocable operations. Resources are addressable data. Prompts are reusable templates. The course intentionally exposes only two tools; adding resource and prompt examples is not necessary to prove a real tool integration.</p>
-<h2>Worked example</h2>
+<h2 id="worked-example">Worked example</h2>
 <p>Run <code>uv run python labs/13_mcp/main.py --check</code>. The adapter launches an actual subprocess, discovers <code>catalog_lookup</code> and <code>catalog_quote</code>, invokes real lookups/calculation, and inspects structured artifacts. Missing <code>absent</code> is a successful protocol call with a domain-level unavailable result. Quantity zero is a server-reported tool error. Neither is automatically a transport failure.</p>
-<h2>Guided completion and independent change</h2>
+<h2 id="guided-completion-and-independent-change">Guided completion and independent change</h2>
 <p>Draw the serialization boundary and label which process reads <code>data/catalog.json</code>. Supply the omitted distinction between <code>ToolMessage.content</code> and its structured artifact. Then use <a href="../../exercises/13_mcp.html">the exercise</a> to change an item/quantity without granting write capability.</p>
-<h2>Failure investigation and exit</h2>
+<h2 id="failure-investigation-and-exit">Failure investigation and exit</h2>
 <p>Predict the effect of printing debugging prose to server stdout: it can corrupt stdio protocol messages. Use stderr for operational diagnostics. Exit by showing a real client/server result and explaining why connection success does not imply trust. Review this boundary in <a href="../14_production/01.html">production configuration</a>; consult <a href="../../reference/GLOSSARY.html">the glossary</a> for transport and capability.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/13_mcp/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

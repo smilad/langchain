@@ -62,33 +62,9 @@ A lexical miss is not automatically generation failure. Citation membership is n
 
 ## Captured `--check` output
 
-Real, unedited stdout of `uv run python labs/08_evaluation/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Excerpt: first 150 lines only. Compare your own run against it.
+Output of `uv run python labs/08_evaluation/main.py --check` (no credentials, no network), re-formatted as indented JSON; local paths are replaced by `<repo>`. The environment `preflight` block is omitted here; Module 00 shows it in full. The middle of the output is omitted for length. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.
 
 ```text
-{
-  "preflight": {
-    "python": "3.14.0",
-    "interpreter": "<repo>/.venv/bin/python",
-    "packages": {
-      "langchain": "1.4.4",
-      "langchain-core": "1.6.9",
-      "langchain-openai": "1.7.0",
-      "langgraph": "1.2.14",
-      "langgraph-checkpoint-sqlite": "3.1.1",
-      "fastmcp": "4.1.0",
-      "pydantic": "2.14.1"
-    },
-    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
-    "configured": {
-      "api_key": false,
-      "model": false,
-      "live_consent": false,
-      "custom_endpoint": false,
-      "hosted_tracing": false
-    },
-    "live_request_sent": false
-  }
-}
 {
   "dataset_sha256": "c52d16db367b05d7cf5bc5c35c6dc21f665bd03c93a013101996704308764467",
   "split": "dev",
@@ -105,8 +81,8 @@ Real, unedited stdout of `uv run python labs/08_evaluation/main.py --check` (no 
   "summary": {
     "lexical": {
       "rows": 12,
-      "mean_seconds": 0.002150034832690532,
-      "population_stdev_seconds": 0.0021311240792657397,
+      "mean_seconds": 0.002054562583604517,
+      "population_stdev_seconds": 0.002188508099401922,
       "failures": {},
       "human_reviewed": 0
     }
@@ -159,21 +135,13 @@ Real, unedited stdout of `uv run python labs/08_evaluation/main.py --check` (no 
             "chunk_id": "EXPENSE:v1:0",
             "chunk": 0
           }
-        },
-        {
-          "text": "The warranty covers manufacturing defects for 12 months from purchase. Accidental damage and normal wear are excluded. Keep the purchase receipt.",
-          "metadata": {
-            "source_id": "WARRANTY",
-            "version": 1,
-            "current": true,
-            "audience": "public",
-            "title": "Warranty",
+... (middle omitted for length) ...
             "trust": "policy",
             "provenance": "Synthetic course author; approved policy",
             "effective_date": "2026-10-01",
-            "path": "warranty-v1.json",
-            "content_sha256": "c4abaacd69279dd007ccd06580778047dfbfe3e897072e0d95e3a901b2dbce47",
-            "chunk_id": "WARRANTY:v1:0",
+            "path": "cancel-v1.json",
+            "content_sha256": "daec76881405878be15eb9cae761554459d014dcd0904902a9d2cc840e77413f",
+            "chunk_id": "CANCEL:v1:0",
             "chunk": 0
           }
         }
@@ -187,32 +155,25 @@ Real, unedited stdout of `uv run python labs/08_evaluation/main.py --check` (no 
         "semantic_support": "not a deterministic check"
       },
       "trace": {
-        "retrieval_seconds": 0.00918537494726479,
+        "retrieval_seconds": 0.0014246670180000365,
         "model_calls": 0,
         "usage": [],
         "corpus_sha256": "42dfb685e549233d2795a949c5296ec8f148498f616608b981e541d3ce972066"
       },
-      "elapsed_seconds": 0.009193374949973077
-    },
-    {
-      "case_id": "a02",
-      "category": "answerable",
-      "split": "dev",
-      "question": "What is the standard shipping delivery time after dispatch?",
-      "user_id": "bob",
-      "trial": 1,
-      "strategy": "lexical",
-      "human_rubric": "3 to 5 business days after dispatch, not calendar days or time after order placement.",
-      "human_review": null,
-      "model_grade": null,
-      "generated_answer": null,
-      "failure_categories": [],
-      "evidence": [
-        {
-          "text": "Standard shipping takes 3 to 5 business days after dispatch. Order SHIP-42 qualifies for free standard shipping. Express shipping takes 1 business day after dispatch.",
-          "metadata": {
-            "source_id": "SHIPPING",
-            "version": 1,
-            "current": true,
-            "audience": "public",
+      "elapsed_seconds": 0.0014281670446507633
+    }
+  ],
+  "configuration": {
+    "strategy": "lexical",
+    "k": 3,
+    "trials": 1,
+    "compare_strategy": null,
+    "live": false,
+    "judge": false,
+    "model": null,
+    "embedding_model": null,
+    "dataset_sha256": "c52d16db367b05d7cf5bc5c35c6dc21f665bd03c93a013101996704308764467",
+    "corpus_sha256": "42dfb685e549233d2795a949c5296ec8f148498f616608b981e541d3ce972066"
+  }
+}
 ```

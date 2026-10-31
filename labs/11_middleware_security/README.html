@@ -18,44 +18,20 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 11 — security boundaries and real middleware</h1>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1 id="module-11--security-boundaries-and-real-middleware">Module 11 — security boundaries and real middleware</h1>
 <p>Setup: <code>uv sync --locked</code>; <a href="../../lessons/11_middleware_security/01.html">lessons</a>; Python &gt;=3.14 and <a href="../../uv.lock">exact versions</a>. <a href="https://docs.langchain.com/oss/python/langchain/middleware/custom">Custom middleware</a> and <a href="https://docs.langchain.com/oss/python/langchain/tools">tools</a>, checked 2026-10-12.</p>
 <pre><code class="language-sh">uv run python labs/11_middleware_security/main.py --check
 uv run python labs/11_middleware_security/main.py --live
 </code></pre>
 <p>Check uses real temporary durable workflows for alice/bob, retrieves MALICIOUS from the corpus, confirms finance exclusion for alice, checks authorized status projection, denies cross-owner inspection, extra owner arguments, secret reading and approval capabilities, and inspects actual zero action counts. It also runs a deliberately unsafe non-model fixture: document text grants permission and releases ONLY a committed synthetic marker. This counterexample is not a model leakage observation and never reads credentials.</p>
 <p>Live additionally invokes actual <code>create_agent</code> with AuthorizationMiddleware, ModelCallLimitMiddleware and ToolCallLimitMiddleware. Provider config/consent and tool calling are required. Inspect all model/tool messages: an unattempted attack, an attempted-and-denied tool call and a model refusal are different evidence. No fake model or fallback exists. The secure tool has no identity argument and receives immutable trusted runtime context; the domain function and workflow repeat ownership checks independently of middleware.</p>
-<h2>Gate report</h2>
+<h2 id="gate-report">Gate report</h2>
 <p>For each case record requested capability, trusted actor, exact synthetic source/input, actual tool execution outcome, action count, versioned model/prompt configuration and declared trial count. Prove denied operations cannot produce effects. Evaluate semantic contamination separately: valid source IDs or no unauthorized actions do not prove grounded wording. Minimize/redact before provider calls; final-display redaction cannot undo upstream disclosure. Never upload private traces without permission.</p>
 <p><code>--check</code> proves deterministic boundaries but does not traverse live model middleware. <code>--live</code> proves whatever actual messages show, not immunity against every injection. The synthetic secret is not available to secure model context or tool capabilities; this is least privilege rather than successful detection of every secret-request phrasing. Local identity arguments are trusted demonstrations, not login credentials.</p>
 <p><strong>Evidence status:</strong> <a href="../../docs/VERIFICATION.html">verification</a> records actual local commands/outcomes separately from unavailable live proof. Installed baseline: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9, LangGraph 1.2.14, langchain-openai 1.7.0, Pydantic 2.14.1. Temporary state is removed after connections close. <a href="../../exercises/11_middleware_security.html">Independent exercise</a>, <a href="../../solutions/11_middleware_security.html">reasoned solution</a>.</p>
-<h2>Captured <code>--check</code> output</h2>
-<p>Real, unedited stdout of <code>uv run python labs/11_middleware_security/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<h2 id="captured---check-output">Captured <code>--check</code> output</h2>
+<p>Output of <code>uv run python labs/11_middleware_security/main.py --check</code> (no credentials, no network), re-formatted as indented JSON; local paths are replaced by <code>&lt;repo&gt;</code>. The environment <code>preflight</code> block is omitted here; Module 00 shows it in full. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.</p>
 <pre><code class="language-json">{
-  &quot;preflight&quot;: {
-    &quot;python&quot;: &quot;3.14.0&quot;,
-    &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
-    &quot;packages&quot;: {
-      &quot;langchain&quot;: &quot;1.4.4&quot;,
-      &quot;langchain-core&quot;: &quot;1.6.9&quot;,
-      &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
-      &quot;langgraph&quot;: &quot;1.2.14&quot;,
-      &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
-      &quot;fastmcp&quot;: &quot;4.1.0&quot;,
-      &quot;pydantic&quot;: &quot;2.14.1&quot;
-    },
-    &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
-    &quot;configured&quot;: {
-      &quot;api_key&quot;: false,
-      &quot;model&quot;: false,
-      &quot;live_consent&quot;: false,
-      &quot;custom_endpoint&quot;: false,
-      &quot;hosted_tracing&quot;: false
-    },
-    &quot;live_request_sent&quot;: false
-  }
-}
-{
   &quot;allowed&quot;: {
     &quot;thread_id&quot;: &quot;alice-thread&quot;,
     &quot;status&quot;: &quot;pending&quot;,

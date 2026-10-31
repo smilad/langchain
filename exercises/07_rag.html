@@ -18,18 +18,18 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 07 exercises — support is more than citation presence</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-07-exercises--support-is-more-than-citation-presence">Module 07 exercises — support is more than citation presence</h1>
 <p>Read <a href="../lessons/07_rag/01.html">the lessons</a> and inspect <a href="../labs/07_rag/README.html">the lab</a>. Use official documentation lookup; attempt the questions before <a href="../solutions/07_rag.html">solutions</a>.</p>
-<h2>1. Map the two-step baseline</h2>
+<h2 id="1-map-the-two-step-baseline">1. Map the two-step baseline</h2>
 <p>Draw question → authorized retrieval → evidence payload → typed model output → citation-membership check. State the input/output shape and responsibility at each boundary. Which stage can run without a model? Which check can establish only structural validity, not factual support?</p>
-<h2>2. Investigate the local cases</h2>
+<h2 id="2-investigate-the-local-cases">2. Investigate the local cases</h2>
 <p>Run <code>uv run python labs/07_rag/main.py --check</code>. Compare evidence for a current return deadline, unrelated question, remote-work contradiction, outdated fourteen-day claim, malicious source, and finance request. Separate current-version filtering, permission filtering, insufficient relevance, and conflicting current evidence. Predict the desired answer behavior before considering any generated prose.</p>
-<h2>3. Refute citation-only scoring</h2>
+<h2 id="3-refute-citation-only-scoring">3. Refute citation-only scoring</h2>
 <p>The lab deliberately supplies a human-authored nine-hundred-day claim with the real <code>RETURN</code> ID. Explain why membership validation passes while support fails. Design a claim-to-passage rubric that checks the period, start event, eligibility, and units. Do not treat this authored counterexample as observed model output.</p>
-<h2>4. Generate and review, when configured</h2>
+<h2 id="4-generate-and-review-when-configured">4. Generate and review, when configured</h2>
 <p>With explicit consent, run <code>--live --question 'What is the returns deadline?'</code>, then a warranty question and an unanswerable question. Inspect raw selected evidence and typed answers. Review substantive claims, citations, and appropriate abstention separately. An exact output sentence is not a reproducible acceptance criterion.</p>
-<h2>5. Change one retrieval decision</h2>
+<h2 id="5-change-one-retrieval-decision">5. Change one retrieval decision</h2>
 <p>On development examples, choose query rewrite or reranking (<code>--experiment rewrite</code> or <code>--experiment rerank</code>). Keep model/corpus/other settings fixed, record extra calls, and compare selected evidence. Explain why the generation trace alone does not include rewrite/rerank usage. Use an explicitly authorized tracing service only if content upload is acceptable.</p>
-<h2>6. Decide whether agentic retrieval is justified</h2>
+<h2 id="6-decide-whether-agentic-retrieval-is-justified">6. Decide whether agentic retrieval is justified</h2>
 <p>Run the real paired experiment <code>--live --compare-agentic</code> only with provider access. Explain what dynamic retrieval decisions add and what extra error/latency/cost they create. Retaining the two-step baseline is a valid result. Do not infer general superiority from one paired run.</p>
 <p><strong>Gate:</strong> supported citations, deliberate abstention, conflicts, outdated sources, and malicious/unavailable evidence must be investigated. Diagnose a retrieval miss separately from an unsupported generated claim. Without a provider, preserve the local boundary evidence and explicitly leave generated support/injection behavior unverified. Review a changed question in Module 08.</p></main></body></html>

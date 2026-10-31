@@ -38,6 +38,8 @@ Follow [the roadmap](../ROADMAP.md) and demonstrate the module gates rather than
 | 14 Production | [Application/config](14_production/01.md) | [Concurrency/deadlines](14_production/02.md) | [Storage/data handling](14_production/03.md) | [Deploy/rollback](14_production/04.md) |
 | 15 Capstone | [Specify architecture](15_capstone/01.md) | [Run/recover/review](15_capstone/02.md) | [Evaluate/improve](15_capstone/03.md) | [Transfer/teach](15_capstone/04.md) |
 
+Every lesson ends with a link to real captured `--check` output from its lab, so you can compare your run against it. Where a lesson says a result was not observed, it means the lesson has no captured run for that live model step; see [the verification report](../docs/VERIFICATION.md) for what was actually run.
+
 ## How to practice
 
 1. Answer the retrieval warm-up before seeing corrections.
@@ -45,6 +47,7 @@ Follow [the roadmap](../ROADMAP.md) and demonstrate the module gates rather than
 3. Attempt the module exercise with a changed constraint; documentation lookup is allowed.
 4. Diagnose the named failure from evidence before opening the solution.
 5. Explain why the repair addresses the cause and what remains unverified.
-6. Revisit a fresh conceptual/coding variation later; record mastery only after actual learner evidence.
+6. If you are stuck, follow a hint ladder: name the failed stage and its expected input and output, inspect its evidence or metadata, and only then open the solution. Repair the boundary, not unrelated prompts.
+7. Revisit each lesson with a fresh question next session and about a week later. These intervals are a practice habit, not evidence of mastery; record mastery only from your own demonstrated work.
 
 Model-free `--check` paths never claim generated-answer quality. `--live` requires a real configured provider and explicit spending consent. Optional advanced tracks remain described in the roadmap and are not substitutes for core module gates.

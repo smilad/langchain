@@ -18,18 +18,18 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 14 exercises — operate the local application</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-14-exercises--operate-the-local-application">Module 14 exercises — operate the local application</h1>
 <p>Read <a href="../lessons/14_production/01.html">the lessons</a> and <a href="../labs/14_production/README.html">the HTTP runbook</a>. Attempt before <a href="../solutions/14_production.html">solutions</a>. This is a localhost operations lab, not an internet-ready security certification.</p>
-<h2>1. Reproduce the environment</h2>
+<h2 id="1-reproduce-the-environment">1. Reproduce the environment</h2>
 <p>Start from a checkout with the locked Python environment, not IDE globals. Explain the configured package index and its hashes, configuration presence versus secret values, health versus readiness, and why the local corpus/state are not model weights.</p>
-<h2>2. Run actual HTTP behavior</h2>
+<h2 id="2-run-actual-http-behavior">2. Run actual HTTP behavior</h2>
 <p>Run <code>uv run python labs/14_production/main.py --check</code>. Inspect health, token authentication, concurrent Alice/Bob starts, user-ID body rejection, cross-user denial, disconnect outcome, process restart, repeat approval, rejection, and deadline response. Identify the corresponding persisted graph/action observations rather than relying on a happy-path HTTP status alone.</p>
-<h2>3. Serve and vary a request</h2>
+<h2 id="3-serve-and-vary-a-request">3. Serve and vary a request</h2>
 <p>Configure private synthetic bearer tokens mapped to Alice/Bob, launch <code>python -m langchain_learning.service</code>, and use the documented routes. Create a fresh human-draft thread, inspect it, edit/approve/reject explicitly, then restart and inspect. Try invalid credentials and another user's thread. Identity must come from the token, not a client body field.</p>
-<h2>4. Investigate cancellation and replay</h2>
+<h2 id="4-investigate-cancellation-and-replay">4. Investigate cancellation and replay</h2>
 <p>Disconnect a client after submitting work, inspect its transient request outcome, then inspect the persistent thread/action before retrying. Explain why cancellation/deadline may happen after commit. A matching terminal decision is an idempotent retry; a conflicting decision must be rejected. Do not promise external exactly-once email delivery from a local unique database record.</p>
-<h2>5. Diagnose provider failure</h2>
+<h2 id="5-diagnose-provider-failure">5. Diagnose provider failure</h2>
 <p>An unconfigured or unconsented live request must fail before registering a new model-driven thread, even when retrieval would find no evidence. With real provider access, use the live runbook's unreachable-endpoint experiment to observe transport failure and sanitized error classification. Do not insert fake model success to make a health endpoint look ready.</p>
-<h2>6. Write an operational handoff</h2>
+<h2 id="6-write-an-operational-handoff">6. Write an operational handoff</h2>
 <p>Document startup/shutdown, bounded concurrency/deadlines, database locations, privacy, observed latency, and a rollback procedure preserving compatible state. Explain the local POSIX lock and serialized database scope; do not extrapolate it to multi-host deployment. Define workload/cost targets from measured behavior, not arbitrary universal SLAs.</p>
 <p><strong>Gate:</strong> another learner can start the application outside the IDE and reproduce owned persistent review and visible failures. Provider quality/outage gates remain unverified without accessible credentials and spending consent. Reassess with an unfamiliar request/owner combination in the capstone.</p></main></body></html>

@@ -18,9 +18,9 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 05 independent exercise — Two users, three threads, one minimal memory</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-05-independent-exercise--two-users-three-threads-one-minimal-memory">Module 05 independent exercise — Two users, three threads, one minimal memory</h1>
 <p>Prerequisites: <a href="../lessons/05_memory_context/01.html">Module 05 lessons</a>, the <a href="../labs/05_memory_context/README.html">lab</a> and actual tool contracts. Attempt first; <a href="../solutions/05_memory_context.html">solutions</a> are separate. This is an explicit <strong>long-term store preference exercise</strong>, not an instruction to infer user traits from conversation.</p>
-<h2>Part A — Prediction and implementation</h2>
+<h2 id="part-a--prediction-and-implementation">Part A — Prediction and implementation</h2>
 <p>In a local copy of the lab's deterministic path, use its <code>Sessions</code>, <code>checkpoint_graph</code>, <code>save_preference</code> and <code>selected_preference</code> helpers with genuine <code>InMemoryStore</code>/<code>InMemorySaver</code> objects.</p>
 <ol>
 <li>With explicit synthetic consent, retain Alice's style <code>short</code> and Bob's style <code>detailed</code>.</li>
@@ -31,12 +31,12 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <li>Delete only Alice's store preference. Explain what future store lookup sees, what old checkpoint snapshots still contain and what you cannot conclude about provider records.</li>
 </ol>
 <p>Use real state/store values for assertions. Do not mock <code>.get</code>, <code>.put</code> or graph invocation. Do not print real private information; the entire exercise is synthetic.</p>
-<h2>Part B — Scope versus durability</h2>
+<h2 id="part-b--scope-versus-durability">Part B — Scope versus durability</h2>
 <p>Rebuild the graph using the same saver and store, then rebuild using new objects. Predict and inspect the difference. Explain why neither case proves process-restart durability. Identify which additional persistent backend and durable ownership binding would be needed before turning this into an authenticated service; do not deploy the lab wrapper.</p>
-<h2>Part C — Change the context constraint</h2>
+<h2 id="part-c--change-the-context-constraint">Part C — Change the context constraint</h2>
 <p>Create a conversation with an early 4500-cent budget, one long unrelated discussion and a latest request to quote desk-lamp. Compare the full context, a complete-message recent trim and an explicitly human-authored summary. List every retained/discarded fact.</p>
 <p>If credentials, remote consent and budget are available, obtain a real generated summary and run real <code>create_agent</code> calls on all three selected contexts. Record exact model inputs, summary omissions and tool-supported totals. Do not invent a generated summary when live execution is blocked. Do not reuse a hidden checkpoint for the comparison, because it would contaminate the experiment.</p>
-<h2>Acceptance and diagnosis</h2>
+<h2 id="acceptance-and-diagnosis">Acceptance and diagnosis</h2>
 <p>Pass with distinct histories, distinct user preferences, rejected cross-user access, consent enforcement, deletion-copy limitations and visible context selection. Explain the difference between actual state leakage and a model guessing an unknown fact. The code guard is the isolation mechanism; a sentence telling the model “do not leak” is not.</p>
 <p>Hints: inspect <code>thread_id</code>; inspect the exact namespace/key; inspect the original checkpoint versus selected input; then read the solution. Review with a fresh user/thread during Modules 11 and 14. No progress is recorded until you supply genuine evidence.</p>
 <p>Sources consulted 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">short-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/long-term-memory">long-term memory</a>. <a href="../docs/VERIFICATION.html">Verification</a> records exercised local state/store behavior and unverified real model recall.</p></main></body></html>

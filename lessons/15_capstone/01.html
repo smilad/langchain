@@ -18,12 +18,13 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>15.1 — Specify the support assistant before connecting components</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../14_production/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="151--specify-the-support-assistant-before-connecting-components">15.1 — Specify the support assistant before connecting components</h1>
+<p><strong>In plain words:</strong> Before wiring anything, write down what the support assistant must do: who can ask, what it may read, where a human reviews, and what effect an approval has.</p>
 <p><strong>Objective:</strong> define observable behavior, data boundaries, and the smallest architecture that satisfies them.</p>
 <p><strong>Prerequisites:</strong> <a href="../07_rag/01.html">RAG</a>, <a href="../08_evaluation/01.html">evaluation</a>, <a href="../10_durable_approval/01.html">durable approval</a>, and <a href="../14_production/01.html">serving</a>. The installed dependency snapshot and live limitations are recorded in <a href="../../docs/VERIFICATION.html">the verification report</a>; APIs are pinned by <code>uv.lock</code>.</p>
-<h2>Recall before reading</h2>
+<h2 id="recall-before-reading">Recall before reading</h2>
 <p>Explain why a source ID is not proof of claim support. Then explain why checkpoint persistence alone does not guarantee that a side effect happens only once. Compare your reasoning with the earlier RAG and approval lessons before continuing.</p>
-<h2>The product contract</h2>
+<h2 id="the-product-contract">The product contract</h2>
 <p>A request arrives with a trusted user identity and a thread identifier. The assistant searches only sources visible to that identity, drafts an evidence-grounded response, and pauses for review. A reviewer approves, rejects, or edits the proposal. Approval records a <strong>synthetic local action</strong>; this course does not send email or create a production ticket.</p>
 <p>The synthetic corpus includes <code>RETURN</code> v2 (30 calendar days, unused item and receipt), an obsolete version with a different period, and conflicting current remote-work sources. These are deliberately different failure classes: an obsolete record should be filtered; two genuinely current contradictions should not be silently collapsed into one fact.</p>
 <pre><code class="language-mermaid">flowchart LR
@@ -35,12 +36,12 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
     A --&gt;|approve or edit| S[Idempotent SQLite action record]
 </code></pre>
 <p>LangChain handles the model interaction; LangGraph exposes the state transitions and review point; SQLite persists checkpoints and the local sink. More agents are not required by this contract. Use <a href="../12_multi_agent/01.html">the multi-agent lesson</a> to justify a specialist only if it improves measured outcomes.</p>
-<h2>Worked design decision</h2>
+<h2 id="worked-design-decision">Worked design decision</h2>
 <p>The concrete invariant “Bob cannot inspect or approve Alice's thread” must hold both before and after restart. A <code>user_id</code> inside a client request is not enough: the server binds a bearer token to identity, and the workflow checks persisted thread ownership. The model is not asked to decide whether Bob is permitted.</p>
 <p>Read the implementation entry points in <code>retrieval.py</code>, <code>rag.py</code>, and <code>workflow.py</code>. Identify the input/output boundary at each transition. State which component can fail because of an unavailable provider and which components can be exercised without one.</p>
-<h2>Guided and independent practice</h2>
+<h2 id="guided-and-independent-practice">Guided and independent practice</h2>
 <p>First, map the architecture to the capstone lab's <code>start</code>, <code>inspect</code>, and decision commands. Then replace the return-policy question with a warranty question. Predict which stages change and which invariants do not. Do not copy a worked solution before making the prediction.</p>
 <p>For a failure investigation, propose a change that removes the source-version filter. Identify the consumer-visible error it could create; inspect retrieval evidence before adjusting any prompt.</p>
 <p><strong>Exit check:</strong> explain authorization, evidence, persistence, and local effect scope in your own words. Revisit this architecture when writing the final tutorial; diagrams should reflect observed behavior, not intended wiring.</p>
-<p><strong>Sources:</strong> <a href="https://docs.langchain.com/oss/python/deepagents/retrieval">Retrieval architectures</a>, <a href="https://docs.langchain.com/oss/python/langgraph/persistence">LangGraph persistence</a>. Ask the teaching assistant for one diagnostic hint at a time if a boundary remains unclear.</p>
+<p><strong>Sources:</strong> <a href="https://docs.langchain.com/oss/python/langchain/retrieval">Retrieval architectures</a>, <a href="https://docs.langchain.com/oss/python/langgraph/persistence">LangGraph persistence</a>. Ask the teaching assistant for one diagnostic hint at a time if a boundary remains unclear.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/15_capstone/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

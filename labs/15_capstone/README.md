@@ -54,13 +54,13 @@ Record model IDs, exact resolved versions, trial count, timings, reported usage,
 
 ## Verification and scope
 
-Observed local evidence and any inaccessible live prerequisites are recorded in [docs/VERIFICATION.md](../../docs/VERIFICATION.md). This runbook makes no claim that live model quality or an advisor review has passed.
+Observed local evidence and any inaccessible live prerequisites are recorded in [docs/VERIFICATION.md](../../docs/VERIFICATION.md). This runbook makes no claim that live model quality has been verified.
 
 The action sink is a real local SQLite record—not email, a payment, or a production ticket. Its unique transactional action identity prevents duplicated **local records**; it does not promise exactly-once distributed delivery. Cancellation can occur after commit: inspect before retrying. Never delete a persistence directory while a workflow/server is running; use a fresh isolated `COURSE_STATE_DIR` for disposable experiments.
 
 ## Captured `--check` output
 
-Real, unedited stdout of `uv run python labs/15_capstone/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
+Output of `uv run python labs/15_capstone/main.py --check` (no credentials, no network), re-formatted as indented JSON; local paths are replaced by `<repo>`. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.
 
 ```json
 {
@@ -105,11 +105,11 @@ Real, unedited stdout of `uv run python labs/15_capstone/main.py --check` (no cr
     "persisted_pending_recovered": "pending",
     "edited_action": [
       {
-        "action_id": "530838f312784225b971d99a78c6c2c2",
+        "action_id": "4b6d2e76f2e747e3bac414f09b1dd2a3",
         "thread_id": "capstone-approved",
         "user_id": "alice",
         "draft": "Human-approved exercise draft: include the verified source and applicable conditions.",
-        "created_at": "2026-10-31 10:03:46"
+        "created_at": "2026-10-31 10:12:54"
       }
     ],
     "retry_status": "recorded",

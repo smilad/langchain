@@ -18,12 +18,13 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>03.3 — Compose stages only when their boundaries fit</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="02.html">&larr; Previous</a> · <a href="04.html">Next &rarr;</a></nav><h1 id="033--compose-stages-only-when-their-boundaries-fit">03.3 — Compose stages only when their boundaries fit</h1>
+<p><strong>In plain words:</strong> The <code>|</code> operator chains steps so one step's output feeds the next. It is only a way to wire steps together. It does not repair bad data. You keep the original text so a final check can compare against it.</p>
 <p><strong>Mission/objective:</strong> Advance the <a href="../../MISSION.html">mission</a> by tracing a Runnable/LCEL pipeline from input to a typed consumer result. Prerequisites: <a href="02.html">03.2</a>, <a href="../02_models_messages/03.html">prompt rendering</a>; identify which <code>invoke</code> operation is local and which is remote.</p>
 <p><strong>Sources/version:</strong> <a href="https://reference.langchain.com/python/langchain-core/runnables/base/RunnableSequence">RunnableSequence</a>, <a href="https://reference.langchain.com/python/langchain-core/output_parsers/pydantic/PydanticOutputParser">PydanticOutputParser</a>, <a href="https://reference.langchain.com/python/langchain-core/prompts/chat/ChatPromptTemplate">ChatPromptTemplate</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0, langchain-core 1.6.9/Pydantic 2.14.1. Exact resolution is in <code>uv.lock</code>; actual execution evidence is in <a href="../../docs/VERIFICATION.html">verification</a>. Local composition is unpaid; the live pipeline invokes a model.</p>
-<h2>Retrieve first</h2>
+<h2 id="retrieve-first">Retrieve first</h2>
 <p>Why retain original source text after rendering a prompt? What does a parsing error prevent the consumer from doing? Attempt before <a href="../../solutions/03_structured_output.html">corrections</a>.</p>
-<h2>Mental model and flow</h2>
+<h2 id="mental-model-and-flow">Mental model and flow</h2>
 <p>LCEL's <code>|</code> passes one stage's output into the next stage's input. It does not make an incompatible function fit, catch every exception, or transform invalid data into facts. RunnableLambda adapts an ordinary function; a sequence supplies invoke/async/batch semantics. Many ordinary Lambdas buffer rather than transform streaming chunks, so composition does not automatically preserve token-by-token display.</p>
 <p>The <a href="../../labs/03_structured_output/main.py">lab</a> implements two honest compositions:</p>
 <table>
@@ -53,13 +54,13 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tbody>
 </table>
 <p>RunnableParallel here carries the original source on one branch and typed generation on another. It is not two competing model agents. The source branch is necessary because the evidence guard cannot validate a quote against an already-discarded source.</p>
-<h2>Worked example and guided fading</h2>
+<h2 id="worked-example-and-guided-fading">Worked example and guided fading</h2>
 <pre><code class="language-python">sequence = RunnableLambda(parser.parse) | RunnableLambda(check_source)
 record = sequence.invoke(authored_json)
 </code></pre>
 <p>Run check mode and locate the returned typed fields. The authored fixture exercises parser/composition behavior, not a mocked model. Now complete a three-stage pipeline with input normalization before prompt rendering. Predict why <code>{wrong_name: ...}</code> fails before a remote call, and why a final guard must return the record rather than only printing it.</p>
-<h2>Failure investigation and independent variation</h2>
+<h2 id="failure-investigation-and-independent-variation">Failure investigation and independent variation</h2>
 <p>Change the guard's source to the missing-ID case while keeping the well-shaped authored record. The schema passes; the evidence guard rejects. This isolates stages more precisely than trying a new prompt. Attempt the changed-schema/source exercise in <a href="../../exercises/03_structured_output.html">independent tasks</a>, with solution withheld until your own diagram and attempt exist.</p>
-<h2>Exit and later review</h2>
+<h2 id="exit-and-later-review">Exit and later review</h2>
 <p>Trace the type at every edge, preserve source provenance and distinguish composition from truth. Explain why a plain Python function chain is also reasonable for a tiny task. Next session recreate the local sequence with a fresh JSON record; Module 06 preserves provenance and Module 09 introduces explicit graph state rather than hiding it inside a pipe. Reference: <a href="../../reference/API_MAP.html">API map</a>, <a href="../../solutions/03_structured_output.html">solution</a>. Ask which adjacent stage contracts fail to match.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/03_structured_output/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

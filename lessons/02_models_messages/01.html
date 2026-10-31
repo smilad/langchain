@@ -18,22 +18,23 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>02.1 — Initialize an integration, not an imaginary universal model</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../01_llm_baseline/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="021--initialize-an-integration-not-an-imaginary-universal-model">02.1 — Initialize an integration, not an imaginary universal model</h1>
+<p><strong>In plain words:</strong> LangChain talks to each provider through a separate integration package. This lesson builds the OpenAI chat model and shows the settings it needs, without printing your key.</p>
 <p><strong>Mission/objective:</strong> Advance the <a href="../../MISSION.html">mission</a> by creating a real LangChain chat-model client with explicit configuration and naming its capability assumptions. Prerequisite: <a href="../01_llm_baseline/04.html">Module 01</a>; explain why low temperature does not guarantee correct classification.</p>
-<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/models">models</a>, <a href="https://docs.langchain.com/oss/python/integrations/chat/openai">ChatOpenAI integration</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0. Exact resolution is in <code>uv.lock</code>; <a href="../../docs/VERIFICATION.html">verification</a> records real gateway-mediated invocation. Paths still require compatible capabilities, private <code>OPENAI_API_KEY</code>, <code>COURSE_MODEL</code>, and <code>COURSE_ALLOW_LIVE=1</code>. Hosted tracing is optional and can transmit data; do not enable it implicitly.</p>
-<h2>Retrieve first</h2>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/models">models</a>, <a href="https://docs.langchain.com/oss/python/integrations/chat/openai">ChatOpenAI integration</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0. Exact resolution is in <code>uv.lock</code>; <a href="../../docs/VERIFICATION.html">verification</a> records the author's live invocation. Paths still require compatible capabilities, private <code>OPENAI_API_KEY</code>, <code>COURSE_MODEL</code>, and <code>COURSE_ALLOW_LIVE=1</code>. Hosted tracing is optional and can transmit data; do not enable it implicitly.</p>
+<h2 id="retrieve-first">Retrieve first</h2>
 <p>What does the SDK own versus the application? Which report field identifies an IDE mismatch? Attempt before consulting <a href="../../solutions/02_models_messages.html">feedback</a>.</p>
-<h2>Mental model and flow</h2>
+<h2 id="mental-model-and-flow">Mental model and flow</h2>
 <p><code>langchain</code> is not a bundle of every provider SDK. The integration <code>langchain-openai</code> supplies <code>ChatOpenAI</code>; <code>langchain-core</code> supplies messages, prompts and Runnable contracts. A common method such as <code>invoke</code> standardizes the Python interface, not every provider parameter or output type.</p>
 <p>The <a href="../../labs/02_models_messages/main.py">lab</a> calls shared <code>get_model()</code> only in its live path. Flow: <code>safe preflight → validate text → consent/configuration → ChatOpenAI → remote invocation → AIMessage inspection</code>. Constructing a client is not a demonstrated remote request. Check mode does not construct a model or infer successful credentials.</p>
-<h2>Worked example and guided completion</h2>
+<h2 id="worked-example-and-guided-completion">Worked example and guided completion</h2>
 <p>The shared runtime's actual constructor is conceptually:</p>
 <pre><code class="language-python">ChatOpenAI(**model_settings(), temperature=0)
 </code></pre>
 <p><code>model_settings()</code> contains a secret; never emit the dictionary or model object. Timeout is bounded, and one SDK retry is allowed. The selected model must accept temperature zero and the chosen endpoint's APIs. If it does not, document the incompatibility rather than assuming all model families are interchangeable.</p>
 <p>Run <code>uv run python labs/02_models_messages/main.py --check</code> for real prompt/message operations only. Then write a three-row checklist matching each dependency to its responsibility. As a guided completion, identify the missing prerequisite before a live constructor is reached: a live flag without configured consent must stop, not select a fake model.</p>
-<h2>Failure investigation and independent variation</h2>
+<h2 id="failure-investigation-and-independent-variation">Failure investigation and independent variation</h2>
 <p>Predict the causes of an absent integration import, missing key, unknown model and unsupported sampling parameter. Installation problems are not prompt problems; a supplied key is not necessarily an authorized key. Attempt the configuration/capability variation in the <a href="../../exercises/02_models_messages.html">exercise</a>.</p>
-<h2>Exit and review</h2>
+<h2 id="exit-and-review">Exit and review</h2>
 <p>Explain package boundaries and show safe configuration reporting. If permitted, perform one real invoke and identify its message envelope; otherwise keep the live gate pending. Next session recall each dependency's role without imports; in Module 03 inspect structured-output support before choosing a method. Reference: <a href="../../reference/API_MAP.html">API map</a>, <a href="../../labs/02_models_messages/README.html">lab runbook</a>. Ask a focused question containing the exception class and requested capability, not credentials.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/02_models_messages/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

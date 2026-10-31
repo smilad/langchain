@@ -18,20 +18,21 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>14.2 — Bound work, and make cancellation honest</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="01.html">&larr; Previous</a> · <a href="03.html">Next &rarr;</a></nav><h1 id="142--bound-work-and-make-cancellation-honest">14.2 — Bound work, and make cancellation honest</h1>
+<p><strong>In plain words:</strong> Put limits on how many requests run at once, how long each may take, and how large a body may be. A timeout or a closed connection does not undo work that already committed.</p>
 <p><strong>Mission/objective:</strong> support <a href="../../MISSION.html">the mission</a> by demonstrating admission limits, deadlines, client disconnects, and visible upstream failure without claiming cancelled work never committed.</p>
 <p><strong>Prerequisites:</strong> <a href="01.html">HTTP entrypoint</a>, async/blocking distinctions, and approval side effects. Check: explain why returning a timeout does not stop a Python thread.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.python.org/3.14/library/socket.html">Python socket timeouts</a>, <a href="https://docs.python.org/3.14/library/multiprocessing.html">multiprocessing</a>, and <a href="https://docs.langchain.com/oss/python/integrations/chat/openai">OpenAI integration</a>, checked 2026-10-12. Python 3.14.0, LangChain OpenAI 1.7.0, SDK 3.29.0; actual evidence in <a href="../../docs/VERIFICATION.html">verification</a>. Live provider outages require genuine configured credentials, not fake keys.</p>
-<h2>Retrieve earlier concepts</h2>
+<h2 id="retrieve-earlier-concepts">Retrieve earlier concepts</h2>
 <p>What is a retry budget? Which side effects occur after approval? After attempting: physical retries differ from logical model invocations; local action recording belongs after the durable approval boundary.</p>
-<h2>Execution model</h2>
+<h2 id="execution-model">Execution model</h2>
 <p>The server admits at most <code>--max-workers</code> connections (default four), including request handling. Excess receives 503 rather than spawning unbounded threads. Bodies are capped at 16 KiB, read timeouts are bounded, and workflow operations have a whole-request deadline. The server uses a spawned process for each operation, not a background thread left running after a 504. It terminates and joins that worker on deadline, shutdown, or detected client disconnect.</p>
 <p>This is deliberately expensive process isolation for a small local course application, not a throughput recommendation. Workflow locking serializes database graph runs; concurrent HTTP admission does not imply parallel SQLite writes.</p>
-<h2>Worked cancellation</h2>
+<h2 id="worked-cancellation">Worked cancellation</h2>
 <p>Run <code>uv run python labs/14_production/main.py --check</code>. It sends an actual complete request and closes the socket. With a known <code>X-Request-ID</code>, <code>/requests/&lt;id&gt;</code> exposes owner-filtered transient outcome. Logs record cancellation or response disconnect. The lab then inspects persistent thread state.</p>
 <p><strong>Important:</strong> the worker may already have committed checkpoint or action data. Cancellation means the response/work process ended, not transactional rollback. Before retrying an approval, inspect the thread/action sink; rely on stable action identity rather than assuming no effect.</p>
-<h2>Guided and independent practice</h2>
+<h2 id="guided-and-independent-practice">Guided and independent practice</h2>
 <p>Predict whether a paused draft, approved action, and request-status record each survive restart. Supply a missing inspection step before retry. Use <a href="../../exercises/14_production.html">the exercise</a> to change the deadline and inspect actual outcomes.</p>
-<h2>Failure diagnosis and exit</h2>
+<h2 id="failure-diagnosis-and-exit">Failure diagnosis and exit</h2>
 <p>502 exposes worker/upstream failure class without raw provider text; 504 exposes deadline expiry. Live lab mode also uses a real unreachable provider endpoint with genuine configuration. Provider SDK retries remain bounded by runtime settings; no extra service retry layer is hidden. Exit by showing cancellation evidence, persisted-state uncertainty, and a repair decision. Revisit those semantics during <a href="04.html">rollback</a>; <a href="../../solutions/14_production.html">solutions</a> distinguish overload control from a per-user rate limiter.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/14_production/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

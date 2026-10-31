@@ -18,8 +18,8 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 13 lab — Actual FastMCP stdio integration</h1>
-<h2>Setup and commands</h2>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1 id="module-13-lab--actual-fastmcp-stdio-integration">Module 13 lab — Actual FastMCP stdio integration</h1>
+<h2 id="setup-and-commands">Setup and commands</h2>
 <p>Use the locked environment, not a tutorial's older adapter imports:</p>
 <pre><code class="language-sh">uv sync --locked
 uv run python labs/13_mcp/main.py --check
@@ -31,7 +31,7 @@ uv run python labs/13_mcp/main.py --check --scenario disconnect
 <pre><code class="language-sh">uv run python -m langchain_learning.mcp_server
 </code></pre>
 <p>That command waits for MCP protocol input. It is not an HTTP endpoint and does not print a catalog as ordinary CLI prose. Usually let the adapter launch the repository-owned script automatically. All server stdout belongs to stdio protocol; use stderr for diagnostics. The server requires no model or credentials.</p>
-<h2>Normal model-free path</h2>
+<h2 id="normal-model-free-path">Normal model-free path</h2>
 <p><code>MCPAdapter(Path(...))</code> starts an actual local subprocess and discovers exactly <code>catalog_lookup</code> and <code>catalog_quote</code>. The lab invokes the adapted LangChain tools with real tool-call IDs, inspects ToolMessages and structured artifacts, and checks:</p>
 <ul>
 <li><code>notebook</code> resolves from actual <code>data/catalog.json</code>;</li>
@@ -40,18 +40,18 @@ uv run python labs/13_mcp/main.py --check --scenario disconnect
 <li>zero quantity produces a server-reported error status.</li>
 </ul>
 <p>No in-memory server, fake tool, or generated model answer substitutes for this path. Read-only annotations declare intent; only the actual registered functions enforce capability. Quantity/domain validation also protects direct Python callers.</p>
-<h2>Actual agent path</h2>
+<h2 id="actual-agent-path">Actual agent path</h2>
 <p>With privately configured key/model and explicit consent:</p>
 <pre><code class="language-sh">uv run python labs/13_mcp/main.py --live
 </code></pre>
 <p>The live agent uses discovered MCP tools, is bounded to four model/three tool calls plus a recursion limit, and must produce at least one actual MCP ToolMessage. Inspect requested arguments, result artifacts, and final prose; a connected tool is not automatically trusted. Prices/stock remain catalog facts, not model guesses. Provider usage/cost and failures are genuine live prerequisites; no remote unreviewed tools or production credentials are needed.</p>
-<h2>Lifecycle and failure cases</h2>
+<h2 id="lifecycle-and-failure-cases">Lifecycle and failure cases</h2>
 <p><code>unavailable</code> attempts a real localhost connection at port 1 with a five-second timeout and reports the exception category. If that port unexpectedly hosts MCP, choose an unused endpoint before drawing conclusions. <code>disconnect</code> starts the actual stdio server with a direct FastMCP Client, calls lookup, exits its context, verifies disconnection, and demonstrates a failing direct call afterward. This differs from adapted tools: they can intentionally reconnect after discovery exits.</p>
 <p>Normal mode releases its adapter context after all calls; disconnect mode releases a direct client context. Both exercise real transport cleanup. Neither asserts arbitrary remote-server process shutdown. Tools expose synthetic data only; no persistent state/reset is required. If an interpreter/import fails, run <code>uv sync --locked</code> and inspect the real server stderr rather than hiding it behind a model fallback.</p>
 <p>See <a href="../../lessons/13_mcp/01.html">lessons</a>, <a href="../../exercises/13_mcp.html">exercise</a>, and <a href="../../solutions/13_mcp.html">solutions</a>.</p>
-<h2>Captured <code>--check</code> output</h2>
-<p>Real, unedited stdout of <code>uv run python labs/13_mcp/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
-<pre><code class="language-json">{
+<h2 id="captured---check-output">Captured <code>--check</code> output</h2>
+<p>Output of <code>uv run python labs/13_mcp/main.py --check</code> (no credentials, no network), re-formatted as indented JSON; local paths are replaced by <code>&lt;repo&gt;</code>. The middle of the output is omitted for length. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.</p>
+<pre><code class="language-text">{
   &quot;preflight&quot;: {
     &quot;python&quot;: &quot;3.14.0&quot;,
     &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
@@ -86,7 +86,7 @@ uv run python labs/13_mcp/main.py --check --scenario disconnect
       {
         &quot;type&quot;: &quot;text&quot;,
         &quot;text&quot;: &quot;{\&quot;found\&quot;:true,\&quot;item_id\&quot;:\&quot;notebook\&quot;,\&quot;name\&quot;:\&quot;Recycled paper notebook\&quot;,\&quot;price_cents\&quot;:1299,\&quot;currency\&quot;:\&quot;USD\&quot;,\&quot;stock\&quot;:12}&quot;,
-        &quot;id&quot;: &quot;lc_87753f5a-5cce-4dc2-b80a-66fb19938bbe&quot;
+        &quot;id&quot;: &quot;lc_3719f9a4-a6bc-4242-82be-e020068a2a6e&quot;
       }
     ],
     &quot;additional_kwargs&quot;: {},
@@ -112,7 +112,7 @@ uv run python labs/13_mcp/main.py --check --scenario disconnect
       {
         &quot;type&quot;: &quot;text&quot;,
         &quot;text&quot;: &quot;{\&quot;found\&quot;:false,\&quot;item_id\&quot;:\&quot;absent\&quot;}&quot;,
-        &quot;id&quot;: &quot;lc_5e1e8e5c-595f-40fe-86ab-e6d903550a6f&quot;
+        &quot;id&quot;: &quot;lc_13db0e3a-e234-4ee3-afad-cf485d07c4bd&quot;
       }
     ],
     &quot;additional_kwargs&quot;: {},
@@ -121,24 +121,7 @@ uv run python labs/13_mcp/main.py --check --scenario disconnect
     &quot;name&quot;: &quot;catalog_lookup&quot;,
     &quot;id&quot;: null,
     &quot;tool_call_id&quot;: &quot;missing&quot;,
-    &quot;artifact&quot;: {
-      &quot;structured_content&quot;: {
-        &quot;found&quot;: false,
-        &quot;item_id&quot;: &quot;absent&quot;
-      }
-    },
-    &quot;status&quot;: &quot;success&quot;
-  },
-  &quot;quote&quot;: {
-    &quot;content&quot;: [
-      {
-        &quot;type&quot;: &quot;text&quot;,
-        &quot;text&quot;: &quot;{\&quot;found\&quot;:true,\&quot;quoted\&quot;:true,\&quot;item_id\&quot;:\&quot;notebook\&quot;,\&quot;quantity\&quot;:2,\&quot;unit_price_cents\&quot;:1299,\&quot;total_cents\&quot;:2598,\&quot;currency\&quot;:\&quot;USD\&quot;,\&quot;stock\&quot;:12}&quot;,
-        &quot;id&quot;: &quot;lc_1ec9353c-6234-41fc-8728-ad987fe16dc7&quot;
-      }
-    ],
-    &quot;additional_kwargs&quot;: {},
-    &quot;response_metadata&quot;: {},
+... (middle omitted for length) ...
     &quot;type&quot;: &quot;tool&quot;,
     &quot;name&quot;: &quot;catalog_quote&quot;,
     &quot;id&quot;: null,
@@ -162,7 +145,7 @@ uv run python labs/13_mcp/main.py --check --scenario disconnect
       {
         &quot;type&quot;: &quot;text&quot;,
         &quot;text&quot;: &quot;Error calling tool 'catalog_quote'&quot;,
-        &quot;id&quot;: &quot;lc_9825722b-6caf-4bef-b026-b6bcc01f0ee2&quot;
+        &quot;id&quot;: &quot;lc_c36ee5c5-31ae-4975-9431-8c1a0ba11cbf&quot;
       }
     ],
     &quot;additional_kwargs&quot;: {},

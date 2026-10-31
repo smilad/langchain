@@ -18,11 +18,12 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>05.4 — Enforce identity separation and minimize retained data</h1>
-<h2>Objective and prerequisites</h2>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="03.html">&larr; Previous</a> · <a href="../06_retrieval/01.html">Next &rarr;</a></nav><h1 id="054--enforce-identity-separation-and-minimize-retained-data">05.4 — Enforce identity separation and minimize retained data</h1>
+<p><strong>In plain words:</strong> Check who owns a thread before loading any of its data. Store only what you need, and remember that deleting a record does not remove copies saved elsewhere. This lab is a teaching boundary, not real authentication.</p>
+<h2 id="objective-and-prerequisites">Objective and prerequisites</h2>
 <p>Advance the <a href="../../MISSION.html">mission</a> by demonstrating a rejected cross-user thread access and identifying retained copies of a preference. Prerequisites: <a href="02.html">store scope</a> and <a href="03.html">context selection</a>. Warm-up: does asking the model not to leak history enforce isolation? Is a namespace string proof of authenticated identity? Attempt before the exit corrections.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/runtime">Runtime context</a>, <a href="https://docs.langchain.com/oss/python/langchain/long-term-memory">long-term memory</a>, and <a href="https://docs.langchain.com/oss/python/langgraph/persistence">persistence</a>, consulted 2026-10-12. <a href="../../docs/VERIFICATION.html">Verification</a> records Python 3.14 isolation checks, exact versions, and actual separate-user/thread model traces. Live runs transmit synthetic messages only with provider consent/charges; they do not certify production identity security.</p>
-<h2>Mental model: identify before loading</h2>
+<h2 id="mental-model-identify-before-loading">Mental model: identify before loading</h2>
 <p>A <code>thread_id</code> is a storage lookup key. LangGraph does not infer that a thread called <code>alice-shopping</code> belongs to authenticated Alice. The application must bind identity and thread <strong>before loading checkpoint state</strong>, then pass immutable per-run context to store-selection code.</p>
 <p>The lab's <code>Sessions</code> object accepts only the two synthetic users, validates a bounded thread identifier and records ownership in a process-local dictionary. A second user's attempt to reuse an owned identifier raises <code>PermissionError</code> before any graph invocation or checkpoint inspection. Store lookups use the exact <code>("preferences", user_id)</code> namespace; broad cross-user searches are unnecessary.</p>
 <pre><code class="language-text">trusted synthetic caller → ownership check → thread config
@@ -30,12 +31,12 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
                          → model context
 </code></pre>
 <p>This is a teaching boundary, not production authentication. A caller who directly accesses the underlying graph can bypass the wrapper. The owner dictionary does not survive process exit and is not designed for concurrent service requests. Module 14 introduces authenticated requests and durable ownership; do not deploy this lab as a service.</p>
-<h2>Worked minimization and isolation</h2>
+<h2 id="worked-minimization-and-isolation">Worked minimization and isolation</h2>
 <p>The <a href="../../labs/05_memory_context/README.html">lab</a> records Alice's short-style preference, two Alice messages and one separate Bob message. Bob's selected preference is empty. Alice's second thread has her stored style but only its own message. The attempted Bob access to <code>alice-shopping</code> is rejected.</p>
 <p>Only <code>style</code> is selected for model personalization. The application does not retain raw preference utterances as store documents or infer sensitive characteristics. Nevertheless, conversation checkpoints include human input, and the offline graph intentionally records a selected preference snapshot. Deleting the store entry leaves that historical snapshot. The live provider and optional trace services may retain additional copies according to their policies.</p>
-<h2>Complete, vary, diagnose</h2>
+<h2 id="complete-vary-diagnose">Complete, vary, diagnose</h2>
 <p>Guided completion: identify the earliest safe rejection point for a mismatched owner; place it before <code>get_state</code>, not merely before the final response. Independent variation: save different preferences for Alice and Bob, then test new threads and a reused thread ID in the <a href="../../exercises/05_memory_context.html">exercise</a>.</p>
 <p>Failure investigation: remove identity from a copied store namespace and predict a collision. Use synthetic values only. Diagnose actual shared storage separately from a model guessing an absent fact; both are failures, but their repairs differ. Trimming messages cannot repair a wrongly scoped store read.</p>
-<h2>Exit and delayed review</h2>
+<h2 id="exit-and-delayed-review">Exit and delayed review</h2>
 <p>Show no cross-user state, explicit rejection and a retained-copy inventory. Explain why this is not comprehensive erasure or authenticated production isolation. Corrections: prompts cannot enforce storage permissions; namespaces only organize data. Review in Modules 11 and 14 with fresh identities. Reference: <a href="../../reference/TROUBLESHOOTING.html">troubleshooting</a>. Focused follow-up: which persistent ownership check must exist before allowing an authenticated request to inspect a resumed thread?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/05_memory_context/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

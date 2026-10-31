@@ -18,11 +18,12 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>04.4 — Inspect intermediate messages and classify failures</h1>
-<h2>Objective and prerequisites</h2>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="03.html">&larr; Previous</a> · <a href="../05_memory_context/01.html">Next &rarr;</a></nav><h1 id="044--inspect-intermediate-messages-and-classify-failures">04.4 — Inspect intermediate messages and classify failures</h1>
+<p><strong>In plain words:</strong> When an agent gives a wrong answer, read the messages in order instead of rewriting the prompt. Sort the failure into one category (bad input, missing data, stock limit, endless loop, provider error, made-up claim) and fix that layer.</p>
+<h2 id="objective-and-prerequisites">Objective and prerequisites</h2>
 <p>Advance the <a href="../../MISSION.html">mission</a> by producing an evidence-backed diagnosis of a catalog-agent failure. Prerequisite: <a href="03.html">bounded loops</a>. Warm-up: does <code>found=false</code> mean an exception? Can a final answer be factual when no matching tool result exists? Attempt before reading the review corrections.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/agents">Agents: invocation and streaming</a> and <a href="https://docs.langchain.com/oss/python/langchain/messages">messages</a>, consulted 2026-10-12. <a href="../../docs/VERIFICATION.html">Verification</a> records Python 3.14 local checks and actual normal quote-agent node/tool messages. Additional cases remain separate evidence gates. Live traces require compatible private access, explicit consent, and approved charges; use only synthetic data.</p>
-<h2>Mental model: evidence before repair</h2>
+<h2 id="mental-model-evidence-before-repair">Mental model: evidence before repair</h2>
 <p>An agent trace is a sequence of state updates, not a collection of final prose. The lab's <code>stream_mode="updates"</code> prints actual node updates through the shared JSON emitter. An AI message may have empty text but meaningful <code>tool_calls</code>. A tool message carries returned content and the matching call ID. Neither should be discarded because it does not resemble a friendly sentence.</p>
 <table>
 <thead>
@@ -65,15 +66,15 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tr>
 </tbody>
 </table>
-<h2>Worked investigation</h2>
+<h2 id="worked-investigation">Worked investigation</h2>
 <pre><code class="language-text">uv run python labs/04_tools_agents/main.py --check
 uv run python labs/04_tools_agents/main.py --live --case missing
 </code></pre>
 <p>These commands are implemented; the local schema/data path is exercised in <a href="../../docs/VERIFICATION.html">verification</a>. The live command tests how the real model handles a missing item and remains unverified without its prerequisites. Wording is variable; acceptance is evidence-grounded unavailability, not a particular sentence.</p>
 <p>Make a three-column trace worksheet: model-requested arguments; actual returned fields; final claims. For every numerical claim, point to <code>unit_price_cents</code>, <code>quantity</code> and <code>total_cents</code>. If the final response includes tax, delivery or a purchase receipt, those claims are outside the tool contract even when the subtotal is correct.</p>
-<h2>Complete and vary</h2>
+<h2 id="complete-and-vary">Complete and vary</h2>
 <p>Guided completion: leave the failure-category column blank for a negative quantity and an absent ID, then fill it from the inspected boundary. Independent variation: change only the prompt to ask for 4 desk lamps. Explain why quantity four passes the 1–20 schema but fails stock three. Use the <a href="../../exercises/04_tools_agents.html">exercise</a>, then compare reasoning with its separate solution.</p>
 <p>Do not hide an unsupported answer by overwriting it with canned success text. Preserve failures and record which boundary held. Do not upload even these traces to hosted tooling without understanding consent and retention.</p>
-<h2>Exit and review</h2>
+<h2 id="exit-and-review">Exit and review</h2>
 <p>Pass the Module 04 gate with successful lookup, unavailable item, invalid tool input and bounded run; identify requested versus executed operations. A missing live configuration is an unverified live gate, not learner failure or fake success. Corrections: unavailability is a valid result; a final assertion alone is not evidence. Review failure categories in Module 08, and context leakage in Module 05. Reference: <a href="../../reference/TROUBLESHOOTING.html">troubleshooting</a>. Focused follow-up: which layer should change when an answer invents shipping costs despite a correct quote tool?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/04_tools_agents/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

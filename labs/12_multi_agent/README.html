@@ -18,15 +18,15 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 12 lab — One specialist must earn its place</h1>
-<h2>Setup and entrypoint</h2>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1 id="module-12-lab--one-specialist-must-earn-its-place">Module 12 lab — One specialist must earn its place</h1>
+<h2 id="setup-and-entrypoint">Setup and entrypoint</h2>
 <p>From repository root:</p>
 <pre><code class="language-sh">uv sync --locked
 uv run python labs/12_multi_agent/main.py --check
 </code></pre>
 <p>Installed authoring baseline: Python 3.14.0, LangChain 1.4.4, langchain-openai 1.7.0. <a href="../../uv.lock">uv.lock</a> records the full set; <a href="../../docs/VERIFICATION.html">verification</a> records exercised paths and unavailable live gates. The default is model-free check mode, not a fake agent run.</p>
 <p>The check retrieves actual filtered policy documents for four cases and rejects a deliberately out-of-scope structured handoff. It does not estimate model quality, token usage, or architecture latency.</p>
-<h2>Real model experiment</h2>
+<h2 id="real-model-experiment">Real model experiment</h2>
 <p>Configure <code>OPENAI_API_KEY</code>, <code>COURSE_MODEL</code>, and <code>COURSE_ALLOW_LIVE=1</code> privately. The selected model must support tool calling and structured output. Do not print configuration objects, commit <code>.env</code>, or upload traces without permission.</p>
 <pre><code class="language-sh">uv run python labs/12_multi_agent/main.py --live --trials 2
 uv run python labs/12_multi_agent/main.py --live --trials 1 --fail-specialist
@@ -35,39 +35,15 @@ uv run python labs/12_multi_agent/main.py --live --trials 1 --fail-specialist
 <p>Limits: single drafter at most four logical model calls/two retrieval calls; specialist arm at most three coordinator plus four drafter model calls and one delegation plus two retrieval calls. Recursion is capped per agent. With two trials, there are sixteen runs and at most eighty-eight logical model calls across arms; provider retries may add physical requests. A full run can cost money even when it fails. Missing usage means unknown, never zero.
 The middleware limits <strong>named business tools</strong>, not structured-response formatting calls. A global one-call coordinator limit would incorrectly block the response after a successful delegation. Actual after-fix eight-run evidence and the real-result fault stop are recorded in <a href="../../docs/VERIFICATION.html">verification</a>.</p>
 <p><code>--fail-specialist</code> corrupts citations <strong>after a real specialist result</strong>, making the handoff validator stop propagation. This is an explicitly injected boundary fault, not a claim that the provider naturally emitted it. Expected fault stops are printed; normal-mode failures make the lab exit nonzero.</p>
-<h2>Evidence and decision rubric</h2>
+<h2 id="evidence-and-decision-rubric">Evidence and decision rubric</h2>
 <p>Retain actual rows locally: case/trial/arm, evidence IDs, result/error, elapsed seconds, attempted calls, actual boundary calls, and reported usage. For each substantive claim, inspect supporting passages. Review contradictions, abstention, restricted disclosure, and document-instruction resistance separately from source-ID membership.</p>
 <p>Publish failures, variability, and usage limitations alongside median/range latency. Do not award quality for fluent unsupported prose. Keep the specialist only if its observed benefit outweighs cost, latency, and another failure boundary; deliberately rejecting it passes the architecture-decision gate.</p>
-<h2>Diagnosis and state</h2>
+<h2 id="diagnosis-and-state">Diagnosis and state</h2>
 <p>Missing consent/configuration is not a failed learner concept. Tool/model-budget errors require trace inspection; unauthorized source IDs require fixing the handoff boundary, not increasing context blindly. This lab creates no persistent workflow actions or model transcripts. It reuses the source corpus; do not delete shared policy data to “reset” an experiment. Live evidence must be supplied by an actual configured run.</p>
 <p>Continue with <a href="../../lessons/12_multi_agent/01.html">lessons</a>, <a href="../../exercises/12_multi_agent.html">exercise</a>, and <a href="../../solutions/12_multi_agent.html">reasoned solutions</a>.</p>
-<h2>Captured <code>--check</code> output</h2>
-<p>Real, unedited stdout of <code>uv run python labs/12_multi_agent/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<h2 id="captured---check-output">Captured <code>--check</code> output</h2>
+<p>Output of <code>uv run python labs/12_multi_agent/main.py --check</code> (no credentials, no network), re-formatted as indented JSON; local paths are replaced by <code>&lt;repo&gt;</code>. The environment <code>preflight</code> block is omitted here; Module 00 shows it in full. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.</p>
 <pre><code class="language-json">{
-  &quot;preflight&quot;: {
-    &quot;python&quot;: &quot;3.14.0&quot;,
-    &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
-    &quot;packages&quot;: {
-      &quot;langchain&quot;: &quot;1.4.4&quot;,
-      &quot;langchain-core&quot;: &quot;1.6.9&quot;,
-      &quot;langchain-openai&quot;: &quot;1.7.0&quot;,
-      &quot;langgraph&quot;: &quot;1.2.14&quot;,
-      &quot;langgraph-checkpoint-sqlite&quot;: &quot;3.1.1&quot;,
-      &quot;fastmcp&quot;: &quot;4.1.0&quot;,
-      &quot;pydantic&quot;: &quot;2.14.1&quot;
-    },
-    &quot;langchain_origin&quot;: &quot;&lt;repo&gt;/.venv/lib/python3.14/site-packages/langchain/__init__.py&quot;,
-    &quot;configured&quot;: {
-      &quot;api_key&quot;: false,
-      &quot;model&quot;: false,
-      &quot;live_consent&quot;: false,
-      &quot;custom_endpoint&quot;: false,
-      &quot;hosted_tracing&quot;: false
-    },
-    &quot;live_request_sent&quot;: false
-  }
-}
-{
   &quot;contract_cases&quot;: [
     {
       &quot;question&quot;: &quot;What is the return policy?&quot;,

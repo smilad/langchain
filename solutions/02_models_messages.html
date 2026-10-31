@@ -18,12 +18,12 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 02 solutions — representation versus execution</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-02-solutions--representation-versus-execution">Module 02 solutions — representation versus execution</h1>
 <p>Consult after the <a href="../exercises/02_models_messages.html">exercise</a>. <a href="../labs/02_models_messages/main.py">The runnable lab</a> implements actual local message operations and separate live execution methods; no fake model substitutes for credentials. <a href="../docs/VERIFICATION.html">Verification</a> records what actually ran.</p>
-<h2>Package and role corrections</h2>
+<h2 id="package-and-role-corrections">Package and role corrections</h2>
 <p><code>langchain_learning</code> is this course. <code>langchain-core</code> supplies prompt/message/Runnable interfaces. <code>langchain-openai</code> supplies ChatOpenAI; its SDK handles provider transport. <code>langchain</code> exposes the higher-level agent harness. Identical method names do not imply identical capabilities.</p>
 <p>A template's <code>invoke</code> is local rendering. A model's <code>invoke</code> is remote generation. System instructions define the attempt; HumanMessage holds user data. AIMessage can contain generated output or explicitly authored history/fixtures, so provenance must be stated. ToolMessage links an execution result to a call ID; it does not cause that execution. Message roles do not grant permissions.</p>
-<h2>Prompt variation</h2>
+<h2 id="prompt-variation">Prompt variation</h2>
 <p>This complete local variation illustrates the missing-context exercise:</p>
 <pre><code class="language-python">from langchain_core.prompts import ChatPromptTemplate
 prompt = ChatPromptTemplate.from_messages([
@@ -37,7 +37,7 @@ value = prompt.invoke({
 messages = value.to_messages()
 </code></pre>
 <p><code>context</code> here must be trusted application configuration; untrusted text remains in the human slot. Rendering braces in a supplied value does not recursively parse them. That is a formatting property, not immunity to adversarial instructions. Supplying <code>request</code> instead of <code>text</code> is a deterministic missing-variable error before transport.</p>
-<h2>Chunk reconstruction answer</h2>
+<h2 id="chunk-reconstruction-answer">Chunk reconstruction answer</h2>
 <pre><code class="language-python">from langchain_core.messages import AIMessageChunk
 chunks = [AIMessageChunk(content=&quot;tech&quot;), AIMessageChunk(content=&quot;nical&quot;),
           AIMessageChunk(content=&quot;&quot;, usage_metadata={
@@ -47,7 +47,7 @@ for chunk in chunks:
     full = chunk if full is None else full + chunk
 </code></pre>
 <p>These are authored exercise values, not provider token counts. Adding full chunks preserves information that <code>''.join(chunk.text for chunk in chunks)</code> loses. Display <code>text</code>, inspect <code>content</code>/<code>content_blocks</code>/tool calls/usage separately. Empty text is not an instruction to discard the envelope.</p>
-<h2>Execution diagnoses</h2>
+<h2 id="execution-diagnoses">Execution diagnoses</h2>
 <ul>
 <li>A halfway stream failure may have already displayed partial text, but no complete-response success should be recorded. Keep the error visible and do not silently classify the fragment.</li>
 <li><code>ainvoke</code> awaits I/O; <code>async def</code> around blocking Python does not make it nonblocking.</li>
@@ -55,5 +55,5 @@ for chunk in chunks:
 <li>A compatible endpoint may omit usage or extra fields. Inspect integration docs instead of inventing counts or concluding that all providers behave identically.</li>
 <li>Missing integration imports point to environment/dependency issues; unsupported temperature is a model capability mismatch; neither is fixed by prompt tweaking.</li>
 </ul>
-<h2>Acceptance and later review</h2>
+<h2 id="acceptance-and-later-review">Acceptance and later review</h2>
 <p>A complete gate explains an actual message sequence, deliberate prompt modification and reconstructed streaming envelope; live proof needs approved access. Authored message/chunk tests prove deterministic operations only. Review later with an unfamiliar content block and a new prompt variable, then compare genuine tool results in Module 04. Use goal→observed mismatch→cause→next action feedback; do not certify mastery from running the supplied source.</p></main></body></html>

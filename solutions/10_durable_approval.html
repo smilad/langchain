@@ -18,15 +18,15 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Reasoned solution — durable approval is more than saved text</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="reasoned-solution--durable-approval-is-more-than-saved-text">Reasoned solution — durable approval is more than saved text</h1>
 <p>Use the exact separate-process commands in <a href="../labs/10_durable_approval/README.html">the lab README</a>; <a href="../docs/VERIFICATION.html">verification</a> records exercised evidence. This solution does not claim authoring runs or model results.</p>
-<h2>Correct state transitions</h2>
+<h2 id="correct-state-transitions">Correct state transitions</h2>
 <p>Start binds owner, action ID and original input, then real graph execution pauses in review. <code>inspect</code> in another process loads SQLite checkpoints: the explicit human draft and pending review survive. No action exists yet because record is downstream of the interrupt.</p>
 <p>Reject persists the human decision, resumes the review node with Command, and routes to END: zero action rows. Approve routes to record: one row. Edit replaces the proposal with nonempty human-approved text before record: the stored action contains that exact text. A blank edit must fail before binding a decision, allowing a later valid edit. These assertions concern actual local records, not displayed success wording.</p>
-<h2>Restart, replay and identity</h2>
+<h2 id="restart-replay-and-identity">Restart, replay and identity</h2>
 <p>A matching repeated decision returns existing terminal state without another action. The stronger regression test selects the actual pre-record checkpoint and reexecutes record; stable action identity and the SQLite unique insert preserve one identical row. The record transaction checks identity/content rather than overwriting a collision. A failure after the sink commits but before completion checkpoints is safe to replay locally.</p>
 <p>This is not external email exactly once. If a mail server accepts a send and the process dies before acknowledgment, another attempt may deliver twice unless that external interface supports idempotency or a delivery design with stated semantics. LangGraph persistence alone cannot create such a guarantee.</p>
 <p>Owner metadata is bound on first creation and never accepts an owner supplied by a later restart. Bob cannot inspect, resume or overwrite alice's thread. Alice repeating start receives original state, not a new proposal. Trusted CLI identity is not authentication; Module 14 derives it from verified tokens before calling SupportWorkflow.</p>
-<h2>Diagnostic feedback</h2>
+<h2 id="diagnostic-feedback">Diagnostic feedback</h2>
 <p>Pending state disappears → compare database pair/thread ID and process configuration, not model memory. Wrong edited text → inspect review update and committed sink row. Duplicate rows → inspect action identity placement/transaction and checkpoint crash window. Changed sink path → preserve existing pair; the checkpoint binding intentionally rejects the mismatch. Provider failure → report prerequisite/transport failure, do not invent draft text.</p>
 <p>Live proof requires actual rag.answer with model consent and source support review. Human input proves durable control only. Independent transfer should change text/owner/thread constraint; supplied solution execution is practice, not mastery evidence.</p></main></body></html>

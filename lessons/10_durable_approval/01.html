@@ -18,13 +18,14 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>10.1 — A checkpoint survives only as long as its storage</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../09_graph_workflows/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="101--a-checkpoint-survives-only-as-long-as-its-storage">10.1 — A checkpoint survives only as long as its storage</h1>
+<p><strong>In plain words:</strong> A checkpoint saves graph state in a database so a paused workflow survives a restart. A thread id finds the state, and ownership records stop other users from touching it.</p>
 <p><a href="../../MISSION.html">Mission</a>. <strong>Objective:</strong> inspect a paused thread in a second process without changing its owner.</p>
-<h2>Prerequisites and recall</h2>
+<h2 id="prerequisites-and-recall">Prerequisites and recall</h2>
 <p>Module 09 and Module 05 identity isolation. What does thread ID identify? Does a model retain application state? Which channel tells the draft's origin? Attempt answers before consulting the workflow source.</p>
-<h2>Source and compatibility</h2>
+<h2 id="source-and-compatibility">Source and compatibility</h2>
 <p><a href="https://docs.langchain.com/oss/python/langgraph/persistence">Persistence</a> and <a href="https://reference.langchain.com/python/langgraph/checkpoints/">SQLite checkpointer</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangGraph 1.2.14, langgraph-checkpoint-sqlite 3.1.1; <a href="../../uv.lock">lockfile</a>, <a href="../../docs/VERIFICATION.html">exercised evidence</a>. SQLite is a local teaching store, not a distributed deployment recommendation. POSIX file locking requires macOS/Linux.</p>
-<h2>Mental model and flow</h2>
+<h2 id="mental-model-and-flow">Mental model and flow</h2>
 <p>A thread groups successive checkpoints. <code>SqliteSaver</code> persists graph snapshots and pending writes to disk. Closing a Python process discards Python objects but not committed database rows. A thread ID locates state; it does not authenticate anyone.</p>
 <p><code>SupportWorkflow</code> binds each thread to immutable metadata in the action database: owner, stable action ID, original input and later human decision. The checkpoint database separately records its bound action-database path, preventing an accidental restart against a new empty sink. Treat both files and the lock as application-private data; local filesystem access is outside the caller boundary.</p>
 <table>
@@ -49,11 +50,11 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tr>
 </tbody>
 </table>
-<h2>Worked process-restart example</h2>
-<p>Use the separate commands in <a href="../../labs/10_durable_approval/README.html">the README</a>. Start <code>restart-demo</code> with <code>--draft 'Human draft: check the return policy'</code>, let the process exit, and inspect the same thread in another invocation. Pending review should retain the exact draft and human origin. These are intended contracts, not pre-recorded observed output.</p>
-<h2>Guided completion and failure investigation</h2>
+<h2 id="worked-process-restart-example">Worked process-restart example</h2>
+<p>Use the separate commands in <a href="../../labs/10_durable_approval/README.html">the README</a>. Start <code>restart-demo</code> with <code>--draft 'Human draft: check the return policy'</code>, let the process exit, and inspect the same thread in another invocation. Pending review should retain the exact draft and human origin.</p>
+<h2 id="guided-completion-and-failure-investigation">Guided completion and failure investigation</h2>
 <p>Predict what happens if bob starts alice's thread ID after restart. It must fail before revealing state or replacing owner metadata. Predict what happens if alice supplies a different draft on a repeated start: the original thread is inspected, not overwritten. If state appears missing, first compare both database paths, thread ID and working environment; do not start another thread and call it a successful resume.</p>
-<h2>Independent variation and exit</h2>
+<h2 id="independent-variation-and-exit">Independent variation and exit</h2>
 <p><a href="../../exercises/10_durable_approval.html">Exercise</a>: create two owners and three decisions using distinct threads. Demonstrate actual process exit/restart, inspection and denied cross-owner access. Explain persistence versus authentication, and retain a failure transcript. Revisit in Module 14's authenticated service. <a href="../../solutions/10_durable_approval.html">Solutions</a> explain path and ownership diagnoses.</p>
 <p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: what durable fact would remain if Python stopped before its first checkpoint?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/10_durable_approval/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

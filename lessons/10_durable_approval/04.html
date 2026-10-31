@@ -18,16 +18,17 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>10.4 — State history and business records answer different questions</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="03.html">&larr; Previous</a> · <a href="../11_middleware_security/01.html">Next &rarr;</a></nav><h1 id="104--state-history-and-business-records-answer-different-questions">10.4 — State history and business records answer different questions</h1>
+<p><strong>In plain words:</strong> Graph snapshots, thread ownership and action records answer different questions. Use all three to see where a workflow is stuck and whether its effect happened.</p>
 <p><a href="../../MISSION.html">Mission</a>. <strong>Objective:</strong> diagnose a persisted workflow using snapshots, immutable metadata and action rows without confusing their responsibilities.</p>
-<h2>Prerequisites and recall</h2>
+<h2 id="prerequisites-and-recall">Prerequisites and recall</h2>
 <p>The first three lessons. Which file owns thread identity? Which contains replayable graph history? Can a terminal graph snapshot alone prove that no earlier effect occurred? Answer before examining the tables.</p>
-<h2>Primary sources and versions</h2>
+<h2 id="primary-sources-and-versions">Primary sources and versions</h2>
 <p><a href="https://docs.langchain.com/oss/python/langgraph/persistence">Checkpoint history</a> and <a href="https://docs.python.org/3/library/sqlite3.html">SQLite transactions</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangGraph 1.2.14, langgraph-checkpoint-sqlite 3.1.1; <a href="../../uv.lock">lockfile</a>, <a href="../../docs/VERIFICATION.html">exercised evidence</a>. Synthetic databases still deserve private storage and careful reset.</p>
-<h2>Mental model</h2>
+<h2 id="mental-model">Mental model</h2>
 <p>A checkpoint answers: what state and next tasks did this graph have? An action record answers: what owned local effect committed? Thread metadata answers: who may inspect/resume, and which human decision was bound? No single layer replaces the others.</p>
 <p><code>inspect(user_id, thread_id)</code> checks metadata first, then returns serializable state, status, pending review and owned action rows. <code>actions(user_id)</code> filters actual records by owner. These IDs are trusted application arguments, not proof of login; the later HTTP service must authenticate before calling the API.</p>
-<h2>Worked diagnosis table</h2>
+<h2 id="worked-diagnosis-table">Worked diagnosis table</h2>
 <p>Run separate inspect and actions commands from <a href="../../labs/10_durable_approval/README.html">the README</a>, then explain:</p>
 <table>
 <thead>
@@ -60,9 +61,9 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tbody>
 </table>
 <p>The implementation serializes workflow operations with a POSIX file lock and gives each context its own SQLite connections. This boring local constraint avoids concurrent graph resumes racing for one thread. It limits throughput and does not make SQLite a distributed service. The sink transaction commits inside the record node so a later checkpoint crash can safely replay it.</p>
-<h2>Guided completion and independent exercise</h2>
+<h2 id="guided-completion-and-independent-exercise">Guided completion and independent exercise</h2>
 <p>Inspect <code>snapshot.next</code> and task interrupts when explaining pending review. Do not expose the raw graph or historical checkpoint selection as an untrusted API; replay is a trusted operator/test activity. In <a href="../../exercises/10_durable_approval.html">the exercise</a>, intentionally choose the wrong sink path and predict the binding failure before opening it.</p>
-<h2>Failure and exit checks</h2>
+<h2 id="failure-and-exit-checks">Failure and exit checks</h2>
 <p>If a provider call fails before review, the bound owner remains unchanged; decision retry may recover pending graph execution before applying a human decision. A repeated start never replaces original input. Demonstrate persisted inspection, owner denial and correct edited action text. Delete only your dedicated demonstration databases after all processes exit; do not delete shared course state. Revisit storage privacy and rollback in Module 14. <a href="../../solutions/10_durable_approval.html">Solutions</a>.</p>
 <p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: what should an untrusted HTTP client never be allowed to replay?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/10_durable_approval/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

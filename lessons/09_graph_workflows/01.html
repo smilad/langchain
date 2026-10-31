@@ -18,13 +18,14 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>09.1 — State is a contract, not a bag of shared mutations</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../08_evaluation/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="091--state-is-a-contract-not-a-bag-of-shared-mutations">09.1 — State is a contract, not a bag of shared mutations</h1>
+<p><strong>In plain words:</strong> A graph passes a state object between steps. Each step returns only the part it changes. Graphs suit fixed workflows where you want to see exactly what each step did.</p>
 <p><a href="../../MISSION.html">Mission</a>: make orchestration inspectable. <strong>Objective:</strong> reconstruct a request's state from node updates and explain why a graph is appropriate here.</p>
-<h2>Prerequisites and warm-up</h2>
+<h2 id="prerequisites-and-warm-up">Prerequisites and warm-up</h2>
 <p>Modules 04, 05 and 08. Before reading the example, answer: does a tool description execute Python? Does conversation history live in model weights? Which trace boundary separates retrieval from generation? Compare your answers with the relevant earlier labs after attempting them.</p>
-<h2>Source and version</h2>
+<h2 id="source-and-version">Source and version</h2>
 <p>Read <a href="https://docs.langchain.com/oss/python/langgraph/graph-api">Graph API</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangGraph 1.2.14, LangChain 1.4.4, Pydantic 2.14.1; <a href="../../uv.lock">lockfile</a>. Actual exercised commands and proof limits are in <a href="../../docs/VERIFICATION.html">verification</a>. <code>--check</code> needs no provider; live classification requires structured output and paid-call consent.</p>
-<h2>Mental model and flow</h2>
+<h2 id="mental-model-and-flow">Mental model and flow</h2>
 <p>A <code>StateGraph</code> describes computation over named state channels. A node receives a snapshot, returns a partial update, and the runtime applies the update. An edge selects the next node. Compilation checks graph structure; it does not prove business correctness or termination.</p>
 <p>The <a href="../../labs/09_graph_workflows/main.py">lab</a> declares <code>RequestState</code>: question and user identity enter once; route, evidence and draft appear later; events accumulate. Its flow is:</p>
 <table>
@@ -58,12 +59,12 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tr>
 </tbody>
 </table>
-<p>Run <code>uv run python labs/09_graph_workflows/main.py --check</code>. The output exposes actual per-node updates and final state for three inputs. No output is claimed observed in this lesson; compare your run with the intended contracts. A supported fixture should finish drafted, an escalation should request human review, and Saturn should finish unsupported.</p>
-<h2>Worked reasoning and guided completion</h2>
+<p>Run <code>uv run python labs/09_graph_workflows/main.py --check</code>. The output exposes actual per-node updates and final state for three inputs. Compare your run with the captured output linked at the end. A supported fixture should finish drafted, an escalation should request human review, and Saturn should finish unsupported.</p>
+<h2 id="worked-reasoning-and-guided-completion">Worked reasoning and guided completion</h2>
 <p>Notice that retrieve returns evidence and one event, not a mutated copy of the entire input. Keeping updates narrow makes responsibility visible. Predict which keys survive if classify returns only route. Then temporarily remove the retrieve-to-join edge in your own exercise copy; identify the missing dependency before changing anything else.</p>
-<h2>Independent variation and failure diagnosis</h2>
+<h2 id="independent-variation-and-failure-diagnosis">Independent variation and failure diagnosis</h2>
 <p>Use <a href="../../exercises/09_graph_workflows.html">the exercise</a> to add a new constraint branch. If a draft lacks evidence, inspect the updates and fan-in edge rather than modifying the model prompt. A graph is justified here by a prescribed workflow and inspectable dependencies; an open-ended agent loop would obscure that contract.</p>
-<h2>Exit and delayed review</h2>
+<h2 id="exit-and-delayed-review">Exit and delayed review</h2>
 <p>Explain a snapshot versus an update, trace every node, and implement the changed branch independently. In Module 10 revisit which of these snapshots becomes a checkpoint. <a href="../../solutions/09_graph_workflows.html">Solutions</a> contain diagnoses, not learner evidence.</p>
 <p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: which channel's update rule would you change, and why?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/09_graph_workflows/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

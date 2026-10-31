@@ -18,17 +18,17 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 07 solutions — inspect claims, not just structure</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-07-solutions--inspect-claims-not-just-structure">Module 07 solutions — inspect claims, not just structure</h1>
 <p>Attempt <a href="../exercises/07_rag.html">the exercises</a> first. <a href="../docs/VERIFICATION.html">Verification</a> separates local boundaries from unexercised generated behavior.</p>
-<h2>1. Boundaries</h2>
+<h2 id="1-boundaries">1. Boundaries</h2>
 <p>Retrieval returns authorized <code>Document</code> evidence. The generation prompt receives evidence as data, including IDs and trust; it must not promote document instructions to application policy. <code>GroundedAnswer</code> requires an answer, citations for non-abstention, no citations for abstention, and no duplicate citations. <code>validate_citations</code> rejects IDs not present in trusted selected evidence. That check cannot establish that the text actually supports every assertion.</p>
-<h2>2. Failure taxonomy</h2>
+<h2 id="2-failure-taxonomy">2. Failure taxonomy</h2>
 <p>A current deadline should use the current return source, not the obsolete fourteen-day revision. Unrelated evidence should produce abstention, not a guessed policy. Two current contradictory remote-work sources require uncertainty/conflict handling, not choosing the prettier answer. Alice's finance query must not expose finance-only text. The malicious public fixture is untrusted retrieved data; its presence must not make its instruction authoritative. Local inspection proves filtering and data boundaries, not how an unrun model responds to an injection.</p>
-<h2>3. Citation counterexample</h2>
+<h2 id="3-citation-counterexample">3. Citation counterexample</h2>
 <p>A nine-hundred-day answer can cite a retrieved <code>RETURN</code> source and pass ID membership while directly contradicting its thirty-day text. Evaluate period, calendar versus business days, delivery versus purchase as start event, unused condition, and receipt. Record a passage supporting each claim or mark lack of support. The local nine-hundred-day example is explicitly human-authored to demonstrate this logical gap; it is not an observed hallucination.</p>
-<h2>4. Actual generation</h2>
+<h2 id="4-actual-generation">4. Actual generation</h2>
 <p>With a configured model, inspect selected evidence, parsed answer, timing, and usage. Check substantive claims before approving the draft. Empty evidence returns an explicit deterministic abstention with zero model calls; it does not generate a fake successful answer. With evidence, the code calls the real configured model and reports structural/citation errors rather than using canned replacement prose. A missing provider leaves supported-answer quality unverified.</p>
-<h2>5. Rewrite and rerank</h2>
+<h2 id="5-rewrite-and-rerank">5. Rewrite and rerank</h2>
 <p>Rewrite changes the search query; it can recover a paraphrase or lose important constraints. Reranking changes which candidates become final evidence; it can improve ordering or remove needed conditions. Both add real model calls. The final generation trace covers only that generation step, so do not present it as total experiment cost. Tune on development cases, keep the baseline, and report the added calls separately.</p>
-<h2>6. Agentic decision</h2>
+<h2 id="6-agentic-decision">6. Agentic decision</h2>
 <p>The agent may choose queries/tool calls, which increases flexibility and adds control/failure overhead. Identity is bound outside model arguments and evidence must still be authorized. One paired example cannot establish a general improvement. Prefer the two-step design when review finds no measured benefit from agentic complexity; carry the quality comparison into Module 08's explicit protocol.</p></main></body></html>

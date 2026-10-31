@@ -18,21 +18,22 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>11.1 — Middleware controls calls; it does not replace domain authorization</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../10_durable_approval/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="111--middleware-controls-calls-it-does-not-replace-domain-authorization">11.1 — Middleware controls calls; it does not replace domain authorization</h1>
+<p><strong>In plain words:</strong> Middleware can block a tool call, but the tool itself must still check permission, because code can call it without the agent. Defense belongs where the action is executed.</p>
 <p><a href="../../MISSION.html">Mission</a>. <strong>Objective:</strong> locate the tool-execution hook and explain what remains protected if that hook is bypassed.</p>
-<h2>Prerequisites and warm-up</h2>
+<h2 id="prerequisites-and-warm-up">Prerequisites and warm-up</h2>
 <p>Modules 04, 08 and 10. Who requests a tool call, and who executes it? Where is thread ownership stored? Does an approval prompt grant permission? Attempt answers before reading the security implementation.</p>
-<h2>Source and compatibility</h2>
+<h2 id="source-and-compatibility">Source and compatibility</h2>
 <p><a href="https://docs.langchain.com/oss/python/langchain/middleware/custom">Custom middleware</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9, LangGraph 1.2.14; <a href="../../uv.lock">lockfile</a>, <a href="../../docs/VERIFICATION.html">exercised evidence</a>. Live requires provider tool calling and consent. Check mode does not invoke a model or pretend to test model hooks.</p>
-<h2>Mental model</h2>
+<h2 id="mental-model">Mental model</h2>
 <p>A node-style hook runs before/after a stage; a wrap-style hook encloses a particular model or tool call and chooses whether to invoke its handler. Authorization belongs before tool execution. Middleware can deny a call while returning a <code>ToolMessage</code> so the model receives a bounded, non-sensitive explanation.</p>
 <p><a href="../../src/langchain_learning/security.py">security.py</a> implements <code>AuthorizationMiddleware.wrap_tool_call</code>. It reads authenticated runtime context, tool name and model-proposed arguments. <code>authorize_call</code> grants only <code>inspect_thread</code>, validates a schema rejecting extra arguments, and checks the thread against immutable owner metadata. Unauthorized calls return a denial message rather than exposing the requested state.</p>
-<h2>Worked integration</h2>
+<h2 id="worked-integration">Worked integration</h2>
 <p><code>build_security_agent()</code> uses actual <code>create_agent</code>, one read-only tool, custom middleware and call-limit middleware. <code>SecurityContext</code> carries the trusted local identity and database paths. <code>ToolRuntime</code> injects it into the tool; the model cannot choose runtime identity through its argument schema.</p>
 <p>Run <code>uv run python labs/11_middleware_security/main.py --check</code> for real domain-boundary checks. Then, with configured model and consent, run <code>--live</code> to observe actual model/tool messages through middleware. Distinguish model refusal, denied tool execution and no attempted attack. None is equivalent to broad injection immunity.</p>
-<h2>Guided completion and failure diagnosis</h2>
+<h2 id="guided-completion-and-failure-diagnosis">Guided completion and failure diagnosis</h2>
 <p>Predict what would happen if the tool trusted middleware but its Python function performed no ownership check. A direct caller could bypass the hook. Here the tool calls the same authorization function again, and the workflow checks ownership independently. The repeated check is intentional defense at the execution boundary, not permission derived from a prompt.</p>
-<h2>Transfer and exit</h2>
+<h2 id="transfer-and-exit">Transfer and exit</h2>
 <p>In <a href="../../exercises/11_middleware_security.html">the exercise</a>, bypass the agent and call the domain boundary against bob's thread; it must still deny alice. Explain handler ordering, inspect live messages when available, and vary an unauthorized argument. In Module 13 apply the same principle to MCP tools. <a href="../../solutions/11_middleware_security.html">Solutions</a> distinguish middleware evidence from domain evidence.</p>
 <p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: where does permission still hold when middleware is absent?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/11_middleware_security/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

@@ -18,23 +18,24 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>00.2 — JSON and configuration are untrusted input</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="01.html">&larr; Previous</a> · <a href="03.html">Next &rarr;</a></nav><h1 id="002--json-and-configuration-are-untrusted-input">00.2 — JSON and configuration are untrusted input</h1>
+<p><strong>In plain words:</strong> Data that arrives as JSON text is not yet trustworthy. First you parse it (is the syntax valid?), then you validate it (does it have the fields and types you need?). Each step fails differently, and you should handle the failures separately.</p>
 <p><strong>Mission/objective:</strong> Advance the <a href="../../MISSION.html">mission</a> by writing a typed JSON boundary that rejects bad records without exposing environment values. Prerequisite: <a href="01.html">00.1</a>; check that you can explain which Python executes your script.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.python.org/3/library/json.html">Python JSON</a>, <a href="https://docs.python.org/3/tutorial/errors.html">exceptions</a>, <a href="https://docs.python.org/3/library/os.html#os.environ">environment access</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0/Pydantic 2.14.1. Exact resolution is in <code>uv.lock</code>; actual execution evidence is in <a href="../../docs/VERIFICATION.html">verification</a>. Entire lesson is local and unpaid.</p>
-<h2>Retrieval warm-up</h2>
+<h2 id="retrieval-warm-up">Retrieval warm-up</h2>
 <p>Does a lockfile select your IDE interpreter? Is a type hint a runtime check? Attempt answers before consulting <a href="../../solutions/00_setup.html">corrections</a>.</p>
-<h2>Mental model</h2>
+<h2 id="mental-model">Mental model</h2>
 <p>JSON is a serialized value, not a trusted Python object. <code>json.loads</code> can return a list, number, dictionary or null. A function annotation documents an expectation but does not enforce it. Parsing syntax and validating the application contract are different stages, and their exceptions identify different repairs.</p>
 <p>The <a href="../../labs/00_setup/main.py">lab</a> gives the complete boundary:</p>
 <pre><code class="language-python">def read_request(raw: str) -&gt; Request:
     return Request.model_validate(json.loads(raw))
 </code></pre>
 <p>The control flow is <code>str → JSON value → Request → consumer</code>. Malformed JSON stops at the decoder. A dictionary without <code>request_id</code> parses successfully and then fails validation. The return annotation tells a caller what successful execution provides; an exception means no Request was returned. Never catch every exception and return an invented default request.</p>
-<h2>Worked example and guided completion</h2>
+<h2 id="worked-example-and-guided-completion">Worked example and guided completion</h2>
 <p>Run the setup check. It parses <code>{"request_id":"REQ-01","quantity":2}</code>, serializes the validated model, and decodes that serialized JSON again. The lab also catches named invalid cases and prints error locations/types. These cases are synthetic diagnostics; the README does not claim the commands have already run.</p>
 <p>Configuration follows another boundary: <code>os.environ.get(name) → bool(value) → safe report</code>. Supply the missing operation in a new small function that reports whether <code>COURSE_MODEL</code> is configured, not its contents. A presence check proves neither valid authentication nor a usable model. The shared loader reads <code>.env</code> without overriding an exported value, so an old shell variable may take precedence.</p>
-<h2>Failure investigation and independent variation</h2>
+<h2 id="failure-investigation-and-independent-variation">Failure investigation and independent variation</h2>
 <p>Predict the stage that rejects a missing brace versus quantity <code>"2"</code>. Do not repair the string quantity by adding silent coercion: this course's Request is deliberately strict. Attempt task 3 in the <a href="../../exercises/00_setup.html">exercise</a>: change the record boundary to a different domain and preserve safe errors. Compare your attempt with the <a href="../../solutions/00_setup.html">reasoned solution</a> only afterwards.</p>
-<h2>Exit and later review</h2>
+<h2 id="exit-and-later-review">Exit and later review</h2>
 <p>Demonstrate one good record, bad syntax, a missing field and a wrong type. Explain why configuration values must not appear in tracebacks or pasted logs. Next session reconstruct the two-stage function from memory; Module 03 reuses the same distinction for model output. Reference: <a href="../../reference/GLOSSARY.html">glossary</a>. Ask a focused question about the failed stage, not “why doesn't Python work?”</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/00_setup/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

@@ -18,12 +18,13 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>02.4 — Stream for display, aggregate for inspection</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="03.html">&larr; Previous</a> · <a href="../03_structured_output/01.html">Next &rarr;</a></nav><h1 id="024--stream-for-display-aggregate-for-inspection">02.4 — Stream for display, aggregate for inspection</h1>
+<p><strong>In plain words:</strong> You can call a model and wait for the whole reply, or stream it in pieces. Streamed pieces can be added together into the full message, and batch runs several inputs at once. Each mode has different cost and ordering behavior.</p>
 <p><strong>Mission/objective:</strong> Serve the <a href="../../MISSION.html">mission</a> by choosing invoke/stream/async/batch execution and reconstructing a streamed message without treating events as prose. Prerequisites: <a href="03.html">02.3</a>, <a href="../00_setup/04.html">async readiness</a>. Live paths require consent, credentials and a compatible model.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/models">model execution modes</a>, <a href="https://docs.langchain.com/oss/python/langchain/messages#streaming-and-chunks">message chunks</a>, <a href="https://docs.langchain.com/oss/python/integrations/chat/openai#streaming-usage-metadata">OpenAI streaming usage</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0, langchain-core 1.6.9/langchain-openai 1.7.0. Exact resolution is in <code>uv.lock</code>; <a href="../../docs/VERIFICATION.html">verification</a> records actual invoke/stream aggregation/async/batch. Gateway buffering means real-time chunk delivery is not verified.</p>
-<h2>Retrieve first</h2>
+<h2 id="retrieve-first">Retrieve first</h2>
 <p>Does await make CPU work nonblocking? Can empty text still carry useful metadata? Answer before opening <a href="../../solutions/02_models_messages.html">feedback</a>.</p>
-<h2>Mental model and execution table</h2>
+<h2 id="mental-model-and-execution-table">Mental model and execution table</h2>
 <table>
 <thead>
 <tr>
@@ -56,14 +57,14 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tbody>
 </table>
 <p><code>--mode all</code> runs all four paths, five requests total, with any permitted provider retry additional. LangChain client-side batch is not a discounted asynchronous provider Batch API. Concurrent calls can increase rate-limit pressure. Streaming reduces time until text is visible, not necessarily total cost or latency.</p>
-<h2>Worked example and guided reconstruction</h2>
+<h2 id="worked-example-and-guided-reconstruction">Worked example and guided reconstruction</h2>
 <p>The <a href="../../labs/02_models_messages/main.py">lab</a> displays <code>chunk.text</code> to stderr and adds whole chunks:</p>
 <pre><code class="language-python">full = chunk if full is None else full + chunk
 </code></pre>
 <p>The accumulated message is then emitted separately with content blocks, tool calls and usage. An empty final chunk may contribute usage; never skip it just because it has no text. Some endpoints omit streaming usage; the runtime does not guarantee it. The check mode combines authored chunks containing <code>bill</code>, <code>ing</code> and a usage-only chunk. This verifies actual addition semantics, not generation.</p>
 <p>Supply the missing accumulator step in your own copy, then predict what is lost by collecting only strings. For a real interactive view, <code>--live --mode stream --interactive</code> reads one synthetic input line and makes one request. No perpetual paid loop is hidden in the UI.</p>
-<h2>Failure investigation and variation</h2>
+<h2 id="failure-investigation-and-variation">Failure investigation and variation</h2>
 <p>If a stream fails halfway, partial displayed text is not a completed validated answer. Do not save it as success. Batch output order follows input order, not completion order; this lab reports only aggregate batch duration and marks individual duration unavailable. Try the <a href="../../exercises/02_models_messages.html">exercise</a> with metadata-only chunks and a new technical input.</p>
-<h2>Exit and delayed review</h2>
+<h2 id="exit-and-delayed-review">Exit and delayed review</h2>
 <p>Reconstruct text and metadata, explain async versus concurrency, and compare provider capabilities honestly. Live proof remains pending without access. Next week inspect a fresh stream; Module 08 revisits measured timings and Module 14 cancellation. Reference: <a href="../../labs/02_models_messages/README.html">runbook</a>. Ask whether an event belongs to display, aggregation or failure control.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/02_models_messages/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

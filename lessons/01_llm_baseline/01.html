@@ -18,12 +18,13 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>01.1 — A model call is not your application's memory</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../00_setup/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="011--a-model-call-is-not-your-applications-memory">01.1 — A model call is not your application's memory</h1>
+<p><strong>In plain words:</strong> A model call is one request with some text in and some text out. The model remembers nothing between calls. Anything that looks like memory is text your program sends again.</p>
 <p><strong>Mission/objective:</strong> Advance the <a href="../../MISSION.html">mission</a> by tracing text through a model call and identifying where state actually lives. Prerequisite: <a href="../00_setup/04.html">Module 00</a>; explain a request/response and a timeout before any paid call.</p>
-<p><strong>Sources/version:</strong> <a href="https://platform.openai.com/docs/models">OpenAI models</a>, <a href="https://platform.openai.com/docs/guides/text">text generation</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0/OpenAI SDK 3.29.0; exact resolution is in <code>uv.lock</code>. <a href="../../docs/VERIFICATION.html">Verification</a> records real gateway-mediated generation and direct-public-endpoint limits. Live examples require privately configured Responses-capable access and approved spend. <code>--check</code> is local.</p>
-<h2>Recall before explanation</h2>
+<p><strong>Sources/version:</strong> <a href="https://platform.openai.com/docs/models">OpenAI models</a>, <a href="https://platform.openai.com/docs/guides/text">text generation</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0/OpenAI SDK 3.29.0; exact resolution is in <code>uv.lock</code>. <a href="../../docs/VERIFICATION.html">Verification</a> records the author's live generation run and its limits. Live examples require privately configured Responses-capable access and approved spend. <code>--check</code> is local.</p>
+<h2 id="recall-before-explanation">Recall before explanation</h2>
 <p>Can a configuration-presence check prove authentication? Which parts of JSON validation are deterministic? Attempt answers before <a href="../../solutions/01_llm_baseline.html">corrections</a>.</p>
-<h2>Mental model and flow</h2>
+<h2 id="mental-model-and-flow">Mental model and flow</h2>
 <p>A tokenizer represents text as tokens, which are not always words. A model receives a bounded context and generates output tokens. The context window limits what fits; output budgets limit generation, and some models count internal reasoning against that budget. Neither limit establishes factual accuracy. Character counts in this lab bound application input, not exact token cost.</p>
 <table>
 <thead>
@@ -52,12 +53,12 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tbody>
 </table>
 <p>The <a href="../../labs/01_llm_baseline/main.py">baseline lab</a> sends a single independent request. It does not pass a previous-response ID, attach a database or maintain conversation history. Calling it twice is not a demonstrated remembered conversation. Providers may retain data under their policies; that is a different issue from application context and must be reviewed before sending private content.</p>
-<h2>Worked example and guided completion</h2>
+<h2 id="worked-example-and-guided-completion">Worked example and guided completion</h2>
 <pre><code class="language-python">payload = request_payload(&quot;I was charged twice.&quot;, selected_model)
 </code></pre>
 <p>The local helper returns <code>model</code>, <code>instructions</code>, <code>input</code> and <code>max_output_tokens</code>. <code>--check</code> prints the prepared request without sending it. Identify which value is human data and which sets the output budget. Complete a diagram with the missing return path: <code>text → Python payload → SDK → HTTPS → provider → ___ → validated label</code>.</p>
-<h2>Failure investigation and variation</h2>
+<h2 id="failure-investigation-and-variation">Failure investigation and variation</h2>
 <p>Predict what happens when a very long input exceeds the lab's 4000-character limit versus when a smaller input exceeds the provider's token context limit. The former is rejected before transport; the latter depends on tokenizer/model capability. Do not claim character count measures tokens. Attempt state/context task 1 in the <a href="../../exercises/01_llm_baseline.html">exercise</a>.</p>
-<h2>Exit and delayed review</h2>
+<h2 id="exit-and-delayed-review">Exit and delayed review</h2>
 <p>Explain tokens, context, output budget and stored history without conflating them. Trace both request and response objects, not just final text. Review in the next session using a fresh text and in Module 05 when history becomes explicit application state. See the <a href="../../reference/GLOSSARY.html">glossary</a>. A focused question asks which layer owns an observed value.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/01_llm_baseline/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

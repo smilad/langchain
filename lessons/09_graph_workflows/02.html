@@ -18,21 +18,22 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>09.2 — Routing is a decision plus a termination contract</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="01.html">&larr; Previous</a> · <a href="03.html">Next &rarr;</a></nav><h1 id="092--routing-is-a-decision-plus-a-termination-contract">09.2 — Routing is a decision plus a termination contract</h1>
+<p><strong>In plain words:</strong> Routing chooses the next step from a label in the state. Every path must end, and a recursion limit is only a last-resort safety net for a loop you should fix.</p>
 <p><a href="../../MISSION.html">Mission</a>. <strong>Objective:</strong> run every conditional route and diagnose a graph that never terminates.</p>
-<h2>Prerequisites and warm-up</h2>
+<h2 id="prerequisites-and-warm-up">Prerequisites and warm-up</h2>
 <p>Read <a href="01.html">state contracts</a>. Predict whether changing a state value changes an edge automatically. Recall why an agent needs a run bound, and why validated model output can still represent a bad decision. Attempt answers before consulting Module 03 or 04.</p>
-<h2>Sources and compatibility</h2>
+<h2 id="sources-and-compatibility">Sources and compatibility</h2>
 <p><a href="https://docs.langchain.com/oss/python/langgraph/graph-api">Conditional edges and termination</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangGraph 1.2.14, LangChain 1.4.4, Pydantic 2.14.1; <a href="../../uv.lock">lockfile</a>, <a href="../../docs/VERIFICATION.html">exercised evidence</a>. Check mode is deterministic graph execution. Live requires provider structured output and consent; routing fixtures do not cover that gate.</p>
-<h2>Mental model</h2>
+<h2 id="mental-model">Mental model</h2>
 <p>A classifier writes a route label. A routing function maps that label to node names. A terminal branch reaches <code>END</code>; a supported branch fans out then joins. The label is data; edges are control flow. Confusing them creates graphs that hold a sensible classification but execute the wrong work.</p>
 <p>The lab deliberately uses explicit rules before introducing a model. Questions containing return take the supported path; escalate takes review; other text takes unsupported. These narrow fixtures are not a general classifier and are not generated answers. Their purpose is to exercise all paths predictably.</p>
-<h2>Worked example</h2>
+<h2 id="worked-example">Worked example</h2>
 <p>Run <code>uv run python labs/09_graph_workflows/main.py --check</code>. Find classify's partial update and follow its destination. Review and unsupported each terminate immediately. Supported runs retrieve and constraints, waits for both, then drafts. The printed draft is labeled human-authored routing exercise text.</p>
 <p>With explicit provider configuration, run <code>uv run python labs/09_graph_workflows/main.py --live --question 'What is the return policy?'</code>. Classification invokes a real model with a <code>Route</code> Pydantic schema. A supported decision then uses real <code>rag.answer</code>. The model may choose another valid route: record that as a classification outcome, not a framework failure.</p>
-<h2>Guided completion and failure investigation</h2>
+<h2 id="guided-completion-and-failure-investigation">Guided completion and failure investigation</h2>
 <p>Predict the result of an edge from a node back to itself. Check mode constructs this actual faulty graph with recursion limit three and requires <code>GraphRecursionError</code>. The limit is a last-resort bound, not evidence of valid termination. Repair the graph by defining a stopping condition or directing terminal work to END, not by increasing the limit indefinitely.</p>
-<h2>Transfer and exit</h2>
+<h2 id="transfer-and-exit">Transfer and exit</h2>
 <p>In <a href="../../exercises/09_graph_workflows.html">the exercise</a>, vary wording and propose a route matrix before execution. Explain when deterministic classification is preferable, and where model variability enters. Pass by running all paths, explaining termination, diagnosing the loop, and handling an unfamiliar request. During Module 12 compare this fixed router with a specialist router; use <a href="../../solutions/09_graph_workflows.html">solutions</a> only after your attempt.</p>
 <p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: which request would expose your router's weakest assumption?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/09_graph_workflows/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

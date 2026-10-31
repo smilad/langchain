@@ -18,9 +18,9 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 04 solution — Locate the boundary before repairing it</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-04-solution--locate-the-boundary-before-repairing-it">Module 04 solution — Locate the boundary before repairing it</h1>
 <p>Read only after attempting the <a href="../exercises/04_tools_agents.html">exercise</a>. This explains reference behavior, not independent learner evidence. Actual Python 3.14 local tool checks passed; <a href="../docs/VERIFICATION.html">verification</a> records exact versions and unverified live agent behavior. No invented model transcript is supplied.</p>
-<h2>Part A: real stock and strict-input boundaries</h2>
+<h2 id="part-a-real-stock-and-strict-input-boundaries">Part A: real stock and strict-input boundaries</h2>
 <p>The catalog gives <code>desk-lamp</code> stock three at 3499 USD cents. Quoting three computes 10497 cents. Quoting four is shape-valid (integer between one and twenty) but returns <code>quoted=false</code>, <code>reason="insufficient_stock"</code>. <code>sold-out</code> is found but has no sellable units. An unknown valid identifier returns <code>found=false</code>; it should not become a fabricated replacement.</p>
 <p>This small regression exercise uses the real tool layer:</p>
 <pre><code class="language-python">from pydantic import ValidationError
@@ -47,10 +47,10 @@ for quantity in (True, &quot;3&quot;, 2.5, 0, MAX_QUANTITY + 1):
 assert (DATA / &quot;catalog.json&quot;).read_bytes() == before
 </code></pre>
 <p><code>strict=True</code> is important: Python considers <code>bool</code> an <code>int</code> subclass, and non-strict validators can coerce strings/floats. Direct domain calls validate through the same Pydantic models, so exposing them through MCP does not remove the boundary. Missing items and stock shortages are explicit results; invalid argument shape is an exception before successful execution.</p>
-<h2>Part B: bounded agent evidence</h2>
+<h2 id="part-b-bounded-agent-evidence">Part B: bounded agent evidence</h2>
 <p>The committed lab already provides the four baseline live commands in its <a href="../labs/04_tools_agents/README.html">runbook</a>. For your changed prompt, keep a recursion limit and stream actual updates. Verify the requested call arguments, matched tool result and final claim. Do not accept “three items purchased” as a quote: the capability never performs purchasing.</p>
 <p>There is no supplied model transcript because model outputs vary and no live run is claimed here. A tiny budget may exhaust before a tool result exists; the proper artifact is a partial trace plus budget failure, not canned final prose. The step limit does not count exact tools when the model requests multiple calls in one step.</p>
-<h2>Part C: diagnosis reasoning</h2>
+<h2 id="part-c-diagnosis-reasoning">Part C: diagnosis reasoning</h2>
 <ul>
 <li>Unsupported final price: generation/evidence mismatch. Compare final numerical claims with tool cents before changing prompts.</li>
 <li>Four units versus stock three: business constraint, not schema bug. Return shortage explicitly; do not increase stock to satisfy a request.</li>

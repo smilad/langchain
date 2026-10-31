@@ -18,9 +18,9 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="README.html">Lesson index</a></nav><h1>Lesson index</h1>
+<body><main><nav><a href="README.html">Lesson index</a></nav><h1 id="lesson-index">Lesson index</h1>
 <p>Follow <a href="../ROADMAP.html">the roadmap</a> and demonstrate the module gates rather than merely reading every file. Each lesson links a real lab, an independent exercise, a separate solution, and primary sources. Read <a href="../docs/VERIFICATION.html">the verification report</a> for exercised behavior and remaining live/review prerequisites.</p>
-<h2>Foundations</h2>
+<h2 id="foundations">Foundations</h2>
 <table>
 <thead>
 <tr>
@@ -62,7 +62,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tr>
 </tbody>
 </table>
-<h2>Applications and measured quality</h2>
+<h2 id="applications-and-measured-quality">Applications and measured quality</h2>
 <table>
 <thead>
 <tr>
@@ -111,7 +111,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tr>
 </tbody>
 </table>
-<h2>Explicit control and integration</h2>
+<h2 id="explicit-control-and-integration">Explicit control and integration</h2>
 <table>
 <thead>
 <tr>
@@ -160,7 +160,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tr>
 </tbody>
 </table>
-<h2>Operations and transfer</h2>
+<h2 id="operations-and-transfer">Operations and transfer</h2>
 <table>
 <thead>
 <tr>
@@ -188,13 +188,15 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tr>
 </tbody>
 </table>
-<h2>How to practice</h2>
+<p>Every lesson ends with a link to real captured <code>--check</code> output from its lab, so you can compare your run against it. Where a lesson says a result was not observed, it means the lesson has no captured run for that live model step; see <a href="../docs/VERIFICATION.html">the verification report</a> for what was actually run.</p>
+<h2 id="how-to-practice">How to practice</h2>
 <ol>
 <li>Answer the retrieval warm-up before seeing corrections.</li>
 <li>Run the small worked example and inspect intermediate representations.</li>
 <li>Attempt the module exercise with a changed constraint; documentation lookup is allowed.</li>
 <li>Diagnose the named failure from evidence before opening the solution.</li>
 <li>Explain why the repair addresses the cause and what remains unverified.</li>
-<li>Revisit a fresh conceptual/coding variation later; record mastery only after actual learner evidence.</li>
+<li>If you are stuck, follow a hint ladder: name the failed stage and its expected input and output, inspect its evidence or metadata, and only then open the solution. Repair the boundary, not unrelated prompts.</li>
+<li>Revisit each lesson with a fresh question next session and about a week later. These intervals are a practice habit, not evidence of mastery; record mastery only from your own demonstrated work.</li>
 </ol>
 <p>Model-free <code>--check</code> paths never claim generated-answer quality. <code>--live</code> requires a real configured provider and explicit spending consent. Optional advanced tracks remain described in the roadmap and are not substitutes for core module gates.</p></main></body></html>

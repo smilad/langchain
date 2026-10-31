@@ -18,20 +18,21 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>14.4 — A runbook includes the way back</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="03.html">&larr; Previous</a> · <a href="../15_capstone/01.html">Next &rarr;</a></nav><h1 id="144--a-runbook-includes-the-way-back">14.4 — A runbook includes the way back</h1>
+<p><strong>In plain words:</strong> Know how to start, stop and roll back the service. Back up both database files together, test the old version on a copy, and remember a rollback cannot undo actions already recorded.</p>
 <p><strong>Mission/objective:</strong> meet <a href="../../MISSION.html">the mission</a> by operating the application outside an IDE, stopping it cleanly, and rehearsing a rollback that protects persistent state.</p>
 <p><strong>Prerequisites:</strong> <a href="03.html">persistent operations</a>, lockfile reproducibility, and evaluation tradeoffs. Check: distinguish restoring an executable from restoring application data.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.astral.sh/uv/guides/projects/">uv project environments</a>, <a href="https://docs.python.org/3.14/library/sqlite3.html#sqlite3.Connection.backup">SQLite online backup</a>, and <a href="https://docs.python.org/3.14/library/socketserver.html#socketserver.BaseServer.shutdown">Python server shutdown</a>, checked 2026-10-12. Python 3.14.0 and repository <a href="../../uv.lock">lockfile</a>; <a href="../../docs/VERIFICATION.html">verification</a> contains runtime evidence. Remote hosting is optional and not claimed hardened by this local server.</p>
-<h2>Retrieval warm-up</h2>
+<h2 id="retrieval-warm-up">Retrieval warm-up</h2>
 <p>What does a lockfile reproduce? Can process rollback undo a committed action? After attempting: dependencies, not provider behavior or credentials; code rollback does not erase already recorded effects.</p>
-<h2>Deployment choice</h2>
+<h2 id="deployment-choice">Deployment choice</h2>
 <p>The chosen mechanism is a locked local Python process, <code>python -m langchain_learning.service</code>. Bind is intentionally restricted to localhost. SIGINT/SIGTERM stops admission, signals active handlers, terminates workflow workers, joins them, closes the server, and emits a stopped event. Shutdown is initiated outside the serving loop to avoid <code>shutdown()</code> deadlock.</p>
 <p>A real internet deployment would require a reviewed production server, TLS, identity lifecycle, proxy limits, observability/storage policy, and an operations owner. None is supplied by a successful localhost response.</p>
-<h2>Worked runbook</h2>
+<h2 id="worked-runbook">Worked runbook</h2>
 <p>Use <a href="../../labs/14_production/README.html">the lab README</a>: <code>uv sync --locked</code>, configure token bindings and state paths, start the service, probe health/readiness, create a human draft, stop, restart, inspect, decide, and check <code>/actions</code>. Repeat with live consent only after the deterministic boundaries work. Measure latency and usage for the intended workload before choosing targets; the course invents no universal SLA.</p>
 <p>Before changing code or state schema, stop all writers and back up <strong>both</strong> SQLite files with SQLite's backup API. Keep code revision and lockfile together. Start a last-known-good checkout on a different localhost port against copies of compatible backups; run readiness and inspect a pending thread before moving any traffic. Do not overwrite the working directory with a destructive Git reset. Do not restore only checkpoints while leaving a mismatched action sink.</p>
-<h2>Guided completion and independent failure</h2>
+<h2 id="guided-completion-and-independent-failure">Guided completion and independent failure</h2>
 <p>Supply the missing post-rollback inspection: verify the pending thread and owner-filtered action count. Use <a href="../../exercises/14_production.html">the exercise</a> to rehearse rollback with an edited draft. Diagnose 503 readiness by checking storage/configuration before resetting data.</p>
-<h2>Exit and later review</h2>
+<h2 id="exit-and-later-review">Exit and later review</h2>
 <p>Produce actual start/stop/restore evidence, a known-good revision, and a state-compatibility limitation. Preserve actions already committed; no external undo is implied. Revisit this runbook in <a href="../15_capstone/04.html">Module 15</a> and compare your evidence with <a href="../../solutions/14_production.html">the solution</a>, not with an imagined production guarantee.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/14_production/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

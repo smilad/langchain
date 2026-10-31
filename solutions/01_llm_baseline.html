@@ -18,13 +18,13 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 01 solutions — boundaries and evidence</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-01-solutions--boundaries-and-evidence">Module 01 solutions — boundaries and evidence</h1>
 <p>Use after <a href="../exercises/01_llm_baseline.html">your attempt</a>. The implemented solution is <a href="../labs/01_llm_baseline/main.py">the direct SDK lab</a>; this explanation does not claim a provider run. See <a href="../docs/VERIFICATION.html">verification</a> for actual evidence.</p>
-<h2>Request-path answer</h2>
+<h2 id="request-path-answer">Request-path answer</h2>
 <p><code>synthetic text → request_payload → OpenAI client → HTTPS request with authentication → provider generation → Response → output_text → exact-label validation → human rubric review</code>.</p>
 <p>The request body contains instructions, model, input and output limit. Secret client configuration must never be printed. Python owns the payload and any explicitly stored history; model weights are not your mutable application memory. This lab sends no previous-response identifier, so separate calls do not demonstrate conversation persistence.</p>
 <p>Deterministic stages: input size/nonblank checks, payload construction from fixed values, exact-label parsing and report formatting. Provider/model stages: accepted model capabilities, network timing, status/output and classification semantics. Reported usage comes from the response, not a guessed tokenizer. Exact future output is not proven by temperature or a successful call.</p>
-<h2>Parser and rubric variation</h2>
+<h2 id="parser-and-rubric-variation">Parser and rubric variation</h2>
 <p>A complete local parser variation, not observed generation:</p>
 <pre><code class="language-python">LABELS = {&quot;billing&quot;, &quot;technical&quot;, &quot;account&quot;, &quot;other&quot;}
 
@@ -36,7 +36,7 @@ def validate_label(text: str) -&gt; str:
 </code></pre>
 <p>A four-label cutover must also change instructions and consumer expectations. If <code>account</code> means access/identity, clarify what remains technical; otherwise you have created overlapping categories without a policy. A reasonable ambiguity policy for “My payment page crashes” is technical when the requested resolution is software malfunction, billing when it is a posted charge. Other policies are legitimate if declared and evaluated consistently. There is no universal answer supplied by label membership.</p>
 <p><code>Billing</code> is rejected for capitalization; <code>billing because…</code> is rejected for representation; <code>technical</code> on a double charge can pass representation while failing the rubric. Accepting every nonempty response or substituting <code>other</code> on parse error would hide the real boundary.</p>
-<h2>Failure diagnoses</h2>
+<h2 id="failure-diagnoses">Failure diagnoses</h2>
 <table>
 <thead>
 <tr>
@@ -89,6 +89,6 @@ def validate_label(text: str) -&gt; str:
 </tbody>
 </table>
 <p>The lab's 128-output-token limit is not a correctness guarantee and can exhaust reasoning-heavy models' output budget. Character limits are application bounds; token context/pricing require model-specific information. Elapsed time includes network/SDK and allowed retries. Cost needs reported usage plus dated pricing assumptions; null usage is not zero.</p>
-<h2>Architecture and delayed transfer</h2>
+<h2 id="architecture-and-delayed-transfer">Architecture and delayed transfer</h2>
 <p>Ordinary Python is enough for one direct classification call. Introduce LangChain when common messages, reusable composition or tool/agent wiring serves a concrete requirement. It does not replace validation, authorization or review. Compare actual envelopes, not imaginary provider equivalence.</p>
 <p>A proper gate includes an independently changed rubric/input and a request-path explanation. If credentials are missing, retain deterministic evidence and mark live classification pending. Next-session closed-note recall and a later unfamiliar request can reveal retention; reading this solution cannot certify it.</p></main></body></html>

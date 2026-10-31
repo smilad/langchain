@@ -27,39 +27,15 @@ One initial request is made; configured SDK policy permits one transport retry. 
 Elapsed time includes the SDK/network and allowed retry. Usage may be null. No dollar estimate is invented; calculate cost only with dated pricing and the reported usage categories. Full output may include reasoning or refusal items, so `output[0]` is not assumed to contain text. Only synthetic inputs belong in this printable report.
 
 ## Evidence, compatibility, state
-Installed authoring snapshot: Python 3.14.0/OpenAI SDK 3.29.0; exact dependencies are in `uv.lock`. [Verification](../../docs/VERIFICATION.md) records actual gateway-mediated Responses classification (`billing`, 79 reported tokens) and direct-public-endpoint limits. No state is persisted and no reset is needed. Check mode does not contact a remote endpoint; live requires privately configured Responses-capable access and consent. Review data-retention and optional hosted-tracing configuration before using real data.
+Installed authoring snapshot: Python 3.14.0/OpenAI SDK 3.29.0; exact dependencies are in `uv.lock`. [Verification](../../docs/VERIFICATION.md) records the author's live Responses classification run and its limits. No state is persisted and no reset is needed. Check mode does not contact a remote endpoint; live requires privately configured Responses-capable access and consent. Review data-retention and optional hosted-tracing configuration before using real data.
 
 Primary references checked 2026-10-12: [SDK](https://github.com/openai/openai-python), [text generation](https://platform.openai.com/docs/guides/text), [Responses](https://platform.openai.com/docs/api-reference/responses).
 
 ## Captured `--check` output
 
-Real, unedited stdout of `uv run python labs/01_llm_baseline/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
+Output of `uv run python labs/01_llm_baseline/main.py --check` (no credentials, no network), re-formatted as indented JSON; local paths are replaced by `<repo>`. The environment `preflight` block is omitted here; Module 00 shows it in full. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.
 
 ```json
-{
-  "preflight": {
-    "python": "3.14.0",
-    "interpreter": "<repo>/.venv/bin/python",
-    "packages": {
-      "langchain": "1.4.4",
-      "langchain-core": "1.6.9",
-      "langchain-openai": "1.7.0",
-      "langgraph": "1.2.14",
-      "langgraph-checkpoint-sqlite": "3.1.1",
-      "fastmcp": "4.1.0",
-      "pydantic": "2.14.1"
-    },
-    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
-    "configured": {
-      "api_key": false,
-      "model": false,
-      "live_consent": false,
-      "custom_endpoint": false,
-      "hosted_tracing": false
-    },
-    "live_request_sent": false
-  }
-}
 {
   "request_boundary": {
     "model": "configured-at-live-time",

@@ -18,9 +18,9 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 05 solution — Scope, retention and request selection</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-05-solution--scope-retention-and-request-selection">Module 05 solution — Scope, retention and request selection</h1>
 <p>Attempt the <a href="../exercises/05_memory_context.html">exercise</a> first. The examples explain executable mechanics but do not claim an observed learner/model result. Python &gt;=3.14 target; exact dependencies are in the lockfile, with integration verification pending.</p>
-<h2>Part A: actual stores and checkpoints</h2>
+<h2 id="part-a-actual-stores-and-checkpoints">Part A: actual stores and checkpoints</h2>
 <p>Use the lab's helpers in a local copy, or load their definitions without executing the CLI:</p>
 <pre><code class="language-python">import runpy
 from langchain_core.messages import HumanMessage
@@ -54,12 +54,12 @@ else:
 </code></pre>
 <p>The reject occurs before <code>.get_state</code> or <code>.invoke</code>; redacting a final answer would be too late. The registry is a process-local demonstration, not an authentication system. In production, derive identity from authenticated context and enforce durable thread ownership at every read/write/resume boundary.</p>
 <p>For consent and value validation, catch <code>PermissionError</code> for <code>consent=False</code> and <code>ValueError</code> for an unsupported style; compare the exact store document before/after. Do not catch all exceptions, because an unrelated bug must not masquerade as correct rejection. Delete with <code>store.delete(("preferences", "alice"), "response_style")</code>. Future selection returns <code>{}</code>, but previous graph snapshots still contain the earlier selection. That observation disproves a claim of comprehensive erasure.</p>
-<h2>Part B: why reconstruction is not restart proof</h2>
+<h2 id="part-b-why-reconstruction-is-not-restart-proof">Part B: why reconstruction is not restart proof</h2>
 <p>The same saver/store objects own their dictionaries independently of the compiled graph. A new graph referencing them can recover state; new objects have no history. All disappear at process exit. A database-backed checkpointer addresses thread-state durability; a persistent store addresses cross-thread documents. Neither automatically authenticates users, persists our registry or implements complete data erasure. Module 10 handles durable checkpoints and Module 14 adds stronger request boundaries.</p>
-<h2>Part C: a controlled context experiment</h2>
+<h2 id="part-c-a-controlled-context-experiment">Part C: a controlled context experiment</h2>
 <p>List original facts before comparing answers. With the early budget, a long unrelated message and a last quote request, recent trimming can remove the budget entirely. The latest agent should not reconstruct 4500 cents from catalog price or another user's history. A human-authored summary may explicitly retain it; label that text as supplied human context, never generated output.</p>
 <p>The live lab uses a real model to produce a summary, then separate fresh <code>create_agent</code> instances for full, trimmed and summarized inputs. This prevents saved history from silently restoring discarded details. Inspect the supplied message lists, summary and new tool calls. Current stock/price must be rechecked. A generated summary might omit units or change the budget; those are summarization errors, not integer-cent arithmetic defects.</p>
 <p>One comparison is mechanism evidence, not a reliable ranking of context strategies. Declare trial count for variability and evaluate support, omissions and token usage separately. When credentials are missing, retain deterministic state/context evidence and mark generated-summary/recall behavior unverified.</p>
-<h2>Teach-back and review</h2>
+<h2 id="teach-back-and-review">Teach-back and review</h2>
 <p>History is thread-scoped application state; explicit style is user-scoped store data; selected context is the current model request; neither is model-weight training. Prompt language does not authorize a namespace or authenticate a thread. Request trimming does not delete storage. Review with new identities/constraints in Modules 11 and 14.</p>
 <p>Sources consulted 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">short-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/long-term-memory">long-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/runtime">runtime</a>.</p></main></body></html>

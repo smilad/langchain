@@ -18,12 +18,13 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>03.1 — A valid shape can still contain an invented fact</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../02_models_messages/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="031--a-valid-shape-can-still-contain-an-invented-fact">03.1 — A valid shape can still contain an invented fact</h1>
+<p><strong>In plain words:</strong> Structured output asks the model to fill a fixed schema instead of writing prose. A reply can match the schema and still contain a made-up fact, so you also check it against the source text.</p>
 <p><strong>Mission/objective:</strong> Advance the <a href="../../MISSION.html">mission</a> by defining required nullable fields and enforcing both schema and source-evidence boundaries. Prerequisites: <a href="../02_models_messages/04.html">Module 02</a>, <a href="../00_setup/03.html">Pydantic basics</a>; explain why an allowed classification label can still be incorrect.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.pydantic.dev/latest/concepts/models/">Pydantic models</a>, <a href="https://docs.pydantic.dev/latest/concepts/validators/">validators</a>, <a href="https://docs.langchain.com/oss/python/langchain/models#structured-output">model structured output</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0, Pydantic 2.14.1, langchain-core 1.6.9/langchain-openai 1.7.0. Exact resolution is in <code>uv.lock</code>; actual execution evidence is in <a href="../../docs/VERIFICATION.html">verification</a>. Local validation requires no model.</p>
-<h2>Retrieval warm-up</h2>
+<h2 id="retrieval-warm-up">Retrieval warm-up</h2>
 <p>Does missing configuration mean a failed learning gate? What does strict JSON validation reject? Attempt before <a href="../../solutions/03_structured_output.html">corrections</a>.</p>
-<h2>Mental model and contract</h2>
+<h2 id="mental-model-and-contract">Mental model and contract</h2>
 <p>The <a href="../../labs/03_structured_output/main.py">extraction lab</a> returns SupportRecord, not an action. Every field is required, including nullable ones. <code>order_id: str | None</code> without a default means a caller must supply the field; null honestly represents unavailable information. A default invented identifier would destroy the boundary.</p>
 <table>
 <thead>
@@ -56,10 +57,10 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tbody>
 </table>
 <p>Supported requires an ID, category and quote. Other statuses must not select an order or quote; irrelevant additionally has no category. A model validator enforces those relationships. A separate source guard rejects an absent ID, fabricated quotation and choosing one of multiple distinct source IDs. Multiple IDs are deliberately ambiguous under this lab's policy, even if a clever reader could infer a preferred one.</p>
-<h2>Worked example and guided completion</h2>
+<h2 id="worked-example-and-guided-completion">Worked example and guided completion</h2>
 <p>Check mode parses authored JSON for “Please refund order ORDER-104. I was charged twice.” It then validates the quote against the source. This is a parser/evidence demonstration, never an observed model answer. Provide the missing substring check in a separate function: both quote membership and ID membership inside the quote are necessary. A genuine substring unrelated to the chosen ID is insufficient.</p>
-<h2>Failure investigation and variation</h2>
+<h2 id="failure-investigation-and-variation">Failure investigation and variation</h2>
 <p>Predict the difference between an omitted <code>order_id</code>, explicit null, malformed identifier and well-shaped invented identifier. The first three involve schema/consistency; the fourth needs source validation. Category relevance still requires human semantic review; substring checks do not prove the request should receive a refund. Attempt the missing/contradictory tasks in the <a href="../../exercises/03_structured_output.html">exercise</a>.</p>
-<h2>Exit and delayed review</h2>
+<h2 id="exit-and-delayed-review">Exit and delayed review</h2>
 <p>Deliver a validated record, explicit unknown/contradiction/irrelevance or error—never a guessed record. Explain nullable versus optional and shape versus support. Review next week with a different identifier format, then apply evidence provenance in Module 07. Reference: <a href="../../reference/GLOSSARY.html">glossary</a>, <a href="../../labs/03_structured_output/README.html">runbook</a>. Ask which boundary an apparently valid but invented value crossed.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/03_structured_output/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

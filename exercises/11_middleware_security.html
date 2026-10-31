@@ -18,7 +18,7 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Independent exercise — attack the execution boundary</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="independent-exercise--attack-the-execution-boundary">Independent exercise — attack the execution boundary</h1>
 <p>Prerequisites: <a href="../lessons/11_middleware_security/01.html">Module 11</a>. All secrets and records must stay synthetic. Attempt before reading <a href="../solutions/11_middleware_security.html">the solution</a>.</p>
 <ol>
 <li>Run <code>uv run python labs/11_middleware_security/main.py --check</code>. Separate the unsafe non-model counterexample, real corpus retrieval, actual authorization denials and zero sink effects in your report. Which checks do not exercise middleware through a model?</li>
@@ -28,5 +28,5 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <li>With provider consent, declare a trial count before using <code>--live</code>. Record actual requested tools/arguments, handler execution/denial messages and final claims. If the model never attempted an unauthorized call, report unattempted attack—not observed middleware denial. Evaluate semantic answer contamination separately from zero unauthorized effects.</li>
 <li>Produce a versioned proof statement: Python and locked package versions, model ID if used, prompt revision, corpus source IDs, trial count and residual risks. Do not publish keys, authentication tokens or full configuration dictionaries.</li>
 </ol>
-<h2>Gate and review</h2>
+<h2 id="gate-and-review">Gate and review</h2>
 <p>Demonstrate untrusted content cannot change identity/capabilities, owner checks occur before data disclosure, extra model arguments cannot override context, and no actions commit. Explain least privilege, minimization and limits. A clean single model response is not injection immunity. Revisit with MCP tool descriptions in Module 13 and held-out adversarial cases in Module 15. Use the teaching guide's hint ladder; no invented learner record.</p></main></body></html>

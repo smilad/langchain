@@ -18,12 +18,12 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 03 solutions — typed does not mean true</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-03-solutions--typed-does-not-mean-true">Module 03 solutions — typed does not mean true</h1>
 <p>Read after <a href="../exercises/03_structured_output.html">an independent attempt</a>. <a href="../labs/03_structured_output/main.py">The complete lab</a> implements SupportRecord, local parser/source composition and real model/agent branches. Actual proof lives in <a href="../docs/VERIFICATION.html">verification</a>, not in an illustrative answer below.</p>
-<h2>Required-nullable and outcome reasoning</h2>
+<h2 id="required-nullable-and-outcome-reasoning">Required-nullable and outcome reasoning</h2>
 <p><code>order_id: str | None</code> without a default is required but permits null. Omitting the field is different from admitting that its value is unavailable. A supported record requires identifier/category/quote; unknown/contradictory/irrelevant cannot select an order or quote. Irrelevant also cannot claim a support category. Cross-field validators enforce those relationships; source validation separately verifies identifier and quote membership.</p>
 <p>Complete source with one explicit order can yield supported. Missing order should yield unknown, conflicting distinct orders contradictory and poetry irrelevant. These are rubric expectations, not fabricated model observations. A cautious unknown may be acceptable when semantics are ambiguous; an invented order is never repaired by having a valid schema.</p>
-<h2>Booking-domain source guard</h2>
+<h2 id="booking-domain-source-guard">Booking-domain source guard</h2>
 <p>After migrating the schema/instructions to BOOK identifiers, this complete guard illustrates the independent change:</p>
 <pre><code class="language-python">import re
 
@@ -42,9 +42,9 @@ def check_booking(record, source: str):
     return record
 </code></pre>
 <p>The corresponding schema must still require supported ID/category/quote, enforce <code>BOOK-</code> plus four digits and forbid selected IDs/quotes in other outcomes. The guard alone is not a complete schema. A substring such as “please refund” is genuine source text but insufficient evidence for <code>BOOK-1204</code> because it lacks the identifier. Selecting the first of two IDs silently solves a different problem.</p>
-<h2>Composition and strategy answers</h2>
+<h2 id="composition-and-strategy-answers">Composition and strategy answers</h2>
 <p>Local LCEL: authored JSON string → PydanticOutputParser → source guard → typed record. Live LCEL: exact input dictionary → normalization → parallel original-source retention and prompt→structured model → raw/parse-error inspection → source guard → consumer result. Runnable composition changes wiring, not validation truth. Lambdas may buffer streams, so token streaming is not guaranteed by the pipe symbol.</p>
 <p>Model-level structured output returns parsed data or, with include_raw, a raw/parsed/parsing_error envelope. Agent output places the typed result in <code>structured_response</code> alongside messages. ProviderStrategy requests native schema support; ToolStrategy represents the response using function arguments. No business action follows merely from this representation. This lab disables tool-strategy automatic error correction and bounds agent recursion. Unsupported capabilities must remain errors, not fake fallback responses.</p>
-<h2>Failure-feedback answer</h2>
+<h2 id="failure-feedback-answer">Failure-feedback answer</h2>
 <p>Missing key/blank input fails before transport. Missing nullable fields or invalid enums fail shape validation. Inconsistent supported/null combinations fail the model validator. Fabricated ID/quote and choosing among conflicts fail the source guard. Wrong category/relevance can survive literal checks and therefore needs human semantic review. A retry cannot recover an identifier absent from source; get more evidence or abstain.</p>
 <p>Exit evidence must include all named cases, strategy explanation, a changed domain and a diagnosis. If live access is unavailable, mark those branches pending and demonstrate reachable deterministic boundaries. Review later with a new optionality/evidence constraint before using schemas as a grounding mechanism in Module 07.</p></main></body></html>

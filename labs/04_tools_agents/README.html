@@ -18,14 +18,14 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 04 lab — Project A: read-only catalog assistant</h1>
-<h2>Objective and setup</h2>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1 id="module-04-lab--project-a-read-only-catalog-assistant">Module 04 lab — Project A: read-only catalog assistant</h1>
+<h2 id="objective-and-setup">Objective and setup</h2>
 <p>Meet the <a href="../../ROADMAP.html#04--tools-and-a-first-agent--68-hours">Module 04 gate</a>: inspect successful lookup, unavailable item, invalid input and bounded agent execution. Start with <a href="../../lessons/04_tools_agents/01.html">lesson 01</a>, complete Modules 00–03 and run from the repository root:</p>
 <pre><code class="language-text">uv sync --locked
 uv run python labs/04_tools_agents/main.py --check
 </code></pre>
 <p>The default without flags also runs <code>--check</code>. It performs actual local data/tool/schema operations, not a fake model. This local path passed; exact versions are in <code>uv.lock</code> and preflight. Consult the centralized <a href="../../docs/VERIFICATION.html">verification record</a> for exercised versions/outcomes and separate unverified live model gates.</p>
-<h2>Local cases and contracts</h2>
+<h2 id="local-cases-and-contracts">Local cases and contracts</h2>
 <table>
 <thead>
 <tr>
@@ -65,7 +65,7 @@ uv run python labs/04_tools_agents/main.py --check
 </tbody>
 </table>
 <p>The synthetic fixture is <a href="../../data/catalog.json"><code>data/catalog.json</code></a>. USD prices are integer cents; no binary-float money calculation or arbitrary <code>eval</code> exists. Quantities are strict integers 1–20. Missing-item and stock outcomes are data, not transport exceptions. Quotes neither reserve inventory nor include tax/shipping or checkout.</p>
-<h2>Real model cases</h2>
+<h2 id="real-model-cases">Real model cases</h2>
 <p>Copy the root <code>.env.example</code> to a local <code>.env</code> using your normal secret-management workflow. Set <code>OPENAI_API_KEY</code>, choose <code>COURSE_MODEL</code> with tool-call support and set <code>COURSE_ALLOW_LIVE=1</code> only after accepting remote transfer/charges. Never commit the key or emit model settings.</p>
 <pre><code class="language-text">uv run python labs/04_tools_agents/main.py --live --case normal
 uv run python labs/04_tools_agents/main.py --live --case missing
@@ -74,11 +74,11 @@ uv run python labs/04_tools_agents/main.py --live --case bounded
 </code></pre>
 <p>Each command invokes a real <code>create_agent</code> and streams intermediate node updates. Trace <code>AIMessage.tool_calls</code>, requested arguments, matching <code>ToolMessage</code> results and the final claims. The normal/missing/invalid cases use recursion limit eight. The bounded case uses one and reports the outcome actually observed: exhausted or terminated. The limit bounds graph steps, not exact calls, cost or wall time. An exhausted normal case remains an error; the deliberately tiny-budget case prints the partial trace without fabricating a final answer.</p>
 <p>The invalid live prompt may trigger a clarification rather than an invalid tool call. The deterministic check is the reproducible proof of schema rejection; do not force an LLM to make a particular mistake.</p>
-<h2>Review, evidence and limitations</h2>
+<h2 id="review-evidence-and-limitations">Review, evidence and limitations</h2>
 <p>Create your own per-case worksheet only after running: input → requested call → executed function → result → final claim → failure category. No authored learner record or model transcript is supplied. Live gate remains unverified when credentials/model/consent are absent. Provider transport failures are errors, never an automatic fake fallback.</p>
 <p>No durable lab state is written, so restarting resets agent state. To change the catalog, edit only your synthetic fixture and rerun checks; restore intended records before sharing results. The loader reloads records each operation. Study the <a href="../../exercises/04_tools_agents.html">independent exercise</a> before the <a href="../../solutions/04_tools_agents.html">solution</a>. Source: <a href="https://docs.langchain.com/oss/python/langchain/tools">official tools</a>, <a href="https://docs.langchain.com/oss/python/langchain/agents">agents</a>, consulted 2026-10-12.</p>
-<h2>Captured <code>--check</code> output</h2>
-<p>Real, unedited stdout of <code>uv run python labs/04_tools_agents/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Excerpt: first 150 lines only. Compare your own run against it.</p>
+<h2 id="captured---check-output">Captured <code>--check</code> output</h2>
+<p>Output of <code>uv run python labs/04_tools_agents/main.py --check</code> (no credentials, no network), re-formatted as indented JSON; local paths are replaced by <code>&lt;repo&gt;</code>. The middle of the output is omitted for length. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.</p>
 <pre><code class="language-text">{
   &quot;python&quot;: &quot;3.14.0&quot;,
   &quot;interpreter&quot;: &quot;&lt;repo&gt;/.venv/bin/python&quot;,
@@ -149,70 +149,7 @@ uv run python labs/04_tools_agents/main.py --live --case bounded
 }
 {
   &quot;normal&quot;: {
-    &quot;found&quot;: true,
-    &quot;item_id&quot;: &quot;notebook&quot;,
-    &quot;name&quot;: &quot;Recycled paper notebook&quot;,
-    &quot;price_cents&quot;: 1299,
-    &quot;currency&quot;: &quot;USD&quot;,
-    &quot;stock&quot;: 12
-  },
-  &quot;quote&quot;: {
-    &quot;found&quot;: true,
-    &quot;quoted&quot;: true,
-    &quot;item_id&quot;: &quot;notebook&quot;,
-    &quot;quantity&quot;: 2,
-    &quot;unit_price_cents&quot;: 1299,
-    &quot;total_cents&quot;: 2598,
-    &quot;currency&quot;: &quot;USD&quot;,
-    &quot;stock&quot;: 12
-  },
-  &quot;missing&quot;: {
-    &quot;found&quot;: false,
-    &quot;item_id&quot;: &quot;invisible-widget&quot;
-  },
-  &quot;missing_quote&quot;: {
-    &quot;found&quot;: false,
-    &quot;item_id&quot;: &quot;invisible-widget&quot;,
-    &quot;quoted&quot;: false,
-    &quot;quantity&quot;: 1,
-    &quot;reason&quot;: &quot;item_unavailable&quot;
-  },
-  &quot;stock_boundary&quot;: {
-    &quot;found&quot;: true,
-    &quot;quoted&quot;: true,
-    &quot;item_id&quot;: &quot;desk-lamp&quot;,
-    &quot;quantity&quot;: 3,
-    &quot;unit_price_cents&quot;: 3499,
-    &quot;total_cents&quot;: 10497,
-    &quot;currency&quot;: &quot;USD&quot;,
-    &quot;stock&quot;: 3
-  },
-  &quot;over_stock&quot;: {
-    &quot;found&quot;: true,
-    &quot;quoted&quot;: false,
-    &quot;item_id&quot;: &quot;desk-lamp&quot;,
-    &quot;quantity&quot;: 4,
-    &quot;stock&quot;: 3,
-    &quot;reason&quot;: &quot;insufficient_stock&quot;
-  },
-  &quot;sold_out&quot;: {
-    &quot;found&quot;: true,
-    &quot;quoted&quot;: false,
-    &quot;item_id&quot;: &quot;sold-out&quot;,
-    &quot;quantity&quot;: 1,
-    &quot;stock&quot;: 0,
-    &quot;reason&quot;: &quot;insufficient_stock&quot;
-  },
-  &quot;max_quantity&quot;: {
-    &quot;found&quot;: true,
-    &quot;quoted&quot;: true,
-    &quot;item_id&quot;: &quot;pen-set&quot;,
-    &quot;quantity&quot;: 20,
-    &quot;unit_price_cents&quot;: 599,
-    &quot;total_cents&quot;: 11980,
-    &quot;currency&quot;: &quot;USD&quot;,
-    &quot;stock&quot;: 40
-  },
+... (middle omitted for length) ...
   &quot;invalid_arguments&quot;: [
     {
       &quot;quantity&quot;: 0,
@@ -229,4 +166,28 @@ uv run python labs/04_tools_agents/main.py --live --case bounded
     {
       &quot;quantity&quot;: 21,
       &quot;error_types&quot;: [
+        &quot;less_than_equal&quot;
+      ]
+    },
+    {
+      &quot;quantity&quot;: true,
+      &quot;error_types&quot;: [
+        &quot;int_type&quot;
+      ]
+    },
+    {
+      &quot;quantity&quot;: 1.5,
+      &quot;error_types&quot;: [
+        &quot;int_type&quot;
+      ]
+    },
+    {
+      &quot;quantity&quot;: &quot;2&quot;,
+      &quot;error_types&quot;: [
+        &quot;int_type&quot;
+      ]
+    }
+  ],
+  &quot;live_gate&quot;: &quot;Not exercised: real model tool choice, final factual answer, agent step bound&quot;
+}
 </code></pre></main></body></html>

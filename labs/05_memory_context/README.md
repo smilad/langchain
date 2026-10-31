@@ -45,7 +45,7 @@ Complete the [exercise](../../exercises/05_memory_context.md) before opening the
 
 ## Captured `--check` output
 
-Real, unedited stdout of `uv run python labs/05_memory_context/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Excerpt: first 150 lines only. Compare your own run against it.
+Output of `uv run python labs/05_memory_context/main.py --check` (no credentials, no network), re-formatted as indented JSON; local paths are replaced by `<repo>`. The middle of the output is omitted for length. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.
 
 ```text
 {
@@ -79,7 +79,7 @@ Real, unedited stdout of `uv run python labs/05_memory_context/main.py --check` 
         "response_metadata": {},
         "type": "human",
         "name": null,
-        "id": "1454fc1a-40be-4ed0-8bf1-50d13b34dbda"
+        "id": "497adbd9-61e4-430f-ae50-d9d091a4eaa7"
       },
       {
         "content": "Look up notebook.",
@@ -87,7 +87,7 @@ Real, unedited stdout of `uv run python labs/05_memory_context/main.py --check` 
         "response_metadata": {},
         "type": "human",
         "name": null,
-        "id": "f2877c5a-5556-4a53-bccd-d0827521e25d"
+        "id": "2e559402-aee2-4fa8-99d6-80ea3812158f"
       }
     ],
     "user_id": "alice",
@@ -103,7 +103,7 @@ Real, unedited stdout of `uv run python labs/05_memory_context/main.py --check` 
         "response_metadata": {},
         "type": "human",
         "name": null,
-        "id": "896ba4cd-2b16-4485-bad3-a1305bd5c346"
+        "id": "45e191ab-0896-4451-a128-c9aff5b9bce5"
       }
     ],
     "user_id": "bob",
@@ -117,53 +117,8 @@ Real, unedited stdout of `uv run python labs/05_memory_context/main.py --check` 
         "response_metadata": {},
         "type": "human",
         "name": null,
-        "id": "a00b02f1-c924-48cf-be7a-4b4b28266255"
-      }
-    ],
-    "user_id": "alice",
-    "selected_preference": {
-      "style": "short"
-    }
-  },
-  "ownership": "Cross-user thread reuse rejected before graph access",
-  "checkpoint_count": 6,
-  "context_comparison": {
-    "full": [
-      {
-        "content": "Synthetic preference: short replies. My old request concerned a notebook.",
-        "additional_kwargs": {},
-        "response_metadata": {},
-        "type": "human",
-        "name": null,
-        "id": "early"
-      },
-      {
-        "content": "Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. Unrelated historical discussion. ",
-        "additional_kwargs": {},
-        "response_metadata": {},
-        "type": "human",
-        "name": null,
-        "id": "irrelevant"
-      },
-      {
-        "content": "Quote 2 notebooks; use fresh catalog facts.",
-        "additional_kwargs": {},
-        "response_metadata": {},
-        "type": "human",
-        "name": null,
-        "id": "latest"
-      }
-    ],
-    "trimmed": [
-      {
-        "content": "Quote 2 notebooks; use fresh catalog facts.",
-        "additional_kwargs": {},
-        "response_metadata": {},
-        "type": "human",
-        "name": null,
-        "id": "latest"
-      }
-    ],
+        "id": "5d0a08c2-9ba7-414d-b0f1-b7dbd49bd9cd"
+... (middle omitted for length) ...
     "human_summarized": [
       {
         "content": "Human-authored summary, not model output: user requested short replies and considered notebook.",
@@ -197,5 +152,11 @@ Real, unedited stdout of `uv run python labs/05_memory_context/main.py --check` 
     "currency": "USD",
     "stock": 12
   }
+}
+{
+  "deleted_store_preference": true,
+  "old_checkpoint_still_contains_selected_preference": true,
+  "durability": "In-memory objects survive graph reconstruction, not process restart",
+  "live_gate": "Not exercised: model recall, generated summary accuracy, provider context validity"
 }
 ```

@@ -18,34 +18,34 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>07.4 — Compare bounded agentic retrieval</h1>
-<h2>Objective and prerequisites</h2>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="03.html">&larr; Previous</a> · <a href="../08_evaluation/01.html">Next &rarr;</a></nav><h1 id="074--compare-bounded-agentic-retrieval">07.4 — Compare bounded agentic retrieval</h1>
+<p><strong>In plain words:</strong> An agent can decide when and what to search, but that adds cost, variable latency and new ways to fail. Compare it with the plain two-step version on the same question and keep whichever is better supported.</p>
+<h2 id="objective-and-prerequisites">Objective and prerequisites</h2>
 <p><a href="../../MISSION.html">course mission</a>: Run a real retrieval-tool agent against the fixed two-step baseline and decide whether its flexibility helps.</p>
 <p>Prerequisite check: Module 04 tool execution and Lessons 01–03.</p>
-<h2>Sources and execution status</h2>
-<p>Primary: <a href="https://docs.langchain.com/oss/python/deepagents/retrieval">retrieval guide</a>. Documentation checked 2026-10-12. Installed baseline: Python 3.14.0, LangChain 1.4.4, core 1.6.9, OpenAI integration 1.7.0, Pydantic 2.14.1. Installation is not execution evidence; consult <a href="../../docs/VERIFICATION.html">verification</a>. Local lexical/check paths need no credentials. Live paths require explicit consent and paid provider access; semantic search additionally requires an embedding model, generation requires structured-output capability, and agentic comparison requires tool calling.</p>
-<h2>Recall before reading</h2>
+<h2 id="sources-and-execution-status">Sources and execution status</h2>
+<p>Primary: <a href="https://docs.langchain.com/oss/python/langchain/retrieval">retrieval guide</a>. Documentation checked 2026-10-12. Installed baseline: Python 3.14.0, LangChain 1.4.4, core 1.6.9, OpenAI integration 1.7.0, Pydantic 2.14.1. Installation is not execution evidence; consult <a href="../../docs/VERIFICATION.html">verification</a>. Local lexical/check paths need no credentials. Live paths require explicit consent and paid provider access; semantic search additionally requires an embedding model, generation requires structured-output capability, and agentic comparison requires tool calling.</p>
+<h2 id="recall-before-reading">Recall before reading</h2>
 <p>Who chooses when to search in two-step RAG? Can a tool docstring authorize a caller? Attempt both questions before consulting the mental model; compare your reasoning afterward rather than copying definitions.</p>
-<h2>Mental model</h2>
+<h2 id="mental-model">Mental model</h2>
 <p>Agentic RAG moves retrieval decisions inside a model-driven tool loop. The real create_agent instance receives a search_policies tool and ToolStrategy(GroundedAnswer). The agent may reformulate a query or search again; two-step RAG always retrieves once before generation. Extra flexibility introduces variable request count, latency and opportunities for evidence drift, so compare it with a baseline rather than assuming that an agent is an upgrade.</p>
 <p>The tool closes over the authenticated user_id and PolicyIndex. The model supplies a query only, not an identity or an audience. Every invocation rechecks current authorized sources. Collected evidence is deduplicated by chunk ID and returned for inspection. A hard three-search budget and graph recursion limit bound execution; exhausted budgets raise an explicit error. ToolStrategy handle_errors=False avoids an invisible corrective-output retry loop in this comparison. If the agent never retrieves any evidence, the published result is an abstention, not an answer from model memory.</p>
 <p>Citation membership is checked against actual trusted retrieved sources after the agent finishes. This does not prove claims are supported or resolve a contradiction across multiple searches. Read search traces, accumulated evidence and substantive claims. A model that fetches contradictory notices must still abstain. The agent has no write tool or finance permission bypass, and malicious source content cannot change the closure's identity.</p>
 <p>The lab compares both architectures on the same question, user, strategy and k with actual live calls. Its one paired trial is demonstration evidence, not general superiority. Repeat a declared number of development trials, count reported model usage, and include failures instead of selecting the nicest run. An agent can legitimately lose to the simpler architecture; retaining the baseline is an engineering result.</p>
-<h2>Data/control flow</h2>
+<h2 id="datacontrol-flow">Data/control flow</h2>
 <p><code>Question → real agent → authorized search tool (0–3 calls) → structured proposal → membership check → evidence report</code></p>
-<h2>Worked example</h2>
-<p>Run from the repository root after <code>uv sync --locked</code>. This is implemented code/command guidance, <strong>not an observed output</strong>:</p>
-<pre><code class="language-python"># Real live paired comparison:
-# uv run python labs/07_rag/main.py --live --compare-agentic \
-#   --question &quot;How many remote work days per week are allowed?&quot;
+<h2 id="worked-example">Worked example</h2>
+<p>Run from the repository root after <code>uv sync --locked</code>.</p>
+<pre><code class="language-sh"># Real live paired comparison:
+uv run python labs/07_rag/main.py --live --compare-agentic \
+  --question &quot;How many remote work days per week are allowed?&quot;
 # Inspect two_step.trace versus agentic.trace.searches and model_calls.
 </code></pre>
 <p>Use the <a href="../../labs/07_rag/README.html">module lab</a> to inspect actual intermediate values. Predict the result first and preserve any disagreement as a diagnostic clue.</p>
-<h2>Guided completion and failure investigation</h2>
+<h2 id="guided-completion-and-failure-investigation">Guided completion and failure investigation</h2>
 <p>Explain why user_id is absent from the tool schema. Remove it from a hypothetical model-controlled tool signature and show where trusted identity must enter instead.</p>
-<p>Hint ladder: first name the failed stage and expected input/output; then inspect its evidence or metadata; only after your attempt read the <a href="../../solutions/07_rag.html">reasoned solution</a>. Repair the boundary rather than changing unrelated prompts.</p>
-<h2>Independent transfer and exit check</h2>
+<h2 id="independent-transfer-and-exit-check">Independent transfer and exit check</h2>
 <p>Take a changed constraint from the <a href="../../exercises/07_rag.html">exercise</a> without copying the worked example. Compare answer support, retrieval calls, model calls and latency. Demonstrate a bounded failure and state which behavior still needs live provider evidence.</p>
-<h2>Delayed review</h2>
-<p>Review this baseline-first decision during Module 12 specialist comparisons. Revisit next session and about a week later with a fresh question; those intervals are a practice policy, not evidence of mastery. Use the <a href="../../reference/GLOSSARY.html">glossary</a> and <a href="../../reference/API_MAP.html">API map</a> for focused lookup. Record only actual learner evidence, never progress inferred from reading this lesson.</p>
+<h2 id="delayed-review">Delayed review</h2>
+<p>Review this baseline-first decision during Module 12 specialist comparisons. See the <a href="../../reference/GLOSSARY.html">glossary</a> and <a href="../../reference/API_MAP.html">API map</a>.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/07_rag/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

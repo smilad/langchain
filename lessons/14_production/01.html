@@ -18,21 +18,22 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>14.1 — A served application has a configuration boundary</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../13_mcp/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="141--a-served-application-has-a-configuration-boundary">14.1 — A served application has a configuration boundary</h1>
+<p><strong>In plain words:</strong> You serve the workflow over local HTTP. A bearer token maps to a user, so the request body cannot claim an identity. Health and readiness checks tell you the process is up, not that the model works.</p>
 <p><strong>Mission/objective:</strong> advance <a href="../../MISSION.html">the mission</a> by starting a real localhost HTTP application and tracing authenticated requests into persisted review state.</p>
 <p><strong>Prerequisites:</strong> <a href="../10_durable_approval/01.html">durable approval</a> and <a href="../11_middleware_security/04.html">code-level authorization</a>. Check: distinguish thread identity from user authentication.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.python.org/3.14/library/http.server.html">Python 3.14 HTTP server</a>, <a href="https://docs.langchain.com/oss/python/langgraph/persistence">LangGraph persistence</a>, and <a href="https://docs.langchain.com/oss/python/langgraph/interrupts">interrupts</a>, checked 2026-10-12. Installed baseline Python 3.14.0, LangGraph 1.2.14, SQLite checkpointer 3.1.1; <a href="../../docs/VERIFICATION.html">verification</a> records exercised behavior. Human-draft requests need no model; live generation requires explicit consent, configured model, and provider credentials.</p>
-<h2>Recall</h2>
+<h2 id="recall">Recall</h2>
 <p>Does a body field named <code>user_id</code> prove identity? What should readiness prove? After attempting: identity is derived from a validated bearer token; readiness checks local prerequisites, not universal downstream availability.</p>
-<h2>Mental model and flow</h2>
+<h2 id="mental-model-and-flow">Mental model and flow</h2>
 <p><code>HTTP bearer → token-to-user mapping → validated route/body → owned workflow process → independent SQLite connections → persisted state → JSON response</code></p>
 <p>The server binds only <code>127.0.0.1</code>. <code>COURSE_AUTH_TOKENS</code> is a JSON map of tokens to supported identities, never printed. Request bodies cannot select identity. Each operation uses the workflow's ownership checks too, so routing alone is not the isolation boundary.</p>
 <p>This uses the standard-library server to make local operations visible. Python explicitly warns that <code>http.server</code> is not recommended for production. There is no TLS, hardened reverse proxy, distributed identity, or internet-facing deployment guarantee here.</p>
-<h2>Worked request</h2>
+<h2 id="worked-request">Worked request</h2>
 <p>Follow <a href="../../labs/14_production/README.html">the runbook</a> to configure tokens, then run <code>uv run python -m langchain_learning.service --port 8765</code>. <code>GET /health</code> reports process liveness. <code>GET /ready</code> checks existing SQLite files and shutdown state; it explicitly does not probe the provider.</p>
 <p><code>POST /threads/start</code> accepts <code>thread_id</code>, <code>question</code>, and either an explicit human <code>draft</code> or <code>live:true</code>. A human draft is never labeled generated output. Both paths pause before a local action. A successful response wraps the workflow result in <code>result</code>; inspect its status and pending review, not just HTTP 200.</p>
-<h2>Guided completion and transfer</h2>
+<h2 id="guided-completion-and-transfer">Guided completion and transfer</h2>
 <p>Trace the missing arrow from token validation to workflow identity. Independently run Alice and Bob using <a href="../../exercises/14_production.html">the exercise</a>, then try a body <code>user_id</code>. Predict rejection before sending it.</p>
-<h2>Diagnosis, exit, review</h2>
+<h2 id="diagnosis-exit-review">Diagnosis, exit, review</h2>
 <p>A 401 indicates missing/invalid bearer; 403 indicates an ownership/permission boundary; 400 identifies rejected fields or state. Do not fix these by granting broader prompt access. Exit with a real human-draft request and identity-isolation demonstration. Review with <a href="../15_capstone/04.html">the capstone</a>; <a href="../../reference/API_MAP.html">API map</a> documents the exact entrypoint and workflow interface.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/14_production/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

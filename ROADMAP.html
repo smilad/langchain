@@ -18,11 +18,11 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="lessons/README.html">Lesson index</a></nav><h1>LangChain learning roadmap</h1>
+<body><main><nav><a href="lessons/README.html">Lesson index</a></nav><h1 id="langchain-learning-roadmap">LangChain learning roadmap</h1>
 <p>Research baseline: 2026-10-12. Status: <strong>all sixteen core modules authored and implemented</strong>; see <a href="lessons/README.html">the sixty-four-lesson index</a>. <a href="docs/VERIFICATION.html">Local verification</a> is not a claim that provider-dependent or learner-mastery gates passed.</p>
-<p>Read <a href="MISSION.html">the mission</a>, use <a href="RESOURCES.html">the resource guide</a> for primary sources, and apply <a href="docs/TEACHING_GUIDE.html">the teaching guide</a> for practice/assessment. The <a href="docs/superpowers/plans/2026-10-12-langchain-learning-resources.html">implementation plan</a> records artifact delivery separately from unavailable live/review prerequisites.</p>
-<h2>1. Design decisions</h2>
-<h3>Learn the primitives before the harness</h3>
+<p>Read <a href="MISSION.html">the mission</a>, use <a href="RESOURCES.html">the resource guide</a> for primary sources, and apply <a href="docs/TEACHING_GUIDE.html">the teaching guide</a> for practice/assessment.</p>
+<h2 id="1-design-decisions">1. Design decisions</h2>
+<h3 id="learn-the-primitives-before-the-harness">Learn the primitives before the harness</h3>
 <p>The current official overview presents LangChain's <code>create_agent</code> as a configurable agent harness, LangGraph as lower-level orchestration, Deep Agents as a more complete harness, and LangSmith as tracing/evaluation tooling. Our <strong>teaching order</strong> is deliberately different from a fastest-start product recommendation:</p>
 <ol>
 <li>Plain Python and a direct model call: identify what the framework does and does not do.</li>
@@ -33,12 +33,12 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <li>Optional specialized architectures only after a baseline exists.</li>
 </ol>
 <p>LangChain agents already use LangGraph underneath. Learning graphs later is a pedagogical choice, not a prerequisite for <code>create_agent</code>. LangSmith concepts start early; a hosted account is not required for the first lessons.</p>
-<h3>Depth without giant lessons</h3>
+<h3 id="depth-without-giant-lessons">Depth without giant lessons</h3>
 <p>Each module contains four narrowly scoped lessons. A lesson has a short explanation and a worked example; its lab supplies the depth. Every module ends with an independent variation, a failure investigation, and a delayed review. Framework API lookup is allowed; conceptual answers and design choices must be the learner's own.</p>
-<h3>Pacing, not a promise</h3>
+<h3 id="pacing-not-a-promise">Pacing, not a promise</h3>
 <p>The sixteen core modules total <strong>91–127 hours</strong> of suggested study/lab time. This is an authoring estimate, not a measured completion time. At 6–8 hours/week, allow roughly 12–22 weeks, plus remediation. Experienced Python developers can demonstrate the Module 00 gate rather than repeat familiar material. Optional tracks add time and are not required for core completion.</p>
 <p>Suggested weekly rhythm: two concept/example sessions, two lab/debugging sessions, and one short retrieval/review session. Advance by demonstrated mastery rather than a calendar date.</p>
-<h2>2. Prerequisite diagnostic</h2>
+<h2 id="2-prerequisite-diagnostic">2. Prerequisite diagnostic</h2>
 <p>Before a paid model call, attempt these without an AI-written solution:</p>
 <ul>
 <li>Write a typed function that reads JSON, validates required fields, and reports an invalid record.</li>
@@ -49,8 +49,8 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <li>Explain what <code>await</code> changes and identify a blocking operation inside asynchronous code.</li>
 </ul>
 <p>If the first three are unfamiliar, take the Python/environment lessons in Module 00 before progressing. HTTP, Pydantic, and async can be remediated just before their first dependent lab. Record actual evidence, not assumed proficiency.</p>
-<h2>3. Core modules</h2>
-<h3>00 — Reproducible setup and Python readiness · 3–5 hours</h3>
+<h2 id="3-core-modules">3. Core modules</h2>
+<h3 id="00--reproducible-setup-and-python-readiness--35-hours">00 — Reproducible setup and Python readiness · 3–5 hours</h3>
 <p><strong>Prerequisites:</strong> none; use the diagnostic to adapt the lesson depth.</p>
 <p><strong>Lessons</strong>
 1. Interpreter, virtual environments, dependency metadata, and a lockfile.
@@ -60,7 +60,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> use the locked course environment and configuration-check command. The namespace cutover is implemented: course <code>langchain-learning</code> / <code>langchain_learning</code>, external library <code>langchain</code>, and migrated course CLI. The repository directory can retain its original name.</p>
 <p><strong>Gate:</strong> a clean checkout can reproduce the environment; <code>import langchain</code> resolves to the external library, not the course package; missing configuration is reported without exposing secrets. Verify selected integrations on Python 3.14 rather than assuming that core-library support proves every integration works.</p>
 <p><strong>Common trap:</strong> installing into one interpreter while the IDE runs another.</p>
-<h3>01 — LLM mental models and a plain-Python baseline · 3–4 hours</h3>
+<h3 id="01--llm-mental-models-and-a-plain-python-baseline--34-hours">01 — LLM mental models and a plain-Python baseline · 3–4 hours</h3>
 <p><strong>Prerequisites:</strong> Module 00.</p>
 <p><strong>Lessons</strong>
 1. Tokens, context windows, generation, and model versus application state.
@@ -70,7 +70,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> a small text classifier with a direct call; record input, output, elapsed time, model ID, and reported usage when available. Use a configurable model, not a tutorial's frozen model name.</p>
 <p><strong>Gate:</strong> trace the full request path and diagnose a bad instruction versus a transport error. Explain why low temperature is not a correctness guarantee. No fine-tuning or transformer mathematics is required here.</p>
 <p><strong>Review prompt:</strong> which parts of this program are deterministic?</p>
-<h3>02 — Models, messages, and prompts · 5–7 hours</h3>
+<h3 id="02--models-messages-and-prompts--57-hours">02 — Models, messages, and prompts · 5–7 hours</h3>
 <p><strong>Prerequisites:</strong> Module 01.</p>
 <p><strong>Lessons</strong>
 1. Model initialization and separately installed provider integrations.
@@ -80,7 +80,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> rebuild the classifier using the LangChain model interface. Add an interactive streaming view; inspect the complete response separately from displayed text.</p>
 <p><strong>Gate:</strong> explain a message sequence, change a prompt intentionally, and reconstruct a streamed answer without mistaking metadata/tool events for prose. Compare interfaces without claiming providers have identical capabilities.</p>
 <p><strong>Common trap:</strong> treating every message's content as a plain string.</p>
-<h3>03 — Structured output and deterministic composition · 5–7 hours</h3>
+<h3 id="03--structured-output-and-deterministic-composition--57-hours">03 — Structured output and deterministic composition · 5–7 hours</h3>
 <p><strong>Prerequisites:</strong> Module 02.</p>
 <p><strong>Lessons</strong>
 1. Schemas, required/optional fields, and semantic versus shape validation.
@@ -90,7 +90,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> extract typed fields from synthetic support requests. Include missing, contradictory, and irrelevant inputs; define what an unknown field means.</p>
 <p><strong>Gate:</strong> consumers receive validated data or an explicit error/abstention, not an invented record. Explain provider-native versus tool-based structured-output strategies. Never use a JSON-shaped answer as proof that its facts are correct.</p>
 <p><strong>Common trap:</strong> automatically retrying a semantically impossible request until it looks valid.</p>
-<h3>04 — Tools and a first agent · 6–8 hours</h3>
+<h3 id="04--tools-and-a-first-agent--68-hours">04 — Tools and a first agent · 6–8 hours</h3>
 <p><strong>Prerequisites:</strong> Module 03.</p>
 <p><strong>Lessons</strong>
 1. Tool schemas, descriptions, and argument validation.
@@ -100,7 +100,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab / Project A:</strong> a read-only catalog assistant over a small local synthetic dataset. Give it lookup and deterministic calculation tools; use real data access, not fabricated weather responses.</p>
 <p><strong>Gate:</strong> show successful lookup, unavailable item, invalid tool input, and a bounded run. Trace which arguments were supplied and which function executed. The assistant must not invent an item absent from the catalog.</p>
 <p><strong>Common trap:</strong> assuming a tool docstring is an authorization boundary.</p>
-<h3>05 — Conversation state, memory, and context engineering · 5–7 hours</h3>
+<h3 id="05--conversation-state-memory-and-context-engineering--57-hours">05 — Conversation state, memory, and context engineering · 5–7 hours</h3>
 <p><strong>Prerequisites:</strong> Module 04.</p>
 <p><strong>Lessons</strong>
 1. A conversation's message history versus a model's weights.
@@ -110,7 +110,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> extend Project A with two separate conversations and an explicit synthetic preference. Compare full history with a summarized context.</p>
 <p><strong>Gate:</strong> no preference/history crosses between users; the learner can show what was retained, discarded, and supplied to the model. State that a summary may lose relevant details.</p>
 <p><strong>Review prompt:</strong> which state survives restarting the process, and why?</p>
-<h3>06 — Documents, embeddings, and retrieval · 6–8 hours</h3>
+<h3 id="06--documents-embeddings-and-retrieval--68-hours">06 — Documents, embeddings, and retrieval · 6–8 hours</h3>
 <p><strong>Prerequisites:</strong> Module 03; Module 05 is useful but not required for the retrieval lab.</p>
 <p><strong>Lessons</strong>
 1. Documents, loaders, metadata, and provenance.
@@ -120,7 +120,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> index a small versioned synthetic policy corpus. Keep source identifiers through ingestion. Inspect retrieved text before asking a model to answer.</p>
 <p><strong>Gate:</strong> answerable queries retrieve relevant passages; metadata filters exclude unauthorized sources; an edited source does not leave an obsolete duplicate active. Include a paraphrase, an exact identifier, and a no-match question.</p>
 <p><strong>Common trap:</strong> changing embedding models without rebuilding the index.</p>
-<h3>07 — Grounded RAG and retrieval improvement · 7–10 hours</h3>
+<h3 id="07--grounded-rag-and-retrieval-improvement--710-hours">07 — Grounded RAG and retrieval improvement · 7–10 hours</h3>
 <p><strong>Prerequisites:</strong> Modules 02, 03, and 06.</p>
 <p><strong>Lessons</strong>
 1. Two-step retrieval → answer generation as the simplest baseline.
@@ -130,7 +130,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab / Project B:</strong> a policy-document assistant returning an answer plus source IDs. Start with two-step RAG, then change only one retrieval variable per experiment.</p>
 <p><strong>Gate:</strong> demonstrate answerable, unanswerable, contradictory, outdated, and malicious-document cases. Citations must identify retrieved passages and those passages must support the answer; citation presence alone does not pass. Compare baseline versus improvement on held-out questions.</p>
 <p><strong>Common trap:</strong> diagnosing generation quality when the relevant passage was never retrieved.</p>
-<h3>08 — Tracing and evaluation · 6–8 hours</h3>
+<h3 id="08--tracing-and-evaluation--68-hours">08 — Tracing and evaluation · 6–8 hours</h3>
 <p><strong>Prerequisites:</strong> Project A and Project B; basic trace inspection also appears in earlier modules.</p>
 <p><strong>Lessons</strong>
 1. Trace trees: model calls, tools, retrieval, errors, usage, and timing.
@@ -140,7 +140,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> create a 20-case synthetic RAG evaluation set: 8 answerable, 4 unanswerable, 4 conflicting/outdated, and 4 adversarial/access-boundary cases. Use 12 for development and freeze 8 for held-out review. This small dataset teaches evaluation; it is not a statistically strong production benchmark.</p>
 <p><strong>Gate:</strong> publish per-case outcomes and failure categories, not just an average score. Show a retrieval failure separately from an unsupported generated claim. Repeated model runs use a declared trial count and report variability. Obtain permission before uploading any private content to hosted traces.</p>
 <p><strong>Common trap:</strong> tuning the prompt on the same examples used to claim improvement.</p>
-<h3>09 — Explicit LangGraph workflows · 6–8 hours</h3>
+<h3 id="09--explicit-langgraph-workflows--68-hours">09 — Explicit LangGraph workflows · 6–8 hours</h3>
 <p><strong>Prerequisites:</strong> Modules 04, 05, and 08.</p>
 <p><strong>Lessons</strong>
 1. State schemas, nodes, edges, and compilation.
@@ -150,7 +150,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> route a synthetic support request through classify → retrieve → draft, with separate paths for unsupported requests and human review. Build the routing mechanics without a model first, then add model-based classification.</p>
 <p><strong>Gate:</strong> explain state before/after every node, run all routes, and diagnose an incorrect reducer or non-terminating edge. Justify why this workflow needs an explicit graph rather than an agent loop.</p>
 <p><strong>Common trap:</strong> returning a complete mutated state when a node should return an update.</p>
-<h3>10 — Persistence, durable execution, and human approval · 7–10 hours</h3>
+<h3 id="10--persistence-durable-execution-and-human-approval--710-hours">10 — Persistence, durable execution, and human approval · 7–10 hours</h3>
 <p><strong>Prerequisites:</strong> Module 09.</p>
 <p><strong>Lessons</strong>
 1. Checkpointers, threads, and checkpoint inspection.
@@ -160,7 +160,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab / Project C:</strong> a support-draft workflow that pauses before a side effect. Use a local synthetic action sink and persistent storage; approve/reject/edit the proposed action explicitly.</p>
 <p><strong>Gate:</strong> stop the process while paused, restart, and resume the same thread. A rejected action has no side effect; approved execution records one action; replay/resume does not duplicate it. An in-memory checkpointer is not sufficient evidence of process-restart durability.</p>
 <p><strong>Common trap:</strong> performing a side effect before an interrupt, then replaying it on resume.</p>
-<h3>11 — Middleware, guardrails, and security boundaries · 6–8 hours</h3>
+<h3 id="11--middleware-guardrails-and-security-boundaries--68-hours">11 — Middleware, guardrails, and security boundaries · 6–8 hours</h3>
 <p><strong>Prerequisites:</strong> Modules 08 and 10.</p>
 <p><strong>Lessons</strong>
 1. Middleware hooks and explicit control of model/tool behavior.
@@ -170,7 +170,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> attack Projects B/C with documents that instruct the agent to reveal secrets or perform an unauthorized action. Use only synthetic secrets. Add code-level boundaries; compare behavior before/after.</p>
 <p><strong>Gate:</strong> show that untrusted content cannot grant permission. Check arguments and identity at the execution boundary. Record limits: guardrails reduce risk; they do not prove immunity to prompt injection.</p>
 <p><strong>Common trap:</strong> expecting an LLM safety instruction to replace access control.</p>
-<h3>12 — Multi-agent patterns and context contracts · 5–7 hours</h3>
+<h3 id="12--multi-agent-patterns-and-context-contracts--57-hours">12 — Multi-agent patterns and context contracts · 5–7 hours</h3>
 <p><strong>Prerequisites:</strong> Modules 08, 09, and 11.</p>
 <p><strong>Lessons</strong>
 1. Single-agent baseline and the cost of extra agents.
@@ -180,7 +180,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> implement one constrained specialist pattern for Project C; compare against the single-agent version on the same cases. Do not implement every pattern just to collect APIs.</p>
 <p><strong>Gate:</strong> document a measurable reason to retain the specialist, or deliberately reject the design. Demonstrate failed specialist output and a bounded recovery/stop decision.</p>
 <p><strong>Common trap:</strong> treating more agents as inherently more intelligent.</p>
-<h3>13 — MCP and external integration boundaries · 4–6 hours</h3>
+<h3 id="13--mcp-and-external-integration-boundaries--46-hours">13 — MCP and external integration boundaries · 4–6 hours</h3>
 <p><strong>Prerequisites:</strong> Modules 04 and 11; async remediation if needed.</p>
 <p><strong>Lessons</strong>
 1. MCP client/server roles, tools, resources, and transport.
@@ -190,7 +190,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> expose a read-only synthetic catalog tool through an actual local MCP server and invoke it through the agent. Keep the direct Python version as a conceptual comparison, not a compatibility layer.</p>
 <p><strong>Gate:</strong> observe a real client/server call and graceful server shutdown; explain why a connected tool is not automatically trusted. No real production credentials or remote unreviewed tools.</p>
 <p><strong>Common trap:</strong> teaching an adapter's import syntax without teaching the security/transport boundary.</p>
-<h3>14 — Production engineering and deployment · 7–10 hours</h3>
+<h3 id="14--production-engineering-and-deployment--710-hours">14 — Production engineering and deployment · 7–10 hours</h3>
 <p><strong>Prerequisites:</strong> Modules 08, 10, and 11.</p>
 <p><strong>Lessons</strong>
 1. Application entrypoint, configuration, health/readiness, and request isolation.
@@ -200,7 +200,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Lab:</strong> serve Project C locally with the chosen deployment mechanism; keep hosting optional. Exercise two simultaneous users, cancellation, upstream failure, and restart with pending work.</p>
 <p><strong>Gate:</strong> publish run/deploy instructions that work outside the author's IDE. Demonstrate an end-to-end request, isolated users, persisted approval, and failure visibility. Define latency/cost targets from measured baseline and the intended workload; do not invent universal SLAs.</p>
 <p><strong>Common trap:</strong> calling a notebook demo production-ready because it returns an answer once.</p>
-<h3>15 — Capstone, transfer, and teaching others · 10–14 hours</h3>
+<h3 id="15--capstone-transfer-and-teaching-others--1014-hours">15 — Capstone, transfer, and teaching others · 10–14 hours</h3>
 <p><strong>Prerequisites:</strong> Modules 00–14 or equivalent demonstrated gates.</p>
 <p><strong>Lessons</strong>
 1. Write the problem statement, data boundary, and acceptance criteria.
@@ -209,7 +209,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 4. Create a clean-checkout tutorial and explain the system to a new learner.</p>
 <p><strong>Capstone default:</strong> evolve Projects B/C into a source-grounded support assistant that drafts a response, pauses for human approval, and records the approved synthetic action. A different domain may replace the dataset without removing the same behavioral requirements.</p>
 <p><strong>Gate:</strong> deliver architecture/data-flow diagrams, runnable application, reproducible environment, held-out evaluation report, restart/approval demonstration, adversarial-case report, and cost/latency measurements. Show one unfamiliar input variation without copying a worked solution. Publish known limitations instead of claiming perfect reliability.</p>
-<h2>4. Beyond the core: optional advanced tracks</h2>
+<h2 id="4-beyond-the-core-optional-advanced-tracks">4. Beyond the core: optional advanced tracks</h2>
 <table>
 <thead>
 <tr>
@@ -258,7 +258,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tr>
 </tbody>
 </table>
-<h2>5. Completion and retention</h2>
+<h2 id="5-completion-and-retention">5. Completion and retention</h2>
 <p>Use the rubric in <a href="docs/TEACHING_GUIDE.html">the teaching guide</a>. Passing a module requires the practical gate, an explanation of the design, a failure diagnosis, and an independent variation. If any is missing, remediate that skill before its dependent module.</p>
 <p>At the end of each phase, revisit earlier material without a worked solution:
 - After 04: reconstruct model → tool request → tool execution → answer.

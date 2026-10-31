@@ -18,23 +18,24 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>01.2 — Instructions define a rubric, not a guarantee</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="01.html">&larr; Previous</a> · <a href="03.html">Next &rarr;</a></nav><h1 id="012--instructions-define-a-rubric-not-a-guarantee">01.2 — Instructions define a rubric, not a guarantee</h1>
+<p><strong>In plain words:</strong> Instructions tell the model what you want, but your code must still check the answer. Here the only valid replies are <code>billing</code>, <code>technical</code> and <code>other</code>; anything else is rejected, and even a valid label can be wrong.</p>
 <p><strong>Mission/objective:</strong> Serve the <a href="../../MISSION.html">mission</a> by writing a classification contract and separating label validity from meaning. Prerequisite: <a href="01.html">01.1</a>; describe what a context window limits.</p>
-<p><strong>Sources/version:</strong> <a href="https://platform.openai.com/docs/guides/text">OpenAI text generation</a>, <a href="https://platform.openai.com/docs/models">model capabilities</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0/OpenAI SDK 3.29.0; exact resolution is in <code>uv.lock</code>. <a href="../../docs/VERIFICATION.html">Verification</a> records actual gateway-mediated classification. No paid request is needed for contract checks; observed label membership is not a general semantic-accuracy score.</p>
-<h2>Retrieve first</h2>
+<p><strong>Sources/version:</strong> <a href="https://platform.openai.com/docs/guides/text">OpenAI text generation</a>, <a href="https://platform.openai.com/docs/models">model capabilities</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0/OpenAI SDK 3.29.0; exact resolution is in <code>uv.lock</code>. <a href="../../docs/VERIFICATION.html">Verification</a> records the author's live classification run. No paid request is needed for contract checks; observed label membership is not a general semantic-accuracy score.</p>
+<h2 id="retrieve-first">Retrieve first</h2>
 <p>Where is a user's text stored before the call? Can three permitted strings still include a wrong answer? Try before opening <a href="../../solutions/01_llm_baseline.html">feedback</a>.</p>
-<h2>Mental model</h2>
+<h2 id="mental-model">Mental model</h2>
 <p>Instructions tell a model what to attempt. Application validation decides what a downstream consumer accepts. The rubric here is billing for invoices/payments/refunds, technical for software errors/access, and other otherwise. User text is data, not a new classification policy. Separating instructions from input makes the boundary visible; it does not make prompt injection impossible.</p>
 <p>The <a href="../../labs/01_llm_baseline/main.py">lab</a> uses one permitted lowercase label, no punctuation or explanation. <code>validate_label</code> strips surrounding whitespace then checks exact membership. <code>Billing</code>, a paragraph and a JSON object are deliberately rejected. That parser does not classify the original complaint: accepting <code>technical</code> for a double charge would still be semantically wrong.</p>
-<h2>Worked example and fading</h2>
+<h2 id="worked-example-and-fading">Worked example and fading</h2>
 <pre><code class="language-python">label = text.strip()
 if label not in {&quot;billing&quot;, &quot;technical&quot;, &quot;other&quot;}:
     raise ValueError(&quot;invalid classification label&quot;)
 </code></pre>
 <p>Run <code>--check</code>; its strings are authored parser fixtures, not invented model answers. Identify the exact contract violated by <code>billing because payment</code>. Then complete your own missing membership check before a caller stores the value. Do not make the consumer accept explanations just to hide a model formatting defect.</p>
 <p>Sampling parameters influence output distribution; low temperature is not a proof of correctness or repeatability. Providers and model families differ in accepted sampling controls. The direct Responses example deliberately omits temperature for broader capability compatibility. The later LangChain runtime uses temperature zero and therefore requires a model that accepts it. Never silently remove unsupported parameters and label that as identical behavior.</p>
-<h2>Failure investigation and independent variation</h2>
+<h2 id="failure-investigation-and-independent-variation">Failure investigation and independent variation</h2>
 <p>Predict the result for ambiguous input “My payment page crashes.” Specify a policy for overlapping categories before comparing live output. A completed but wrong label suggests rubric/prompt/model investigation; a timeout or 429 suggests transport/quota investigation. Attempt a changed-rubric exercise in <a href="../../exercises/01_llm_baseline.html">independent tasks</a>, then consult the <a href="../../solutions/01_llm_baseline.html">solution</a>.</p>
-<h2>Exit and review</h2>
+<h2 id="exit-and-review">Exit and review</h2>
 <p>Explain the exact accepted label set, distinguish shape from semantics, and diagnose one ambiguity without unlimited retries. Next session recall the parser from memory; Module 03 replaces strings with schemas but preserves this boundary. Reference: <a href="../../labs/01_llm_baseline/README.html">lab limits</a>. Ask whether an observed mismatch violates the rubric or the output representation.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/01_llm_baseline/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

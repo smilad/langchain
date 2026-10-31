@@ -28,4 +28,4 @@ Change to a warranty question or add one synthetic current policy. Predict which
 
 ## Exit evidence
 
-Practical behavior, your explanation, one diagnosed defect, and a fresh variation are required. Revisit the explanation and a new question later before claiming durable retention. Record peer/tutorial review only if it occurred. The user waived advisor review; do not invent sign-off or treat it as a remaining gate.
+Practical behavior, your explanation, one diagnosed defect, and a fresh variation are required. Revisit the explanation and a new question later before claiming durable retention. Record peer/tutorial review only if it occurred.

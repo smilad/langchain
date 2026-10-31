@@ -73,27 +73,6 @@ These sources inform the teaching design; none validates this particular adult L
 
 The [teaching guide](docs/TEACHING_GUIDE.md) turns these principles into concrete lesson and assessment mechanics.
 
-## Skills used and recommended
-
-Searched the skills.sh leaderboard and CLI for `superpowers`, `teaching curriculum`, and `instructional design`; inspected source content and GitHub repository metadata for the selected skills. This is a curated selection, not a claim to have found or applied every teaching skill.
-
-| Skill | Purpose in this repository | Observed popularity snapshot |
-|---|---|---|
-| [Superpowers: brainstorming](https://skills.sh/obra/superpowers/brainstorming) | Separate goals from assumptions; compare approaches and establish the curriculum before implementation. | About 388K installs; source repository about 298K stars. |
-| [Superpowers: writing-plans](https://skills.sh/obra/superpowers/writing-plans) | Map files/interfaces, decompose checkable deliverables, and define acceptance/handoff before authoring. | About 270K installs; same source repository. |
-| [Superpowers: verification-before-completion](https://skills.sh/obra/superpowers/verification-before-completion) | Evidence before completion claims; actual course/lab execution is recorded separately from provider-dependent gates. | About 235K installs; same source repository. |
-| [Matt Pocock: teach](https://skills.sh/mattpocock/skills/teach) | Mission-led workspace, curated knowledge, practice, references, and evidence-backed learning records. Markdown/Python remains the course format, not its default HTML output. | About 795K installs; source repository about 287K stars. |
-
-Popularity is a discovery signal, not proof of instructional effectiveness. The selected sources are community-authored, not official LangChain documentation. Search also surfaced narrower curriculum/cognitive-load skills with substantially lower adoption; they were not bulk-installed or treated as evidence for learning claims.
-
-**Installation is optional and was not performed.** Review the current skill content before installing into an agent environment:
-
-```bash
-npx skills add obra/superpowers --skill brainstorming writing-plans verification-before-completion
-npx skills add mattpocock/skills --skill teach
-```
-
-These commands install agent workflow instructions, not course dependencies. Do not install unrelated image/video-generation packages merely because their repository name contains “superpowers”.
 
 ## Wisdom (communities)
 
@@ -105,8 +84,7 @@ No community participation preference has been established; joining is optional.
 ## Freshness and gaps
 
 - Public official docs and individual Academy course pages were read. Some Academy catalog/collection pages returned HTTP 403; no claim is made that the complete catalog or enrolled videos were reviewed.
-- Context7 instructions were read, but its MCP tools were not exposed; direct official documentation was used. Codebase-memory MCP tools were also unavailable, and no LSP server was configured, so no graph-index update or LSP-backed reference verification is claimed.
-- Provider/budget diagnostics remain required before paid labs. The user approved bounded OpenAI verification; genuine OpenAI-Codex generation/tool access was subsequently exercised through the credential-backed gateway. Its catalog exposes no direct OpenAI or embedding models. Advisor review was explicitly waived by the user and the session-only advisor disabled; no review sign-off is claimed.
+- Provider/budget diagnostics remain required before paid labs. The author exercised live generation and tool use against one endpoint, which exposed no embedding models.
 - The locked environment is exercised on Python 3.14, including catalog operations, lexical retrieval, durable graph approval, MCP, and localhost serving. [Verification](docs/VERIFICATION.md) separates observed live successes/failures from unverified JSON-schema, embedding quality, currency cost, and hosted evaluation.
 - Source URLs and API defaults can change. Re-check before authoring a lesson and after changing a relevant dependency. Annotate the exact exercised versions in each lab README.
-- Skill install/star counts and PyPI versions above are discovery snapshots, not compatibility pins or quality guarantees.
+- PyPI versions above are discovery snapshots, not compatibility pins.

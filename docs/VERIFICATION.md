@@ -1,5 +1,7 @@
 # Course verification — 2026-10-12
 
+> **About this record.** This is the course author's execution record from 2026-10-12. Live model runs went through the author's own OpenAI-compatible endpoint, not a standard public API key. Your results can differ: use your own key and model (see the README), and treat everything here as evidence of what was run, not a guarantee.
+
 **Artifacts are implemented; all sixteen local checks and real gateway-mediated model paths have been exercised. JSON-schema compatibility, embeddings, and general model quality remain explicit limits. Advisor review was waived by the user.** Read [the course entry point](../README.md), [lesson index](../lessons/README.md), and [implementation plan](superpowers/plans/2026-10-12-langchain-learning-resources.md) for navigation and remaining evidence gates.
 
 ## Environment actually exercised

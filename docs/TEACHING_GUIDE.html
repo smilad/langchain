@@ -18,9 +18,9 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Teaching guide: detailed learning without tutorial dependence</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="teaching-guide-detailed-learning-without-tutorial-dependence">Teaching guide: detailed learning without tutorial dependence</h1>
 <p>Use with <a href="../MISSION.html">the mission</a>, <a href="../ROADMAP.html">the roadmap</a>, and <a href="../RESOURCES.html">the source guide</a>. This is an authoring/assessment specification, not evidence that a learner has completed a lesson.</p>
-<h2>1. What “highly detailed” means</h2>
+<h2 id="1-what-highly-detailed-means">1. What “highly detailed” means</h2>
 <p>A detailed lesson explains the mental model, the data/control flow, why an API is used, what it guarantees, where it fails, and how to inspect it. It does not introduce every adjacent API at once.</p>
 <p>Separate three layers:</p>
 <ul>
@@ -29,7 +29,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <li><strong>Reference:</strong> concise terminology, verified API shapes, compatibility notes, and troubleshooting that can be reused later.</li>
 </ul>
 <p>Authoring default: 15–25 minutes for the explanation/example and 30–60 minutes for a small lab segment, with larger project work split across sessions. These timings are adjustable design choices, not limits established by working-memory research.</p>
-<h2>2. Evidence-informed design</h2>
+<h2 id="2-evidence-informed-design">2. Evidence-informed design</h2>
 <table>
 <thead>
 <tr>
@@ -72,7 +72,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tbody>
 </table>
 <p>Interleave already introduced skills during later practice—for example, compare a tool result, model message, and retrieved passage. Do not mix several unfamiliar topics into the first explanation. Assess actual delayed performance rather than claiming a teaching technique worked because it was used.</p>
-<h2>3. Required lesson structure</h2>
+<h2 id="3-required-lesson-structure">3. Required lesson structure</h2>
 <p>Each lesson file must contain the following, adapted to its single objective:</p>
 <ol>
 <li><strong>Mission link and objective.</strong> State a behavior: “Diagnose a retrieval miss by inspecting the retrieved passages,” not “Understand RAG.”</li>
@@ -89,8 +89,8 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <li><strong>Review and reference.</strong> Name a later review opportunity, link relevant glossary/API entries, and invite a focused follow-up question.</li>
 </ol>
 <p>The lab README additionally states setup commands, the actual entrypoint, input cases, expected behavior, observed evidence, provider limitations, and how to remove/reset local state safely. Mark commands as planned until they have been implemented and exercised.</p>
-<h2>4. Feedback and hints</h2>
-<h3>Hint ladder</h3>
+<h2 id="4-feedback-and-hints">4. Feedback and hints</h2>
+<h3 id="hint-ladder">Hint ladder</h3>
 <p>Offer the least revealing support that permits another genuine attempt:</p>
 <ol>
 <li>Ask the learner to identify the failed stage and its expected input/output.</li>
@@ -100,12 +100,12 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <li>Provide the worked solution only after an attempt or an explicit request.</li>
 </ol>
 <p>Record support used. Completion with a supplied solution is practice, not evidence of independent implementation.</p>
-<h3>Feedback format</h3>
+<h3 id="feedback-format">Feedback format</h3>
 <p><strong>Goal → observation → cause/hypothesis → next action.</strong></p>
 <p>Example: “The answer must be supported by retrieved passages. Your response cites source P3, but the trace contains P1 and P2 only. Inspect the source-ID propagation between retrieval and response construction; regenerate only after the citations can be checked against actual evidence.”</p>
 <p>Avoid “Try again,” “Great job,” or “The model is wrong” as the complete explanation. Distinguish environmental failures, missing prerequisites, logic defects, and stochastic model errors; they need different interventions.</p>
 <p>For novices, feedback soon after an authentic attempt is the default. Delay revealing answers long enough for the learner to reason; do not claim immediate feedback is optimal in every situation.</p>
-<h2>5. Mastery rubric</h2>
+<h2 id="5-mastery-rubric">5. Mastery rubric</h2>
 <p>Use criterion-based decisions rather than averaging away a serious misconception.</p>
 <table>
 <thead>
@@ -147,7 +147,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Retention:</strong> initial mastery remains provisional until a later check. Continue unrelated work while waiting for the review, but remediate a delayed miss before major dependent project work. Do not silently label the prerequisite permanently learned.</p>
 <p><strong>Reassessment:</strong> identify the exact missed criterion, reteach only the relevant concept, then use a different equivalent task. More time/support is allowed; repeated access to the same answer is not reassessment.</p>
 <p><strong>Assessment validity:</strong> unavailable credentials, network/provider outages, or billing limits are environment blockers, not evidence of conceptual incompetence. Mark live execution unverified and record reachable conceptual/deterministic evidence separately; never replace the missing behavior with fake success.</p>
-<h2>6. Detailed lesson blueprint: supported citations in RAG</h2>
+<h2 id="6-detailed-lesson-blueprint-supported-citations-in-rag">6. Detailed lesson blueprint: supported citations in RAG</h2>
 <p>This blueprint demonstrates the authoring method; <a href="../lessons/07_rag/01.html">Module 07</a> now implements the evidence-first RAG lesson and lab. Local boundaries are exercised; generated claim support still requires the live and human-review evidence described in <a href="VERIFICATION.html">verification</a>.</p>
 <p><strong>Objective:</strong> Given a question, retrieved passages, and an answer with source IDs, determine whether each substantive claim is supported and identify an appropriate abstention.</p>
 <p><strong>Prerequisites:</strong> document metadata, retrieval inspection, schema validation, and the difference between generated text and evidence.</p>
@@ -162,7 +162,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <p><strong>Failure investigation:</strong> intentionally lose source metadata during ingestion, or pair a valid source ID with a passage that does not support the claim. Require inspection of the ingestion/retrieval/output boundary rather than prompt tweaking alone.</p>
 <p><strong>Gate:</strong> actual sources are present in retrieval, cited claims are supported, unavailable evidence produces abstention, and the learner can distinguish source-ID validity from factual support. Repeat with a different question during Module 08 evaluation.</p>
 <p><strong>Limit:</strong> automated checks can verify IDs/schema membership; semantic support requires an explicit rubric, human review, or a calibrated evaluator. A model judge is not an infallible source of truth.</p>
-<h2>7. Learning records and progress</h2>
+<h2 id="7-learning-records-and-progress">7. Learning records and progress</h2>
 <p>Use the <code>teach</code> skill's useful distinction: coverage is not learning. Create <code>learning-records/</code> lazily, only after a real learner demonstration. Do not create fictional progress records during course authoring.</p>
 <p>A record should capture:
 - The non-obvious concept, corrected misconception, or established prior knowledge.
@@ -171,7 +171,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 - A later review opportunity if retention has not yet been demonstrated.</p>
 <p>Use sequential files such as <code>0001-retrieval-is-not-groundedness.md</code>. If a later insight corrects an earlier record, mark the earlier one superseded rather than losing the history. Keep ordinary session logs separate; do not inflate them into mastery evidence.</p>
 <p>The mission changes only when the user changes the goal; a teacher's preference for a new framework is not a mission change.</p>
-<h2>8. AI-assisted teaching rules</h2>
+<h2 id="8-ai-assisted-teaching-rules">8. AI-assisted teaching rules</h2>
 <p>An assistant is a coach and source-checking partner, not a substitute for learner evidence.</p>
 <ul>
 <li>Before explanation, inspect demonstrated prerequisites and ask one focused question when a misconception is unresolved.</li>
@@ -183,7 +183,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <li>Record observed understanding and uncertainty honestly. A learner saying “got it” is useful feedback, not a durable-mastery gate.</li>
 </ul>
 <p>Suggested practice request: “Coach me through the Module 06 retrieval exercise. Ask for my prediction first, provide one hint at a time, inspect my retrieved passages, and do not reveal the solution until I attempt it. Use the module sources and report unverified assumptions.”</p>
-<h2>9. Quality checklist before publishing a module</h2>
+<h2 id="9-quality-checklist-before-publishing-a-module">9. Quality checklist before publishing a module</h2>
 <ul>
 <li>[ ] Mission, single-lesson objectives, and prerequisites are explicit.</li>
 <li>[ ] Four lessons cover the module topics without skipping its practical gate.</li>

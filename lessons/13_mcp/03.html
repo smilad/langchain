@@ -18,19 +18,20 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>13.3 — Expose only the capabilities you intend</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="02.html">&larr; Previous</a> · <a href="04.html">Next &rarr;</a></nav><h1 id="133--expose-only-the-capabilities-you-intend">13.3 — Expose only the capabilities you intend</h1>
+<p><strong>In plain words:</strong> Expose only the tools you intend. A read-only label is a hint, not a lock, so each tool still validates its inputs and has no way to write files or run commands.</p>
 <p><strong>Mission/objective:</strong> advance <a href="../../MISSION.html">the mission</a> by explaining and enforcing the local server's capability and credential boundary without claiming protocol-level security immunity.</p>
 <p><strong>Prerequisites:</strong> <a href="02.html">current adapter</a>, argument validation, and synthetic-data handling. Check: identify the trusted executable and the untrusted argument in a tool invocation.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/mcp/tools">MCP tools and metadata</a>, <a href="https://gofastmcp.com/servers/server">FastMCP server configuration</a>, and <a href="https://gofastmcp.com/clients/transports">client transports</a>, checked 2026-10-12. Python 3.14.0, LangChain 1.4.4, FastMCP 4.1.0; beta adapter behavior is version-sensitive. See <a href="../../docs/VERIFICATION.html">verification</a> for exercised evidence. The local server requires no model or production credentials.</p>
-<h2>Recall before reading</h2>
+<h2 id="recall-before-reading">Recall before reading</h2>
 <p>Does <code>readOnlyHint</code> prevent file writes? Does a connected server become trusted? Correction after an attempt: annotations are declarations, not enforcement; connection authenticates/negotiates transport, not the truth or safety of arbitrary tool behavior.</p>
-<h2>Mental model</h2>
+<h2 id="mental-model">Mental model</h2>
 <p>The server registers only <code>catalog_lookup</code> and <code>catalog_quote</code>. Their Python implementations delegate to real catalog functions with bounded identifier and strict quantity validation. They read synthetic JSON and perform integer arithmetic. No shell, arbitrary file path, purchasing operation, workflow decision, or secret-reading capability is registered.</p>
 <p><code>untrusted arguments → schema checks → domain validation → read-only catalog operation</code></p>
 <p>Both layers matter. FastMCP strict schema validation rejects mismatched types at the transport boundary; catalog validation protects direct Python callers too. The annotations document intent, while code and operating-system permissions determine actual capability.</p>
-<h2>Worked example</h2>
+<h2 id="worked-example">Worked example</h2>
 <p>Inspect <a href="../../src/langchain_learning/mcp_server.py">mcp_server.py</a>. Errors are masked before returning tool details; the lab still records success/error status. The stdio server uses the client's subprocess lifecycle and needs no network bearer token. Do not add an API key merely because some remote MCP tutorials contain one. Do not commit credentials to MCP configuration or print inherited environment variables.</p>
 <p>Run the model-free check and explain why <code>quantity=0</code> should fail while an absent item should return explicit unavailable data. Then supply the missing allowlist check in a private client copy: unexpected advertised tools must stop discovery, not silently enter the agent context.</p>
-<h2>Independent change, diagnosis, exit</h2>
+<h2 id="independent-change-diagnosis-exit">Independent change, diagnosis, exit</h2>
 <p>Follow <a href="../../exercises/13_mcp.html">the exercise</a> with a changed stock case. If an unexpected tool appears, inspect registration/discovery before adjusting the model prompt. Exit by naming a capability this server cannot perform and the code enforcing that fact. Review least privilege in <a href="../14_production/03.html">Module 14</a>; ask whether the same assumptions hold for a remote unreviewed server. <a href="../../solutions/13_mcp.html">Solutions</a> explain why read-only metadata alone is insufficient.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/13_mcp/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

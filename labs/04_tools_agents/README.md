@@ -48,7 +48,7 @@ No durable lab state is written, so restarting resets agent state. To change the
 
 ## Captured `--check` output
 
-Real, unedited stdout of `uv run python labs/04_tools_agents/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Excerpt: first 150 lines only. Compare your own run against it.
+Output of `uv run python labs/04_tools_agents/main.py --check` (no credentials, no network), re-formatted as indented JSON; local paths are replaced by `<repo>`. The middle of the output is omitted for length. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.
 
 ```text
 {
@@ -121,70 +121,7 @@ Real, unedited stdout of `uv run python labs/04_tools_agents/main.py --check` (n
 }
 {
   "normal": {
-    "found": true,
-    "item_id": "notebook",
-    "name": "Recycled paper notebook",
-    "price_cents": 1299,
-    "currency": "USD",
-    "stock": 12
-  },
-  "quote": {
-    "found": true,
-    "quoted": true,
-    "item_id": "notebook",
-    "quantity": 2,
-    "unit_price_cents": 1299,
-    "total_cents": 2598,
-    "currency": "USD",
-    "stock": 12
-  },
-  "missing": {
-    "found": false,
-    "item_id": "invisible-widget"
-  },
-  "missing_quote": {
-    "found": false,
-    "item_id": "invisible-widget",
-    "quoted": false,
-    "quantity": 1,
-    "reason": "item_unavailable"
-  },
-  "stock_boundary": {
-    "found": true,
-    "quoted": true,
-    "item_id": "desk-lamp",
-    "quantity": 3,
-    "unit_price_cents": 3499,
-    "total_cents": 10497,
-    "currency": "USD",
-    "stock": 3
-  },
-  "over_stock": {
-    "found": true,
-    "quoted": false,
-    "item_id": "desk-lamp",
-    "quantity": 4,
-    "stock": 3,
-    "reason": "insufficient_stock"
-  },
-  "sold_out": {
-    "found": true,
-    "quoted": false,
-    "item_id": "sold-out",
-    "quantity": 1,
-    "stock": 0,
-    "reason": "insufficient_stock"
-  },
-  "max_quantity": {
-    "found": true,
-    "quoted": true,
-    "item_id": "pen-set",
-    "quantity": 20,
-    "unit_price_cents": 599,
-    "total_cents": 11980,
-    "currency": "USD",
-    "stock": 40
-  },
+... (middle omitted for length) ...
   "invalid_arguments": [
     {
       "quantity": 0,
@@ -201,4 +138,28 @@ Real, unedited stdout of `uv run python labs/04_tools_agents/main.py --check` (n
     {
       "quantity": 21,
       "error_types": [
+        "less_than_equal"
+      ]
+    },
+    {
+      "quantity": true,
+      "error_types": [
+        "int_type"
+      ]
+    },
+    {
+      "quantity": 1.5,
+      "error_types": [
+        "int_type"
+      ]
+    },
+    {
+      "quantity": "2",
+      "error_types": [
+        "int_type"
+      ]
+    }
+  ],
+  "live_gate": "Not exercised: real model tool choice, final factual answer, agent step bound"
+}
 ```

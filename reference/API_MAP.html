@@ -18,9 +18,9 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>API map and tested-version baseline</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="api-map-and-tested-version-baseline">API map and tested-version baseline</h1>
 <p><code>uv.lock</code> is the dependency authority. Installed on Python <strong>3.14.0</strong>: LangChain <strong>1.4.4</strong>, langchain-core <strong>1.6.9</strong>, langchain-openai <strong>1.7.0</strong>, LangGraph <strong>1.2.14</strong>, SQLite checkpointer <strong>3.1.1</strong>, FastMCP <strong>4.1.0</strong>, Pydantic <strong>2.14.1</strong>, OpenAI SDK <strong>3.29.0</strong>. Installation alone is not runtime/capability proof; see <a href="../docs/VERIFICATION.html">the verification report</a> for exercised paths and blockers.</p>
-<h2>Framework boundaries</h2>
+<h2 id="framework-boundaries">Framework boundaries</h2>
 <table>
 <thead>
 <tr>
@@ -103,13 +103,13 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tbody>
 </table>
 <p>Provider feature support is checked per model/endpoint. The same import path does not make tool calling, structured output, content blocks, or usage metadata identical across providers.</p>
-<h2>Course domain APIs</h2>
-<h3>Catalog</h3>
+<h2 id="course-domain-apis">Course domain APIs</h2>
+<h3 id="catalog">Catalog</h3>
 <p><code>lookup_item(item_id)</code> reads the actual synthetic catalog; missing IDs are explicit. <code>quote_total(item_id, quantity)</code> validates stock/quantity and computes integer cents. <code>catalog_tools()</code> exposes those real functions as LangChain tools. <code>build_catalog_agent(checkpointer=...)</code> requires live provider consent/configuration.</p>
-<h3>Retrieval and generated answers</h3>
+<h3 id="retrieval-and-generated-answers">Retrieval and generated answers</h3>
 <p><code>PolicyIndex(strategy="lexical").search(question, user_id, k=3)</code> returns authorized current <code>Document</code> values. Lexical retrieval is a genuine local baseline, not a substitute claiming learned semantic capabilities. The semantic strategy calls the configured embedding provider; it has no silent lexical fallback.</p>
 <p><code>rag.answer(question, user_id, strategy="lexical", k=3)</code> returns <code>GroundedAnswer(answer, source_ids, abstained)</code>. Inspect selected evidence independently. Schema/source-membership validation does not establish that every claim is supported.</p>
-<h3>Persistent review</h3>
+<h3 id="persistent-review">Persistent review</h3>
 <pre><code class="language-python">from langchain_learning.runtime import state_dir
 from langchain_learning.workflow import SupportWorkflow
 
@@ -121,7 +121,7 @@ with SupportWorkflow(folder / &quot;checkpoints.sqlite&quot;, folder / &quot;act
     completed = flow.decide(&quot;alice&quot;, &quot;reference-thread&quot;, &quot;approve&quot;)
 </code></pre>
 <p>The example records a synthetic local action after approval. The user/thread ownership binding survives restart. Repeat matching decisions reuse the result; conflicting decisions are rejected. Do not describe this as exactly-once delivery to an external service.</p>
-<h2>Navigation and modes</h2>
+<h2 id="navigation-and-modes">Navigation and modes</h2>
 <pre><code class="language-bash">uv run langchain-learning list
 uv run langchain-learning check
 uv run langchain-learning run 06 --check

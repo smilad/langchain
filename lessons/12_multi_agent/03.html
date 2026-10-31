@@ -18,20 +18,21 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>12.3 — Context contracts are executable boundaries</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="02.html">&larr; Previous</a> · <a href="04.html">Next &rarr;</a></nav><h1 id="123--context-contracts-are-executable-boundaries">12.3 — Context contracts are executable boundaries</h1>
+<p><strong>In plain words:</strong> A handoff between agents has three contracts: what the specialist may see, what its output must look like, and how many calls it gets. All three are checked in code.</p>
 <p><strong>Mission/objective:</strong> advance <a href="../../MISSION.html">the mission</a> by rejecting an invalid specialist handoff and explaining why context ownership and termination belong in code.</p>
 <p><strong>Prerequisites:</strong> <a href="02.html">specialist pattern</a>, structured outputs, and filtered retrieval. Check: identify the difference between schema validity and authorized source membership.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/multi-agent/subagents#context-engineering">context engineering for subagents</a> and <a href="https://docs.langchain.com/oss/python/langchain/middleware/built-in#model-call-limit">call-limit middleware</a>, checked 2026-10-12. Installed baseline Python 3.14.0, LangChain 1.4.4, LangChain OpenAI 1.7.0; <a href="../../uv.lock">uv.lock</a> defines exact dependencies and <a href="../../docs/VERIFICATION.html">verification</a> separates local evidence from unavailable live proof. Real model capability and consent remain prerequisites.</p>
-<h2>Recall</h2>
+<h2 id="recall">Recall</h2>
 <p>Who owns checkpoint state? Does another model inherit access because it received a question? After attempting: persistence belongs to the workflow/checkpointer; a question contains no authority.</p>
-<h2>Mental model</h2>
+<h2 id="mental-model">Mental model</h2>
 <p>A handoff has three separate contracts: input scope, output meaning, and execution budget. The application fixes <code>user_id</code> and retrieved documents. The specialist receives only the question; it cannot query a broader identity. Its output has <code>answer</code>, <code>source_ids</code>, and <code>abstained</code>. Membership validation rejects citations outside the selected evidence. A non-abstaining answer requires citations, while an abstention must not imply supporting sources.</p>
 <p>These checks do <strong>not</strong> prove every cited claim is supported. Semantic review remains a separate gate. Also, a source can contain malicious instructions; retaining provenance is useful but does not make its prose trusted instructions.</p>
-<h2>Worked boundary</h2>
+<h2 id="worked-boundary">Worked boundary</h2>
 <p><code>validate_handoff(proposal, permitted_ids)</code> runs both after the specialist and after the coordinator. Model-call middleware permits four drafter calls; the coordinator gets three. Tool-call limits allow two retrieval calls and one delegation. Graph recursion is separately capped at twelve per agent. Provider SDK retries can add physical network requests, so logical-call budgets are not a precise bill.</p>
 <p>Run <code>uv run python labs/12_multi_agent/main.py --live --trials 1 --fail-specialist</code>. After a real specialist generates a result, the lab deliberately replaces its citations with <code>not-retrieved</code>. This is a labeled boundary fault injection, <strong>not</strong> evidence that the model naturally produced that error. The validator stops propagation; no automatic fallback drafts a replacement.</p>
-<h2>Guided completion and variation</h2>
+<h2 id="guided-completion-and-variation">Guided completion and variation</h2>
 <p>Predict the validator outcome before opening <a href="../../solutions/12_multi_agent.html">the solution</a>. Remove just the membership check in a private copy and explain the newly possible failure. Independently design a typed handoff that preserves conflicting-evidence status.</p>
-<h2>Exit and review</h2>
+<h2 id="exit-and-review">Exit and review</h2>
 <p>Show the fault's error category and call counts without printing secrets. Explain why rejecting a handoff is safer than silently trusting the coordinator to repair it. Review the same boundary when MCP tools enter the context in <a href="../13_mcp/03.html">Module 13</a>; consult <a href="../../reference/TROUBLESHOOTING.html">troubleshooting</a> for transport versus logic failures.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/12_multi_agent/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

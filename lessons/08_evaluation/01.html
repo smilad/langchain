@@ -18,34 +18,34 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>08.1 — Read traces as causal evidence</h1>
-<h2>Objective and prerequisites</h2>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../07_rag/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="081--read-traces-as-causal-evidence">08.1 — Read traces as causal evidence</h1>
+<p><strong>In plain words:</strong> A trace shows what happened at each step: retrieval, model call, parsing. When an answer is wrong, find the earliest step that failed instead of editing the prompt.</p>
+<h2 id="objective-and-prerequisites">Objective and prerequisites</h2>
 <p><a href="../../MISSION.html">course mission</a>: Locate retrieval, model, tool and parsing failures without mistaking a final answer for a full trace.</p>
 <p>Prerequisite check: Project A tool messages and Project B evidence inspection.</p>
-<h2>Sources and execution status</h2>
+<h2 id="sources-and-execution-status">Sources and execution status</h2>
 <p>Primary: <a href="https://docs.langchain.com/langsmith/evaluate-rag-tutorial">RAG evaluation tutorial</a>. Documentation checked 2026-10-12. Installed baseline: Python 3.14.0, LangChain 1.4.4, core 1.6.9, OpenAI integration 1.7.0, Pydantic 2.14.1. Installation is not execution evidence; consult <a href="../../docs/VERIFICATION.html">verification</a>. Local lexical/check paths need no credentials. Live paths require explicit consent and paid provider access; semantic search additionally requires an embedding model, generation requires structured-output capability, and agentic comparison requires tool calling.</p>
-<h2>Recall before reading</h2>
+<h2 id="recall-before-reading">Recall before reading</h2>
 <p>Which event proves Python executed a tool? Can token count alone explain a bad answer? Attempt both questions before consulting the mental model; compare your reasoning afterward rather than copying definitions.</p>
-<h2>Mental model</h2>
+<h2 id="mental-model">Mental model</h2>
 <p>A trace is the execution structure behind an output: retrieval precedes generation in two-step RAG, while agentic RAG alternates model calls and tool results. A final fluent answer hides this structure. Start with the question, caller identity, strategy and corpus fingerprint, then inspect actual selected chunks. Next inspect generated output, parsing/citation validation and timings. Only then decide whether the defect belongs to retrieval, generation or an execution boundary.</p>
 <p>The course produces local JSON telemetry without requiring a hosted account. Two-step traces include retrieval_seconds, generation_seconds, total_seconds, model_calls and reported usage. Agentic traces additionally list each query and retrieved chunk IDs. Evaluation rows retain exact evidence even if generation subsequently fails. Error types are explicit without publishing provider configuration or raw secret-bearing exceptions. A trace of an abstention with zero model calls is deterministic evidence, not a completed provider demonstration.</p>
 <p>Hosted LangSmith tracing can give nested run trees and model/tool details, but it can also upload question and evidence content. It is optional: decide whether the synthetic corpus may be uploaded before setting tracing variables, and never reuse that decision for private material. Local elapsed time includes process/index/provider work; it is not isolated model server latency. Provider usage may be absent and must remain unknown rather than zero. Trace IDs and response IDs help correlate actual runs; do not invent them.</p>
 <p>Read one failure backwards: missing expected evidence is a retrieval miss; valid retrieval followed by an unsupported claim is a semantic generation defect; invalid citations are output validation failures. Record the earliest violated contract and avoid repeatedly tweaking prompts when the correct passage was never selected.</p>
-<h2>Data/control flow</h2>
+<h2 id="datacontrol-flow">Data/control flow</h2>
 <p><code>Retrieval run → generation child → structured parser → membership validation; agentic runs also contain tool children</code></p>
-<h2>Worked example</h2>
-<p>Run from the repository root after <code>uv sync --locked</code>. This is implemented code/command guidance, <strong>not an observed output</strong>:</p>
-<pre><code class="language-python"># Print actual per-case evidence and local telemetry:
-# uv run python labs/08_evaluation/main.py --check
-# uv run python labs/07_rag/main.py --live --compare-agentic
+<h2 id="worked-example">Worked example</h2>
+<p>Run from the repository root after <code>uv sync --locked</code>.</p>
+<pre><code class="language-sh"># Print actual per-case evidence and local telemetry:
+uv run python labs/08_evaluation/main.py --check
+uv run python labs/07_rag/main.py --live --compare-agentic
 # No provider use is implied by --check output.
 </code></pre>
 <p>Use the <a href="../../labs/08_evaluation/README.html">module lab</a> to inspect actual intermediate values. Predict the result first and preserve any disagreement as a diagnostic clue.</p>
-<h2>Guided completion and failure investigation</h2>
+<h2 id="guided-completion-and-failure-investigation">Guided completion and failure investigation</h2>
 <p>Choose a row with expected_evidence_missing. Identify what you can conclude before looking at any generated answer, and what remains semantically unverified.</p>
-<p>Hint ladder: first name the failed stage and expected input/output; then inspect its evidence or metadata; only after your attempt read the <a href="../../solutions/08_evaluation.html">reasoned solution</a>. Repair the boundary rather than changing unrelated prompts.</p>
-<h2>Independent transfer and exit check</h2>
+<h2 id="independent-transfer-and-exit-check">Independent transfer and exit check</h2>
 <p>Take a changed constraint from the <a href="../../exercises/08_evaluation.html">exercise</a> without copying the worked example. Trace a genuine error to its stage and distinguish absent usage from reported zero usage. Explain the upload boundary for hosted tracing.</p>
-<h2>Delayed review</h2>
-<p>Revisit trace diagnosis in Module 14 upstream failure handling. Revisit next session and about a week later with a fresh question; those intervals are a practice policy, not evidence of mastery. Use the <a href="../../reference/GLOSSARY.html">glossary</a> and <a href="../../reference/API_MAP.html">API map</a> for focused lookup. Record only actual learner evidence, never progress inferred from reading this lesson.</p>
+<h2 id="delayed-review">Delayed review</h2>
+<p>Revisit trace diagnosis in Module 14 upstream failure handling. See the <a href="../../reference/GLOSSARY.html">glossary</a> and <a href="../../reference/API_MAP.html">API map</a>.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/08_evaluation/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

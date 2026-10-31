@@ -18,16 +18,17 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>09.3 — Reducers define how partial updates become state</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="02.html">&larr; Previous</a> · <a href="04.html">Next &rarr;</a></nav><h1 id="093--reducers-define-how-partial-updates-become-state">09.3 — Reducers define how partial updates become state</h1>
+<p><strong>In plain words:</strong> A reducer says how updates to the same field are combined. Without one, two parallel steps that write the same field cause an error. A list with an add reducer appends, and returning an empty list does not reset it.</p>
 <p><a href="../../MISSION.html">Mission</a>. <strong>Objective:</strong> predict accumulated events and repair a real parallel-write conflict.</p>
-<h2>Prerequisites and recall</h2>
+<h2 id="prerequisites-and-recall">Prerequisites and recall</h2>
 <p><a href="01.html">Nodes</a> and <a href="02.html">routing</a>. What does a node return? Which two nodes run after a supported classification? Does an empty list always clear a list channel? Answer before reviewing the source.</p>
-<h2>Source and versions</h2>
+<h2 id="source-and-versions">Source and versions</h2>
 <p><a href="https://docs.langchain.com/oss/python/langgraph/graph-api#reducers">Reducers</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangGraph 1.2.14, LangChain 1.4.4; <a href="../../uv.lock">lockfile</a>, <a href="../../docs/VERIFICATION.html">exercised evidence</a>. This lesson is local; provider configuration is irrelevant to reducer correctness.</p>
-<h2>Mental model</h2>
+<h2 id="mental-model">Mental model</h2>
 <p>Each channel has its own update rule. Without an explicit reducer, a normal sequential update replaces its value. <code>Annotated[list[str], operator.add]</code> instead combines the old list with the new list. The reducer receives old accumulated state as the left argument and the node's partial update as the right argument.</p>
 <p>For the lab's events channel, classify returns one classification event. Retrieve returns one retrieval event; constraints returns one constraint event. The draft adds another event. No node should return the complete accumulated event list: doing so would append prior events again.</p>
-<h2>Worked example</h2>
+<h2 id="worked-example">Worked example</h2>
 <p>Inspect <code>RequestState.events</code> in <a href="../../labs/09_graph_workflows/main.py">the lab</a>:</p>
 <pre><code class="language-python">from operator import add
 from typing import Annotated
@@ -36,9 +37,9 @@ from typing import Annotated
 </code></pre>
 <p>Run <code>uv run python labs/09_graph_workflows/main.py --check</code>. The check requires both parallel contributions to survive. It then compiles an equivalent graph with plain <code>events: list[str]</code>; supported execution must raise <code>InvalidUpdateError</code> because concurrent writes have no merge rule. These are actual graph executions, not a simulated exception or import check.</p>
 <p>Order within concurrent branches is not a substitute for semantic correctness. Assert that both contributions exist; do not infer business priority from which appeared first. Addition is associative, but list concatenation is not commutative. If ordering matters, use explicit sequencing or normalize records by stable identity after merging.</p>
-<h2>Guided repair and independent variation</h2>
+<h2 id="guided-repair-and-independent-variation">Guided repair and independent variation</h2>
 <p>Before looking at the schema, predict the event count. Remove the reducer in an exercise copy and identify the colliding key from the error. Restore a reducer compatible with the intended meaning. In <a href="../../exercises/09_graph_workflows.html">the exercise</a>, add a second read-only constraint contribution and explain why evidence itself is written by only one branch.</p>
-<h2>Exit and review</h2>
+<h2 id="exit-and-review">Exit and review</h2>
 <p>Explain replacement versus accumulation, show the real conflict, and diagnose duplicated history caused by full-state returns. Returning <code>[]</code> to an additive channel preserves previous values; it does not reset them. Revisit this rule when Module 10 replays nodes and distinguish reducer duplication from duplicated external effects. <a href="../../solutions/09_graph_workflows.html">Solutions</a>.</p>
 <p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: when would set-like merging be more appropriate than event concatenation?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/09_graph_workflows/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

@@ -18,21 +18,19 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Troubleshooting the course</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="troubleshooting-the-course">Troubleshooting the course</h1>
 <p>Start with the failing boundary and observed values, not random prompt changes. Use <a href="API_MAP.html">the API map</a> to locate a component and <a href="../docs/VERIFICATION.html">the verification report</a> to separate exercised paths from unverified live behavior.</p>
-<h2>Observed environment issues during implementation</h2>
-<h3>Package download host does not resolve</h3>
+<h2 id="observed-environment-issues-during-implementation">Observed environment issues during implementation</h2>
+<h3 id="package-download-host-does-not-resolve">Package download host does not resolve</h3>
 <p>The initial PyPI-backed <code>uv lock</code> timed out fetching wheel metadata from <code>files.pythonhosted.org</code>; an IPv4 header diagnostic also timed out during DNS resolution. This was a connectivity problem, not evidence of an incompatible LangChain dependency graph.</p>
-<p>The Tsinghua TUNA mirror was reachable. Resolution and installation succeeded there; <code>pyproject.toml</code> declares that default index and <code>uv.lock</code> records its artifact URLs and hashes. Normal course commands therefore use <code>uv sync --locked</code> without silently changing indexes on every run.</p>
+<p>The Tsinghua mirror was reachable from the author's network. Resolution and installation succeeded there; <code>pyproject.toml</code> declares that default index and <code>uv.lock</code> records its artifact URLs and hashes. Normal course commands therefore use <code>uv sync --locked</code> without silently changing indexes on every run.</p>
 <p>If your network can use PyPI and you prefer it, deliberately re-resolve with your chosen index configuration, review the resulting versions/hash sources, then re-exercise the course. Do not hand-edit lockfile URLs or disable certificate verification. Choosing a new index can change the environment; it is not a pass/fail workaround for application tests.</p>
-<h3>Provider configuration is absent</h3>
+<h3 id="provider-configuration-is-absent">Provider configuration is absent</h3>
 <p>No OpenAI, Anthropic, Google, or LangSmith credential was configured in the implementation session; no model ID was selected and no local Ollama executable was installed. Model-free local paths remain meaningful: schemas, catalog tools, retrieval permissions, actual graphs, persistence, local action records, HTTP, and MCP can be investigated without claiming generated-model evidence.</p>
 <p>For a live run, configure <code>.env</code> from <code>.env.example</code>, choose an accessible model and budget, and set <code>COURSE_ALLOW_LIVE=1</code> only after consent. Semantic retrieval additionally needs <code>COURSE_EMBEDDING_MODEL</code>. <code>--live</code> must fail explicitly if required configuration is missing; never add a fake answer or silent fallback to make it appear successful.</p>
-<h3>Gateway generation works but JSON-schema output fails</h3>
-<p>The actual OpenAI-Codex gateway returned natural text or an invalid enum on JSON-schema requests; tool/function-calling paths succeeded. A credential and successful text response do not establish every capability. Keep validation strict and select a compatible endpoint/model privately; do not repair output into fake success. SDK parsing may raise before an <code>include_raw</code> envelope exists. The HTTP service reports generated-output failures as <code>502 / ModelOutputError</code>, not malformed caller input. Embeddings separately need a real accessible embedding model.</p>
-<h3>Advisor review is waived</h3>
-<p>The user explicitly skipped advisor review and disabled its session-only setting. No sign-off is claimed and no replacement review is required.</p>
-<h2>Boundary-oriented diagnosis for learner experiments</h2>
+<h3 id="generation-works-but-json-schema-output-fails">Generation works but JSON-schema output fails</h3>
+<p>The endpoint used during authoring returned natural text or an invalid enum on JSON-schema requests; tool/function-calling paths succeeded. A credential and successful text response do not establish every capability. Keep validation strict and select a compatible endpoint/model privately; do not repair output into fake success. SDK parsing may raise before an <code>include_raw</code> envelope exists. The HTTP service reports generated-output failures as <code>502 / ModelOutputError</code>, not malformed caller input. Embeddings separately need a real accessible embedding model.</p>
+<h2 id="boundary-oriented-diagnosis-for-learner-experiments">Boundary-oriented diagnosis for learner experiments</h2>
 <p>The following are investigative procedures, not claims that every listed failure occurred during implementation.</p>
 <table>
 <thead>
@@ -120,6 +118,6 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tr>
 </tbody>
 </table>
-<h2>Safe resets</h2>
+<h2 id="safe-resets">Safe resets</h2>
 <p>Use a fresh <code>COURSE_STATE_DIR</code> for disposable experiments. Stop the server/workflow before removing any local database directory. Keep synthetic fixture sources separate from generated state. Do not delete a persistence directory to hide a failed replay/ownership investigation; capture evidence and diagnose the cause first.</p>
 <p><strong>Sources:</strong> <a href="https://docs.astral.sh/uv/concepts/indexes/">uv indexes</a>, <a href="https://docs.langchain.com/oss/python/langgraph/interrupts">interrupts</a>, <a href="https://docs.langchain.com/langsmith/evaluation-concepts">evaluation concepts</a>.</p></main></body></html>

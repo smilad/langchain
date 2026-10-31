@@ -18,11 +18,11 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 00 solutions — reasoning before repairs</h1>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1 id="module-00-solutions--reasoning-before-repairs">Module 00 solutions — reasoning before repairs</h1>
 <p>Use after a genuine <a href="../exercises/00_setup.html">diagnostic attempt</a>, not as evidence of independent mastery. The complete executable diagnostic is <a href="../labs/00_setup/main.py">main.py</a>. Runtime proof is recorded separately in <a href="../docs/VERIFICATION.html">verification</a>.</p>
-<h2>Recall corrections</h2>
+<h2 id="recall-corrections">Recall corrections</h2>
 <p>A checkout directory name is not necessarily an import name. Python's selected environment/import paths determine where <code>langchain</code> resolves. Metadata permits dependency ranges; the lock records exact versions/hashes; installed files are what your interpreter actually executes. An annotation is documentation/static-tool input, not automatic runtime validation. <code>async def</code> does not make a blocking function cooperative.</p>
-<h2>A changed typed JSON boundary</h2>
+<h2 id="a-changed-typed-json-boundary">A changed typed JSON boundary</h2>
 <p>This illustrative complete variation can be copied into your own scratch file after an attempt; it is not reported as executed course evidence:</p>
 <pre><code class="language-python">import json
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
@@ -53,12 +53,12 @@ for raw in ['{&quot;ticket_id&quot;:&quot;T-01&quot;,&quot;priority&quot;:2}',
 </code></pre>
 <p>The decoder must run before model validation because the schema expects a Python value. Missing ID and priority 4 fail different field rules; valid syntax alone proves neither. Strict mode deliberately rejects string priority. Returning a default Ticket in <code>except</code> would erase the failure and mislead consumers.</p>
 <p>Environment reporting should be <code>bool(os.environ.get(name))</code>, never the value. A harmless synthetic variable suffices to prove the boundary. The lab's preflight reports presence and import origin; it does not authenticate with a provider.</p>
-<h2>Diagnosis feedback</h2>
+<h2 id="diagnosis-feedback">Diagnosis feedback</h2>
 <ul>
 <li><strong>Goal:</strong> reproduce the environment. <strong>Observation:</strong> IDE import fails but <code>uv run</code> succeeds. <strong>Hypothesis:</strong> interpreter mismatch. <strong>Next action:</strong> compare <code>sys.executable</code>/preflight paths and select the project interpreter before reinstalling anything.</li>
 <li><strong>Goal:</strong> accept positive quantity. <strong>Observation:</strong> validation points to <code>quantity</code>. <strong>Cause:</strong> declared lower bound. <strong>Next action:</strong> follow <code>main → read_request</code>; repair input or revise the legitimate contract, not dependency installation.</li>
 <li><strong>Goal:</strong> cooperative concurrency. <strong>Observation:</strong> tasks run one after another without an await. <strong>Cause:</strong> no yielding point. <strong>Next action:</strong> inspect the actual blocking operation; choose an async client or explicit offload where appropriate.</li>
 </ul>
 <p>HTTP timeout means no timely response, not proof that the server made no change. HTTP 429 means rate/quota pressure; a completed wrong label means application/model semantics. These demand different repairs.</p>
-<h2>Gate and remediation</h2>
+<h2 id="gate-and-remediation">Gate and remediation</h2>
 <p>Demonstrate changed schemas, invalid cases, safe environment reporting and interpreter ownership. Solution-assisted execution is practice, not independent evidence. A new Python learner may need much more than 3–5 hours: use functions/dictionaries → JSON/exceptions → environments → schema → HTTP → async as a remediation sequence, with a fresh reassessment after each gap. Delayed review should ask a new domain/constraint, not repeat the same source. No credential is needed until Module 01's explicitly approved live gate.</p></main></body></html>

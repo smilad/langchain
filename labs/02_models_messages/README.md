@@ -24,39 +24,15 @@ Streaming text goes to stderr as chunks arrive; structured complete-response ins
 Batch responses retain input order, not completion order. Only whole-batch duration is measured; per-response duration is null. Client-side batch is not a provider Batch API or cost discount. Async awaits native model I/O; it does not make CPU-heavy Python nonblocking. Report missing usage as unavailable, especially with custom compatible endpoints. Common interfaces do not imply identical multimodal or provider-specific fields.
 
 ## Evidence and state
-Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0. [Verification](../../docs/VERIFICATION.md) records actual gateway-mediated invoke, stream aggregation, async, and batch. The gateway buffers streams; real-time delivery and interactive input remain unverified. Exact versions live in `uv.lock` and actual preflight. No state is written, so there is nothing to reset. Configure compatible private access/consent; disable/review hosted tracing before sending private content.
+Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0. [Verification](../../docs/VERIFICATION.md) records the author's live invoke, stream aggregation, async, and batch runs. Real-time streaming delivery and interactive input were not verified. Exact versions live in `uv.lock` and actual preflight. No state is written, so there is nothing to reset. Configure compatible private access/consent; disable/review hosted tracing before sending private content.
 
 Sources checked 2026-10-12: [models](https://docs.langchain.com/oss/python/langchain/models), [messages](https://docs.langchain.com/oss/python/langchain/messages), [ChatOpenAI](https://docs.langchain.com/oss/python/integrations/chat/openai).
 
 ## Captured `--check` output
 
-Real, unedited stdout of `uv run python labs/02_models_messages/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
+Output of `uv run python labs/02_models_messages/main.py --check` (no credentials, no network), re-formatted as indented JSON; local paths are replaced by `<repo>`. The environment `preflight` block is omitted here; Module 00 shows it in full. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.
 
 ```json
-{
-  "preflight": {
-    "python": "3.14.0",
-    "interpreter": "<repo>/.venv/bin/python",
-    "packages": {
-      "langchain": "1.4.4",
-      "langchain-core": "1.6.9",
-      "langchain-openai": "1.7.0",
-      "langgraph": "1.2.14",
-      "langgraph-checkpoint-sqlite": "3.1.1",
-      "fastmcp": "4.1.0",
-      "pydantic": "2.14.1"
-    },
-    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
-    "configured": {
-      "api_key": false,
-      "model": false,
-      "live_consent": false,
-      "custom_endpoint": false,
-      "hosted_tracing": false
-    },
-    "live_request_sent": false
-  }
-}
 {
   "rendered_messages": [
     {

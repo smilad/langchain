@@ -18,12 +18,13 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>03.4 — Stop impossible extraction instead of retrying it into fiction</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="03.html">&larr; Previous</a> · <a href="../04_tools_agents/01.html">Next &rarr;</a></nav><h1 id="034--stop-impossible-extraction-instead-of-retrying-it-into-fiction">03.4 — Stop impossible extraction instead of retrying it into fiction</h1>
+<p><strong>In plain words:</strong> Sometimes the right answer is "unknown" or "contradictory". Retrying cannot create information that is not in the input, so stop and report the failure instead of forcing a made-up answer.</p>
 <p><strong>Mission/objective:</strong> Serve the <a href="../../MISSION.html">mission</a> by diagnosing unsupported capability, malformed shape and semantic impossibility separately, then returning an explicit bounded outcome. Prerequisites: <a href="01.html">03.1</a>–<a href="03.html">03.3</a>; draw the input→prompt→model→parse→source-validation path.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/structured-output#error-handling">structured-output error handling</a>, <a href="https://platform.openai.com/docs/guides/structured-outputs">OpenAI structured outputs</a>, <a href="https://docs.pydantic.dev/latest/concepts/validators/">Pydantic validators</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0, LangChain 1.4.4/langchain-openai 1.7.0, Pydantic 2.14.1. Exact resolution is in <code>uv.lock</code>; <a href="../../docs/VERIFICATION.html">verification</a> records successful real function-calling boundary cases and rejected JSON-schema output. Compatible approved access remains a prerequisite, not simulated success.</p>
-<h2>Recall first</h2>
+<h2 id="recall-first">Recall first</h2>
 <p>Which error belongs to prompt rendering? Does a provider-native schema prove the quoted facts exist? Answer before <a href="../../solutions/03_structured_output.html">feedback</a>.</p>
-<h2>Mental model and failure ladder</h2>
+<h2 id="mental-model-and-failure-ladder">Mental model and failure ladder</h2>
 <p>The <a href="../../labs/03_structured_output/main.py">lab</a> defines four synthetic inputs: complete order, missing order, two contradictory identifiers and irrelevant poetry request. Unknown is a valid domain outcome, not broken formatting. Contradictory deliberately forbids choosing a convenient identifier; irrelevant must not acquire a fabricated support category.</p>
 <table>
 <thead>
@@ -59,11 +60,11 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </tr>
 </tbody>
 </table>
-<h2>Worked example and guided decision</h2>
+<h2 id="worked-example-and-guided-decision">Worked example and guided decision</h2>
 <p>Check mode supplies an authored supported record to a source without its identifier and then to the conflicting source. The guard raises actual ValueError in both cases. The printed report is a caught diagnostic, not an invented model outcome. In live model mode, <code>parsing_error</code> or missing <code>parsed</code> stops consumer delivery. Agent tool strategy disables automatic structured-output retries and uses a recursion bound; provider transport still has one configured retry.</p>
 <p>Complete this decision in your own variation: if no order identifier exists, repeatedly requesting a schema-valid ID is ___ because ___. A correction request may repair a formatting mistake, but cannot add absent evidence. Refusal or incomplete responses should be inspected and treated as explicit failures, never mapped to a successful support record.</p>
-<h2>Independent investigation and exit</h2>
+<h2 id="independent-investigation-and-exit">Independent investigation and exit</h2>
 <p>Run each local boundary and predict its stage before execution. If access permits, choose the four live cases one at a time; review category/relevance yourself and record actual envelopes. Try an unfamiliar missing-data request from the <a href="../../exercises/03_structured_output.html">exercise</a>, not a copy of the worked input. Exit with a defensible record/error/abstention policy, evidence against invention and a diagnosis for capability mismatch.</p>
-<h2>Delayed review and reference</h2>
+<h2 id="delayed-review-and-reference">Delayed review and reference</h2>
 <p>Next week recreate the failure table using a new domain; in Module 07 evaluate grounded abstention and in Module 08 separate failure categories. Consult <a href="../../labs/03_structured_output/README.html">runbook</a> and <a href="../../reference/TROUBLESHOOTING.html">troubleshooting</a>. A focused follow-up asks what new information a retry could actually obtain.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/03_structured_output/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

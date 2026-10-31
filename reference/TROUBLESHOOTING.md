@@ -8,7 +8,7 @@ Start with the failing boundary and observed values, not random prompt changes. 
 
 The initial PyPI-backed `uv lock` timed out fetching wheel metadata from `files.pythonhosted.org`; an IPv4 header diagnostic also timed out during DNS resolution. This was a connectivity problem, not evidence of an incompatible LangChain dependency graph.
 
-The Tsinghua TUNA mirror was reachable. Resolution and installation succeeded there; `pyproject.toml` declares that default index and `uv.lock` records its artifact URLs and hashes. Normal course commands therefore use `uv sync --locked` without silently changing indexes on every run.
+The Tsinghua mirror was reachable from the author's network. Resolution and installation succeeded there; `pyproject.toml` declares that default index and `uv.lock` records its artifact URLs and hashes. Normal course commands therefore use `uv sync --locked` without silently changing indexes on every run.
 
 If your network can use PyPI and you prefer it, deliberately re-resolve with your chosen index configuration, review the resulting versions/hash sources, then re-exercise the course. Do not hand-edit lockfile URLs or disable certificate verification. Choosing a new index can change the environment; it is not a pass/fail workaround for application tests.
 
@@ -18,13 +18,9 @@ No OpenAI, Anthropic, Google, or LangSmith credential was configured in the impl
 
 For a live run, configure `.env` from `.env.example`, choose an accessible model and budget, and set `COURSE_ALLOW_LIVE=1` only after consent. Semantic retrieval additionally needs `COURSE_EMBEDDING_MODEL`. `--live` must fail explicitly if required configuration is missing; never add a fake answer or silent fallback to make it appear successful.
 
-### Gateway generation works but JSON-schema output fails
+### Generation works but JSON-schema output fails
 
-The actual OpenAI-Codex gateway returned natural text or an invalid enum on JSON-schema requests; tool/function-calling paths succeeded. A credential and successful text response do not establish every capability. Keep validation strict and select a compatible endpoint/model privately; do not repair output into fake success. SDK parsing may raise before an `include_raw` envelope exists. The HTTP service reports generated-output failures as `502 / ModelOutputError`, not malformed caller input. Embeddings separately need a real accessible embedding model.
-
-### Advisor review is waived
-
-The user explicitly skipped advisor review and disabled its session-only setting. No sign-off is claimed and no replacement review is required.
+The endpoint used during authoring returned natural text or an invalid enum on JSON-schema requests; tool/function-calling paths succeeded. A credential and successful text response do not establish every capability. Keep validation strict and select a compatible endpoint/model privately; do not repair output into fake success. SDK parsing may raise before an `include_raw` envelope exists. The HTTP service reports generated-output failures as `502 / ModelOutputError`, not malformed caller input. Embeddings separately need a real accessible embedding model.
 
 ## Boundary-oriented diagnosis for learner experiments
 

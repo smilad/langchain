@@ -18,33 +18,33 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>06.1 — Load documents without losing their origin</h1>
-<h2>Objective and prerequisites</h2>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../05_memory_context/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="061--load-documents-without-losing-their-origin">06.1 — Load documents without losing their origin</h1>
+<p><strong>In plain words:</strong> Retrieval starts by loading documents with their source, version, audience and trust level. Only current documents the caller is allowed to see become candidates, and you filter before searching.</p>
+<h2 id="objective-and-prerequisites">Objective and prerequisites</h2>
 <p><a href="../../MISSION.html">course mission</a>: Build a Document whose text and provenance can be inspected independently.</p>
 <p>Prerequisite check: Module 03 schema validation: explain why a typed object can still contain a false fact.</p>
-<h2>Sources and execution status</h2>
+<h2 id="sources-and-execution-status">Sources and execution status</h2>
 <p>Primary: <a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">knowledge-base guide</a>. Documentation checked 2026-10-12. Installed baseline: Python 3.14.0, LangChain 1.4.4, core 1.6.9, OpenAI integration 1.7.0, Pydantic 2.14.1. Installation is not execution evidence; consult <a href="../../docs/VERIFICATION.html">verification</a>. Local lexical/check paths need no credentials. Live paths require explicit consent and paid provider access; semantic search additionally requires an embedding model, generation requires structured-output capability, and agentic comparison requires tool calling.</p>
-<h2>Recall before reading</h2>
+<h2 id="recall-before-reading">Recall before reading</h2>
 <p>If a loader returns text only, which two fields are lost? Does loading a source make it trustworthy? Attempt both questions before consulting the mental model; compare your reasoning afterward rather than copying definitions.</p>
-<h2>Mental model</h2>
+<h2 id="mental-model">Mental model</h2>
 <p>A loader converts an external representation into text plus metadata; it does not certify the text. Our loader reads JSON policy records instead of adding a PDF dependency for a corpus that is already structured. A LangChain Document carries page_content, metadata and an optional id. Keep source_id separate from chunk_id: RETURN names the policy, while RETURN:v2:0 locates one passage in one revision. Provenance identifies a synthetic author or imported attachment; audience controls eligibility; trust distinguishes approved policy from an injection exercise.</p>
 <p>The source directory deliberately includes RETURN v1 and v2. Retaining history for inspection is not permission to answer from history. PolicyIndex.documents includes ingested history, but authorized_documents supplies only current records in the caller's audience. Schema validation rejects missing metadata, invalid audiences and duplicate current source IDs. It does not decide whether two differently named current policies contradict one another. Inspect REMOTE and REMOTE-EXCEPTION to see that distinction.</p>
 <p>Do not embed everything and filter only the final answer. That design may already have sent private source text to a provider or let it influence ranking. Here authentication-derived identity is checked before selecting eligible documents. The tiny identity map is a teaching boundary, not production authentication. MALICIOUS remains public untrusted data to exercise instruction handling; finance text never reaches public retrieval.</p>
-<h2>Data/control flow</h2>
+<h2 id="datacontrol-flow">Data/control flow</h2>
 <p><code>JSON bytes → validated records → Document(text, metadata, id) → authorized current candidates</code></p>
-<h2>Worked example</h2>
-<p>Run from the repository root after <code>uv sync --locked</code>. This is implemented code/command guidance, <strong>not an observed output</strong>:</p>
+<h2 id="worked-example">Worked example</h2>
+<p>Run from the repository root after <code>uv sync --locked</code>.</p>
 <pre><code class="language-python">from langchain_learning.retrieval import PolicyIndex
 index = PolicyIndex()
 for doc in index.authorized_documents(&quot;alice&quot;):
     print(doc.id, doc.metadata[&quot;source_id&quot;], doc.metadata[&quot;provenance&quot;])
 </code></pre>
 <p>Use the <a href="../../labs/06_retrieval/README.html">module lab</a> to inspect actual intermediate values. Predict the result first and preserve any disagreement as a diagnostic clue.</p>
-<h2>Guided completion and failure investigation</h2>
+<h2 id="guided-completion-and-failure-investigation">Guided completion and failure investigation</h2>
 <p>Remove the audience predicate on a disposable branch. Before running, predict whether a public finance query can now expose text. Restore code-level filtering, not a prompt warning.</p>
-<p>Hint ladder: first name the failed stage and expected input/output; then inspect its evidence or metadata; only after your attempt read the <a href="../../solutions/06_retrieval.html">reasoned solution</a>. Repair the boundary rather than changing unrelated prompts.</p>
-<h2>Independent transfer and exit check</h2>
+<h2 id="independent-transfer-and-exit-check">Independent transfer and exit check</h2>
 <p>Take a changed constraint from the <a href="../../exercises/06_retrieval.html">exercise</a> without copying the worked example. List RETURN revisions from documents and identify the active one; demonstrate unknown-user rejection. Explain why provenance is not authentication.</p>
-<h2>Delayed review</h2>
-<p>Revisit provenance in Module 11 when attacking retrieved instructions. Revisit next session and about a week later with a fresh question; those intervals are a practice policy, not evidence of mastery. Use the <a href="../../reference/GLOSSARY.html">glossary</a> and <a href="../../reference/API_MAP.html">API map</a> for focused lookup. Record only actual learner evidence, never progress inferred from reading this lesson.</p>
+<h2 id="delayed-review">Delayed review</h2>
+<p>Revisit provenance in Module 11 when attacking retrieved instructions. See the <a href="../../reference/GLOSSARY.html">glossary</a> and <a href="../../reference/API_MAP.html">API map</a>.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/06_retrieval/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

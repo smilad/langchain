@@ -38,6 +38,6 @@ A lexical-to-semantic comparison changes only retrieval strategy (and necessaril
 
 A new policy needs stable source identity, version/access metadata, ingestion/reindexing, and an independent query. It should not require rewriting approval ownership or local-action uniqueness. Explain this separation before making changes.
 
-A usable tutorial includes the locked environment, no-cost local run, explicit paid/live consent, token-bound HTTP flow, process restart, rejection/edit, evaluation protocol, and known limitations. Client disconnect/deadline does not prove rollback; inspect persisted state before retry. Do not publish an exact stochastic sentence as a guaranteed output or claim peer/advisor approval without that review.
+A usable tutorial includes the locked environment, no-cost local run, explicit paid/live consent, token-bound HTTP flow, process restart, rejection/edit, evaluation protocol, and known limitations. Client disconnect/deadline does not prove rollback; inspect persisted state before retry. Do not publish an exact stochastic sentence as a guaranteed output or claim peer approval without that review.
 
 The independent variation and later review must be performed by the learner. These solutions can support practice; reading them is not evidence that the learner has mastered the capstone.

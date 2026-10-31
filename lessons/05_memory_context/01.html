@@ -18,11 +18,12 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>05.1 — Conversation history is application state</h1>
-<h2>Objective and prerequisites</h2>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="../04_tools_agents/04.html">&larr; Previous</a> · <a href="02.html">Next &rarr;</a></nav><h1 id="051--conversation-history-is-application-state">05.1 — Conversation history is application state</h1>
+<p><strong>In plain words:</strong> A model does not remember earlier turns by itself. Your application stores the history under a thread id and sends it back each time. The thread id is a lookup key, not proof of who the user is.</p>
+<h2 id="objective-and-prerequisites">Objective and prerequisites</h2>
 <p>Support the <a href="../../MISSION.html">mission</a> by identifying exactly which earlier messages reach a later model call. Prerequisite: Module 04 tools and <a href="../04_tools_agents/04.html">trace inspection</a>. Warm-up: does returning a response update model weights? Does a <code>thread_id</code> identify an authenticated user? Attempt first; corrections appear below.</p>
-<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">Short-term memory</a> and <a href="https://docs.langchain.com/oss/python/langgraph/persistence">LangGraph persistence</a>, consulted 2026-10-12. <a href="../../docs/VERIFICATION.html">Verification</a> records Python 3.14/locked versions, local state checks, and actual gateway-mediated follow-up/context calls. These examples are not a general recall-quality score. Live use requires compatible private access, consent, and budget.</p>
-<h2>Mental model and flow</h2>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">Short-term memory</a> and <a href="https://docs.langchain.com/oss/python/langgraph/persistence">LangGraph persistence</a>, consulted 2026-10-12. <a href="../../docs/VERIFICATION.html">Verification</a> records Python 3.14/locked versions, local state checks, and the author's live follow-up/context calls. These examples are not a general recall-quality score. Live use requires compatible private access, consent, and budget.</p>
+<h2 id="mental-model-and-flow">Mental model and flow</h2>
 <p>A chat model sees the current request's messages and instructions. It does not acquire a personal database by changing its weights during our ordinary invocation. The application maintains history, chooses a thread, retrieves checkpoint state and includes that context in subsequent steps.</p>
 <pre><code class="language-text">new human message + thread configuration
   → load checkpoint for that thread
@@ -31,16 +32,16 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
   → save updated state
 </code></pre>
 <p>Without a checkpointer, creating another invocation does not automatically retain earlier messages. With <code>InMemorySaver</code>, the compiled graph can retrieve earlier state while the saver object exists. Rebuilding a graph against that same object can retain state; starting a new process with a new saver cannot. “Short-term” describes scope, not necessarily storage medium: a database-backed short-term checkpointer can persist across restarts.</p>
-<h2>Worked example</h2>
+<h2 id="worked-example">Worked example</h2>
 <p>The <a href="../../labs/05_memory_context/README.html">memory lab</a> creates <code>InMemorySaver</code> and runs a real <code>StateGraph</code> in <code>--check</code>. Its node selects a stored preference; it produces <strong>no assistant answer</strong>. Actual <code>HumanMessage</code> inputs accumulate via <code>MessagesState</code>. Inspect the first and second Alice snapshots and predict their message counts before running.</p>
 <p>The live path instead creates a genuine catalog agent with the same checkpointer pattern:</p>
 <pre><code class="language-python">config = {&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;alice-shopping&quot;}, &quot;recursion_limit&quot;: 8}
 # Pass config on BOTH turns, and SessionContext(&quot;alice&quot;) on every invocation.
 </code></pre>
 <p>Alice states a temporary 3000-cent budget, then asks whether two notebooks fit it. Inspect the complete checkpoint messages, not only the last reply. The numerical total comes from the catalog tool; recall of the earlier budget comes from supplied history. Both sources are necessary for the comparison.</p>
-<h2>Guided completion and diagnosis</h2>
+<h2 id="guided-completion-and-diagnosis">Guided completion and diagnosis</h2>
 <p>Guided completion: omit the stable thread configuration in a copy and predict which state cannot be found. Restore it on both turns. Independent variation: create another Alice thread and determine which facts should be absent; use the <a href="../../exercises/05_memory_context.html">exercise</a>.</p>
 <p>If the agent forgets a budget, first inspect whether the earlier message exists in its checkpoint and selected context. Do not conclude that the model's weights “lost memory.” If it guesses a budget in Bob's conversation, distinguish an actual leaked checkpoint from unsupported inference.</p>
-<h2>Exit and review</h2>
+<h2 id="exit-and-review">Exit and review</h2>
 <p>Show retained messages and explain the application's role in recall. Demonstrate same-thread accumulation and new-thread isolation without pretending the offline graph generated text. Corrections: ordinary inference does not train weights; thread identifiers are lookup keys, not authentication. Review checkpoint durability in Module 10. See the <a href="../../reference/API_MAP.html">API map</a>. Focused follow-up: why can a graph reconstruction retain memory while process restart loses it?</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/05_memory_context/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

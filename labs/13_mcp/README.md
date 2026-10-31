@@ -48,9 +48,9 @@ See [lessons](../../lessons/13_mcp/01.md), [exercise](../../exercises/13_mcp.md)
 
 ## Captured `--check` output
 
-Real, unedited stdout of `uv run python labs/13_mcp/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
+Output of `uv run python labs/13_mcp/main.py --check` (no credentials, no network), re-formatted as indented JSON; local paths are replaced by `<repo>`. The middle of the output is omitted for length. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.
 
-```json
+```text
 {
   "preflight": {
     "python": "3.14.0",
@@ -86,7 +86,7 @@ Real, unedited stdout of `uv run python labs/13_mcp/main.py --check` (no credent
       {
         "type": "text",
         "text": "{\"found\":true,\"item_id\":\"notebook\",\"name\":\"Recycled paper notebook\",\"price_cents\":1299,\"currency\":\"USD\",\"stock\":12}",
-        "id": "lc_87753f5a-5cce-4dc2-b80a-66fb19938bbe"
+        "id": "lc_3719f9a4-a6bc-4242-82be-e020068a2a6e"
       }
     ],
     "additional_kwargs": {},
@@ -112,7 +112,7 @@ Real, unedited stdout of `uv run python labs/13_mcp/main.py --check` (no credent
       {
         "type": "text",
         "text": "{\"found\":false,\"item_id\":\"absent\"}",
-        "id": "lc_5e1e8e5c-595f-40fe-86ab-e6d903550a6f"
+        "id": "lc_13db0e3a-e234-4ee3-afad-cf485d07c4bd"
       }
     ],
     "additional_kwargs": {},
@@ -121,24 +121,7 @@ Real, unedited stdout of `uv run python labs/13_mcp/main.py --check` (no credent
     "name": "catalog_lookup",
     "id": null,
     "tool_call_id": "missing",
-    "artifact": {
-      "structured_content": {
-        "found": false,
-        "item_id": "absent"
-      }
-    },
-    "status": "success"
-  },
-  "quote": {
-    "content": [
-      {
-        "type": "text",
-        "text": "{\"found\":true,\"quoted\":true,\"item_id\":\"notebook\",\"quantity\":2,\"unit_price_cents\":1299,\"total_cents\":2598,\"currency\":\"USD\",\"stock\":12}",
-        "id": "lc_1ec9353c-6234-41fc-8728-ad987fe16dc7"
-      }
-    ],
-    "additional_kwargs": {},
-    "response_metadata": {},
+... (middle omitted for length) ...
     "type": "tool",
     "name": "catalog_quote",
     "id": null,
@@ -162,7 +145,7 @@ Real, unedited stdout of `uv run python labs/13_mcp/main.py --check` (no credent
       {
         "type": "text",
         "text": "Error calling tool 'catalog_quote'",
-        "id": "lc_9825722b-6caf-4bef-b026-b6bcc01f0ee2"
+        "id": "lc_c36ee5c5-31ae-4975-9431-8c1a0ba11cbf"
       }
     ],
     "additional_kwargs": {},

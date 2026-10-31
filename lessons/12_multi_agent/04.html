@@ -18,20 +18,21 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>12.4 — Keep or reject the specialist with evidence</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="03.html">&larr; Previous</a> · <a href="../13_mcp/01.html">Next &rarr;</a></nav><h1 id="124--keep-or-reject-the-specialist-with-evidence">12.4 — Keep or reject the specialist with evidence</h1>
+<p><strong>In plain words:</strong> Compare the single agent with the specialist on the same cases, including failed runs, latency and calls. Rejecting the specialist is a valid result.</p>
 <p><strong>Mission/objective:</strong> serve <a href="../../MISSION.html">the mission</a> by publishing a defensible single-agent versus specialist comparison, including failed trials instead of averaging them away.</p>
 <p><strong>Prerequisites:</strong> <a href="03.html">handoff contracts</a> and evaluation splits. Check: distinguish an unknown token count from zero tokens.</p>
 <p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/langsmith/evaluation">LangChain evaluation concepts</a> and <a href="https://docs.langchain.com/oss/python/langchain/multi-agent/subagents">subagent tradeoffs</a>, checked 2026-10-12. Installed baseline Python 3.14.0, LangChain 1.4.4, LangChain OpenAI 1.7.0; <a href="../../uv.lock">lockfile</a> is authoritative and <a href="../../docs/VERIFICATION.html">verification</a> records actual runtime evidence. No live scores, costs, or latency targets are invented when provider prerequisites are unavailable.</p>
-<h2>Warm-up</h2>
+<h2 id="warm-up">Warm-up</h2>
 <p>Why freeze held-out inputs? Why include failures in a comparison? Correction after attempting: tuning on evaluation cases biases claims; failures affect usefulness and cost even when no final answer exists.</p>
-<h2>Experiment design</h2>
+<h2 id="experiment-design">Experiment design</h2>
 <p>Both arms see the same original question, identity, and filtered evidence. Trial order alternates to reduce simple warm-up/order confounding. The lab's four cases include answerable policies, unavailable information, and restricted finance information requested by a public identity. These are a teaching sample, not a statistically powerful benchmark and not a replacement for the frozen Module 08 held-out set.</p>
 <p>Every row reports wall-clock latency, attempted logical model/tool calls, provider usage when present, source-membership validation, and either a draft or a sanitized error type. Nested calls belong in the total. SDK retries, missing provider usage, and failed calls complicate cost; do not multiply an unknown count by today's price and call it observed cost.</p>
-<h2>Worked review</h2>
+<h2 id="worked-review">Worked review</h2>
 <p>Run <code>uv run python labs/12_multi_agent/main.py --live --trials 2</code>, retaining its actual JSON rows locally. Build a table per case and arm. Review each draft against the retrieved passages: supported claims, handling of contradictions, appropriate abstention, no restricted disclosure, and resistance to document instructions. Record reviewer decisions explicitly; the lab does not manufacture human judgments.</p>
 <p>Compare latency distributions and variability alongside quality. A specialist that increases runtime while merely paraphrasing the same evidence has not earned its complexity. Rejecting it is a valid course result.</p>
-<h2>Guided and independent work</h2>
+<h2 id="guided-and-independent-work">Guided and independent work</h2>
 <p>Supply a missing failure row in your comparison table from an actual run, not an imagined output. Then follow <a href="../../exercises/12_multi_agent.html">the independent exercise</a>: change one context constraint and rerun a declared trial count without retuning on held-out cases.</p>
-<h2>Failure diagnosis, exit, review</h2>
+<h2 id="failure-diagnosis-exit-review">Failure diagnosis, exit, review</h2>
 <p>If all specialist trials fail, separate configuration, transport, budget, schema, and membership failures before adjusting prompts. Exit with a written keep/reject decision tied to measured rows and limitations. Revisit the decision in <a href="../15_capstone/03.html">Module 15</a>; <a href="../../solutions/12_multi_agent.html">solutions</a> show reasoning, not a universal winning architecture.</p>
 <p><strong>What a successful run looks like:</strong> see the <a href="../../labs/12_multi_agent/README.html#captured---check-output">captured <code>--check</code> output</a>.</p></main></body></html>

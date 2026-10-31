@@ -18,15 +18,16 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>15.4 — Teach the application and state its limits</h1>
+<body><main><nav><a href="../README.html">Lesson index</a> · <a href="03.html">&larr; Previous</a></nav><h1 id="154--teach-the-application-and-state-its-limits">15.4 — Teach the application and state its limits</h1>
+<p><strong>In plain words:</strong> Write a tutorial that another person can follow from a clean checkout, and state its limits honestly. If nobody else has tried it, say that feedback has not been collected.</p>
 <p><strong>Objective:</strong> write a reproducible tutorial and demonstrate transfer to a changed question or corpus constraint without hiding failures.</p>
 <p><strong>Prerequisites:</strong> <a href="01.html">the architecture</a>, <a href="02.html">execution</a>, <a href="03.html">evaluation</a>, and <a href="../14_production/01.html">production operations</a>. Cite the exercised dependency versions from <a href="../../docs/VERIFICATION.html">the verification report</a>, not whichever release is newest when you publish.</p>
-<h2>Recall</h2>
+<h2 id="recall">Recall</h2>
 <p>Explain why a smooth demo can conceal a retrieval miss, an authorization defect, or a replayed side effect. Sketch the system from memory, then compare it with your actual source and observed trace. Correct the diagram if it describes intended rather than real behavior.</p>
-<h2>The tutorial is a consumer contract</h2>
-<p>A new learner must be able to start with a checkout rather than your IDE state. Include Python/<code>uv</code> prerequisites, the exact locked installation command, safe environment-variable configuration, the no-cost local path, and the explicit live path. Explain the TUNA package-mirror choice and how a user with accessible PyPI can deliberately re-resolve; changing the index is an environment change, not an invisible workaround.</p>
+<h2 id="the-tutorial-is-a-consumer-contract">The tutorial is a consumer contract</h2>
+<p>A new learner must be able to start with a checkout rather than your IDE state. Include Python/<code>uv</code> prerequisites, the exact locked installation command, safe environment-variable configuration, the no-cost local path, and the explicit live path. Explain why <code>pyproject.toml</code> pins the Tsinghua package index (the author could not reach PyPI) and how a learner with PyPI access can deliberately switch; changing the index is an environment change, not an invisible workaround.</p>
 <p>Never include your <code>.env</code>, bearer tokens, provider credentials, private traces, or generated data copied from a real workplace. The course corpus and action sink are synthetic. Give a reader the question and expected <em>behavior</em>, not an exact model sentence that a stochastic system cannot guarantee.</p>
-<h2>Worked runbook outline</h2>
+<h2 id="worked-runbook-outline">Worked runbook outline</h2>
 <ol>
 <li>Check interpreter, dependency versions, and external <code>langchain</code> import origin.</li>
 <li>Inspect authorized current passages for the selected question.</li>
@@ -37,7 +38,7 @@ nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 <li>Serve the application locally with token-bound identities; exercise concurrent users and documented failure behavior.</li>
 </ol>
 <p>Explain what cancellation guarantees: a disconnected client does not prove that a database operation was rolled back. Inspect persisted thread/action state before retrying. Similarly, the atomic unique local action record does not establish exactly-once delivery to an arbitrary external service.</p>
-<h2>Independent transfer</h2>
+<h2 id="independent-transfer">Independent transfer</h2>
 <p>Choose the warranty policy rather than the return policy, or add a new synthetic public source with explicit ID/version metadata. Predict the ingestion/retrieval changes, rebuild the relevant index, and show the new evidence before generating an answer. Keep ownership, review, and action identity invariants unchanged.</p>
 <p>Ask another learner to follow your tutorial. Record concrete points where setup or concepts were unclear; revise those explanations rather than adding a new abstraction. If no peer is available, rehearse from a clean environment and say that external learner feedback has not been collected.</p>
 <p>For a failure investigation, remove a prerequisite from your runbook and identify the exact command that becomes unusable. Add the missing explanation with its diagnosis, not a vague “install everything” instruction.</p>

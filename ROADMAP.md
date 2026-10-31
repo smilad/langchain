@@ -2,7 +2,7 @@
 
 Research baseline: 2026-10-12. Status: **all sixteen core modules authored and implemented**; see [the sixty-four-lesson index](lessons/README.md). [Local verification](docs/VERIFICATION.md) is not a claim that provider-dependent or learner-mastery gates passed.
 
-Read [the mission](MISSION.md), use [the resource guide](RESOURCES.md) for primary sources, and apply [the teaching guide](docs/TEACHING_GUIDE.md) for practice/assessment. The [implementation plan](docs/superpowers/plans/2026-10-12-langchain-learning-resources.md) records artifact delivery separately from unavailable live/review prerequisites.
+Read [the mission](MISSION.md), use [the resource guide](RESOURCES.md) for primary sources, and apply [the teaching guide](docs/TEACHING_GUIDE.md) for practice/assessment.
 
 ## 1. Design decisions
 

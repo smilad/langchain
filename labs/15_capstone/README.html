@@ -18,9 +18,9 @@ th{background:var(--code)}
 blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
 nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
 </style></head>
-<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Capstone: source-grounded support workflow</h1>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1 id="capstone-source-grounded-support-workflow">Capstone: source-grounded support workflow</h1>
 <p>Start with <a href="../../lessons/15_capstone/01.html">Lesson 15.1</a>; complete <a href="../../exercises/15_capstone.html">the exercises</a> before opening <a href="../../solutions/15_capstone.html">solutions</a>.</p>
-<h2>Setup and modes</h2>
+<h2 id="setup-and-modes">Setup and modes</h2>
 <p>From the repository root:</p>
 <pre><code class="language-bash">uv sync --locked
 uv run langchain-learning check
@@ -39,7 +39,7 @@ uv run python labs/15_capstone/main.py --action inspect --thread capstone-manual
 <pre><code class="language-bash">uv run python labs/15_capstone/main.py --action inspect --user bob --thread capstone-manual
 </code></pre>
 <p>This last command intentionally exits nonzero. Use a separate Bob-owned thread and <code>--action reject</code> to confirm zero Bob actions.</p>
-<h2>Real model path</h2>
+<h2 id="real-model-path">Real model path</h2>
 <p>Copy <code>.env.example</code> to <code>.env</code>, supply an accessible OpenAI or compatible model, and set <code>COURSE_ALLOW_LIVE=1</code> only with a chosen spending limit. Do not paste secrets into lessons or chat logs. Hosted LangSmith tracing is separate, optional consent.</p>
 <pre><code class="language-bash">uv run python labs/15_capstone/main.py --live --action start --thread capstone-live
 uv run python labs/15_capstone/main.py --action inspect --thread capstone-live
@@ -47,14 +47,14 @@ uv run python labs/15_capstone/main.py --action inspect --thread capstone-live
 uv run python labs/15_capstone/main.py --action approve --thread capstone-live
 </code></pre>
 <p>A generated draft is not automatically approved. <code>--live</code> without configuration exits with an explicit prerequisite error; no fake model takes its place. An answer that abstains must be understood/reviewed, not interpreted as proof that a question was supported.</p>
-<h2>Evaluation and serving</h2>
+<h2 id="evaluation-and-serving">Evaluation and serving</h2>
 <p>Follow <a href="../08_evaluation/README.html">Module 08's runbook</a> to freeze configuration on development cases and evaluate the eight held-out cases. Keep semantic support review distinct from citation-ID checks. Follow <a href="../14_production/README.html">Module 14's runbook</a> for actual HTTP requests, authentication, concurrency, deadlines, and restart recovery.</p>
 <p>Record model IDs, exact resolved versions, trial count, timings, reported usage, any estimated-cost assumptions, and per-case failures. The twenty-case corpus is instructional and does not certify production quality.</p>
-<h2>Verification and scope</h2>
-<p>Observed local evidence and any inaccessible live prerequisites are recorded in <a href="../../docs/VERIFICATION.html">docs/VERIFICATION.md</a>. This runbook makes no claim that live model quality or an advisor review has passed.</p>
+<h2 id="verification-and-scope">Verification and scope</h2>
+<p>Observed local evidence and any inaccessible live prerequisites are recorded in <a href="../../docs/VERIFICATION.html">docs/VERIFICATION.md</a>. This runbook makes no claim that live model quality has been verified.</p>
 <p>The action sink is a real local SQLite record—not email, a payment, or a production ticket. Its unique transactional action identity prevents duplicated <strong>local records</strong>; it does not promise exactly-once distributed delivery. Cancellation can occur after commit: inspect before retrying. Never delete a persistence directory while a workflow/server is running; use a fresh isolated <code>COURSE_STATE_DIR</code> for disposable experiments.</p>
-<h2>Captured <code>--check</code> output</h2>
-<p>Real, unedited stdout of <code>uv run python labs/15_capstone/main.py --check</code> (no credentials, no network; local paths replaced by <code>&lt;repo&gt;</code>). Compare your own run against it.</p>
+<h2 id="captured---check-output">Captured <code>--check</code> output</h2>
+<p>Output of <code>uv run python labs/15_capstone/main.py --check</code> (no credentials, no network), re-formatted as indented JSON; local paths are replaced by <code>&lt;repo&gt;</code>. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.</p>
 <pre><code class="language-json">{
   &quot;environment&quot;: {
     &quot;python&quot;: &quot;3.14.0&quot;,
@@ -97,11 +97,11 @@ uv run python labs/15_capstone/main.py --action approve --thread capstone-live
     &quot;persisted_pending_recovered&quot;: &quot;pending&quot;,
     &quot;edited_action&quot;: [
       {
-        &quot;action_id&quot;: &quot;530838f312784225b971d99a78c6c2c2&quot;,
+        &quot;action_id&quot;: &quot;4b6d2e76f2e747e3bac414f09b1dd2a3&quot;,
         &quot;thread_id&quot;: &quot;capstone-approved&quot;,
         &quot;user_id&quot;: &quot;alice&quot;,
         &quot;draft&quot;: &quot;Human-approved exercise draft: include the verified source and applicable conditions.&quot;,
-        &quot;created_at&quot;: &quot;2026-10-31 10:03:46&quot;
+        &quot;created_at&quot;: &quot;2026-10-31 10:12:54&quot;
       }
     ],
     &quot;retry_status&quot;: &quot;recorded&quot;,

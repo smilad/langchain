@@ -27,39 +27,15 @@ The agent uses `create_agent`, no business tools, explicit ProviderStrategy or T
 All fields are required; unavailable values are null. More than one distinct ORDER identifier is contradictory by this lab's deliberately conservative policy. Non-supported states must not choose an order or quote. Supported fields require exact literal source evidence. This catches invention of identifiers/quotes, not every semantic error: relevance/category and real eligibility still need a human rubric. Do not retry missing facts into existence. There is no automatic semantic repair loop.
 
 ## Evidence and reset
-Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0, Pydantic 2.14.1. [Verification](../../docs/VERIFICATION.md) records four successful real function-calling cases and a rejected gateway JSON-schema result. Agent/provider strategies are separate capability gates, not certified by those model-level cases. Exact versions are locked in `uv.lock`. This lab writes no state and requires no reset; keep printable text synthetic and configure private compatible access/consent.
+Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0, Pydantic 2.14.1. [Verification](../../docs/VERIFICATION.md) records four successful real function-calling cases and a JSON-schema request the author's endpoint rejected. Agent/provider strategies are separate capability gates, not certified by those model-level cases. Exact versions are locked in `uv.lock`. This lab writes no state and requires no reset; keep printable text synthetic and configure private compatible access/consent.
 
 Primary sources checked 2026-10-12: [models](https://docs.langchain.com/oss/python/langchain/models#structured-output), [agent strategies](https://docs.langchain.com/oss/python/langchain/structured-output), [RunnableSequence](https://reference.langchain.com/python/langchain-core/runnables/base/RunnableSequence), [Pydantic validators](https://docs.pydantic.dev/latest/concepts/validators/).
 
 ## Captured `--check` output
 
-Real, unedited stdout of `uv run python labs/03_structured_output/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Excerpt: first 150 lines only. Compare your own run against it.
+Output of `uv run python labs/03_structured_output/main.py --check` (no credentials, no network), re-formatted as indented JSON; local paths are replaced by `<repo>`. The environment `preflight` block is omitted here; Module 00 shows it in full. The middle of the output is omitted for length. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.
 
 ```text
-{
-  "preflight": {
-    "python": "3.14.0",
-    "interpreter": "<repo>/.venv/bin/python",
-    "packages": {
-      "langchain": "1.4.4",
-      "langchain-core": "1.6.9",
-      "langchain-openai": "1.7.0",
-      "langgraph": "1.2.14",
-      "langgraph-checkpoint-sqlite": "3.1.1",
-      "fastmcp": "4.1.0",
-      "pydantic": "2.14.1"
-    },
-    "langchain_origin": "<repo>/.venv/lib/python3.14/site-packages/langchain/__init__.py",
-    "configured": {
-      "api_key": false,
-      "model": false,
-      "live_consent": false,
-      "custom_endpoint": false,
-      "hosted_tracing": false
-    },
-    "live_request_sent": false
-  }
-}
 {
   "authored_parser_fixture": {
     "status": "supported",
@@ -130,24 +106,7 @@ Real, unedited stdout of `uv run python labs/03_structured_output/main.py --chec
     {
       "location": [
         "category"
-      ],
-      "type": "missing"
-    },
-    {
-      "location": [
-        "evidence_quote"
-      ],
-      "type": "missing"
-    },
-    {
-      "location": [
-        "reason"
-      ],
-      "type": "missing"
-    }
-  ]
-}
-{
+... (middle omitted for length) ...
   "shape_or_consistency_errors": [
     {
       "location": [],
@@ -186,4 +145,6 @@ Real, unedited stdout of `uv run python labs/03_structured_output/main.py --chec
       "id": null
     }
   ],
+  "live_verification": "Pending: no model or agent was invoked by these deterministic boundaries."
+}
 ```

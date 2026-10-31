@@ -34,7 +34,7 @@ Sources: [uv](https://docs.astral.sh/uv/guides/projects/), [Pydantic](https://do
 
 ## Captured `--check` output
 
-Real, unedited stdout of `uv run python labs/00_setup/main.py --check` (no credentials, no network; local paths replaced by `<repo>`). Compare your own run against it.
+Output of `uv run python labs/00_setup/main.py --check` (no credentials, no network), re-formatted as indented JSON; local paths are replaced by `<repo>`. Ids, timings and temporary paths will differ on your machine; the shape and the pass/fail results should match.
 
 ```json
 {
