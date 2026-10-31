@@ -1,0 +1,11 @@
+{
+  "source_id": "CANCEL",
+  "version": 1,
+  "current": true,
+  "audience": "public",
+  "title": "Cancellation",
+  "text": "An order can be cancelled before dispatch. After dispatch use the returns process. Cancellation requests go to the support portal.",
+  "trust": "policy",
+  "provenance": "Synthetic course author; approved policy",
+  "effective_date": "2026-10-01"
+}

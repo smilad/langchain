@@ -1,0 +1,13 @@
+.venv/
+.env
+.env.*
+!.env.example
+.course/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+*.egg-info/
+.DS_Store

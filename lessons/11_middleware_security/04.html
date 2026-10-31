@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11.4 — Security evidence must name its scope and version</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>11.4 — Security evidence must name its scope and version</h1>
+<p><a href="../../MISSION.html">Mission</a>. <strong>Objective:</strong> produce an adversarial report that distinguishes enforced ownership from observed model behavior and redaction limits.</p>
+<h2>Prerequisites and retrieval</h2>
+<p>The prior three lessons and Module 08 per-case evaluation. What does a denied tool message prove? What if the model never called the tool? Can a public identity string authenticate an HTTP request? Attempt answers before writing your report.</p>
+<h2>Source and compatibility</h2>
+<p><a href="https://docs.langchain.com/oss/python/langchain/guardrails">Guardrails</a>, <a href="https://docs.langchain.com/oss/python/langchain/runtime">runtime</a>, and <a href="https://docs.langchain.com/oss/python/langchain/middleware/custom">custom middleware</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangChain 1.4.4, LangGraph 1.2.14, langchain-openai 1.7.0; <a href="../../uv.lock">lockfile</a>. <a href="../../docs/VERIFICATION.html">Verification</a> distinguishes exercised local commands from unavailable live proof; no provider credentials were available during authorship.</p>
+<h2>Mental model</h2>
+<p>Authorization, minimization, redaction and human review solve different problems. Authorization decides who may perform an operation. Minimization reduces data entering context. Redaction changes visible text but may miss encoded or paraphrased content and cannot retract upstream disclosure. Human review accepts or edits a specific proposal, not every future operation from that thread.</p>
+<p>The local CLI deliberately accepts a trusted demo identity. The HTTP service in Module 14 authenticates tokens before supplying workflow identity. The model's requested <code>user_id</code> is not accepted by the inspection tool; the schema forbids extra fields and trusted runtime context owns identity. An attacker knowing a thread ID gains no inspection/resumption permission.</p>
+<h2>Worked report structure</h2>
+<p>Run the <a href="../../labs/11_middleware_security/main.py">lab</a>. For every attack record input/source ID, trusted actor, requested capability, actual execution outcome, action count and interpretation. Record interpreter/package lock, model ID when used, prompt revision, declared trial count and whether any external tracing was enabled. Never paste tokens or full configuration objects.</p>
+<p>The check mode establishes actual local permission/schema/sink boundaries, not middleware traversal through a model. Live mode observes real middleware integration and provider variability. A successful check plus one clean live output is still not proof against all prompt injections. The unsafe fixture's synthetic leak is a counterexample to text-based permission, not measured model leakage.</p>
+<h2>Guided diagnosis and independent gate</h2>
+<p>If an output contains a synthetic secret, locate how it entered the outbound context; deleting it from the final display alone is not a complete fix. If an unauthorized action commits, inspect the execution boundary and persisted human decision. Use <a href="../../exercises/11_middleware_security.html">the exercise</a> to test altered arguments and a fresh attack, then state residual semantic risks explicitly.</p>
+<h2>Exit and review</h2>
+<p>Explain code-level ownership, demonstrate zero unauthorized effects, distinguish model attempts/refusals from enforced denials, and publish versioned limits. Revisit the report in the Module 15 capstone with held-out adversarial cases. <a href="../../solutions/11_middleware_security.html">Solutions</a>.</p>
+<p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: what evidence would falsify your current security claim?</p></main></body></html>

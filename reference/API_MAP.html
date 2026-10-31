@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>API map and tested-version baseline</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>API map and tested-version baseline</h1>
+<p><code>uv.lock</code> is the dependency authority. Installed on Python <strong>3.14.0</strong>: LangChain <strong>1.4.4</strong>, langchain-core <strong>1.6.9</strong>, langchain-openai <strong>1.7.0</strong>, LangGraph <strong>1.2.14</strong>, SQLite checkpointer <strong>3.1.1</strong>, FastMCP <strong>4.1.0</strong>, Pydantic <strong>2.14.1</strong>, OpenAI SDK <strong>3.29.0</strong>. Installation alone is not runtime/capability proof; see <a href="../docs/VERIFICATION.html">the verification report</a> for exercised paths and blockers.</p>
+<h2>Framework boundaries</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>API / module</th>
+<th>Course location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Direct model request</td>
+<td><code>openai.OpenAI.responses.create</code>, Responses request/response</td>
+<td><a href="../lessons/01_llm_baseline/01.html">01 baseline</a></td>
+</tr>
+<tr>
+<td>LangChain model</td>
+<td><code>langchain_openai.ChatOpenAI</code>, <code>invoke</code>, <code>stream</code>, <code>ainvoke</code>, <code>batch</code></td>
+<td><a href="../lessons/02_models_messages/01.html">02 messages/models</a></td>
+</tr>
+<tr>
+<td>Prompt/data composition</td>
+<td><code>langchain_core.prompts.ChatPromptTemplate</code>, Runnable composition</td>
+<td><a href="../lessons/03_structured_output/01.html">03 typed output</a></td>
+</tr>
+<tr>
+<td>Model structured output</td>
+<td><code>ChatOpenAI.with_structured_output</code> plus Pydantic schema</td>
+<td><a href="../lessons/03_structured_output/02.html">03 typed output</a></td>
+</tr>
+<tr>
+<td>Agent construction</td>
+<td><code>langchain.agents.create_agent</code>; <code>system_prompt</code>, tools, middleware/checkpointer</td>
+<td><a href="../lessons/04_tools_agents/01.html">04 tools/agents</a></td>
+</tr>
+<tr>
+<td>Typed tools</td>
+<td><code>langchain.tools.tool</code>; Pydantic input validation</td>
+<td><a href="../labs/04_tools_agents/README.html">04 catalog</a></td>
+</tr>
+<tr>
+<td>Messages/context</td>
+<td><code>langchain.messages</code> / <code>langchain_core.messages</code>; content blocks and context selection</td>
+<td><a href="../lessons/05_memory_context/01.html">05 memory/context</a></td>
+</tr>
+<tr>
+<td>Evidence</td>
+<td><code>langchain_core.documents.Document</code>; metadata survives ingestion/retrieval</td>
+<td><a href="../labs/06_retrieval/README.html">06 retrieval</a></td>
+</tr>
+<tr>
+<td>Learned semantic embeddings</td>
+<td><code>langchain_openai.OpenAIEmbeddings</code>; actual configured embedding model required</td>
+<td><a href="../lessons/06_retrieval/03.html">06 retrieval</a></td>
+</tr>
+<tr>
+<td>Graph workflow</td>
+<td><code>langgraph.graph.StateGraph</code>, <code>START</code>, <code>END</code>, conditional edges, reducers</td>
+<td><a href="../labs/09_graph_workflows/README.html">09 graphs</a></td>
+</tr>
+<tr>
+<td>Durable state</td>
+<td><code>langgraph.checkpoint.sqlite.SqliteSaver</code></td>
+<td><a href="../labs/10_durable_approval/README.html">10 approval</a></td>
+</tr>
+<tr>
+<td>Human review</td>
+<td><code>langgraph.types.interrupt</code>, <code>Command(resume=...)</code></td>
+<td><a href="../lessons/10_durable_approval/02.html">10 approval</a></td>
+</tr>
+<tr>
+<td>MCP client/server</td>
+<td><code>langchain.mcp.MCPAdapter</code>, <code>list_tools</code>; <code>fastmcp.FastMCP</code></td>
+<td><a href="../labs/13_mcp/README.html">13 MCP</a></td>
+</tr>
+<tr>
+<td>Local serving</td>
+<td><code>langchain_learning.service</code>, localhost HTTP, token-bound identity</td>
+<td><a href="../labs/14_production/README.html">14 production</a></td>
+</tr>
+</tbody>
+</table>
+<p>Provider feature support is checked per model/endpoint. The same import path does not make tool calling, structured output, content blocks, or usage metadata identical across providers.</p>
+<h2>Course domain APIs</h2>
+<h3>Catalog</h3>
+<p><code>lookup_item(item_id)</code> reads the actual synthetic catalog; missing IDs are explicit. <code>quote_total(item_id, quantity)</code> validates stock/quantity and computes integer cents. <code>catalog_tools()</code> exposes those real functions as LangChain tools. <code>build_catalog_agent(checkpointer=...)</code> requires live provider consent/configuration.</p>
+<h3>Retrieval and generated answers</h3>
+<p><code>PolicyIndex(strategy="lexical").search(question, user_id, k=3)</code> returns authorized current <code>Document</code> values. Lexical retrieval is a genuine local baseline, not a substitute claiming learned semantic capabilities. The semantic strategy calls the configured embedding provider; it has no silent lexical fallback.</p>
+<p><code>rag.answer(question, user_id, strategy="lexical", k=3)</code> returns <code>GroundedAnswer(answer, source_ids, abstained)</code>. Inspect selected evidence independently. Schema/source-membership validation does not establish that every claim is supported.</p>
+<h3>Persistent review</h3>
+<pre><code class="language-python">from langchain_learning.runtime import state_dir
+from langchain_learning.workflow import SupportWorkflow
+
+folder = state_dir()
+with SupportWorkflow(folder / &quot;checkpoints.sqlite&quot;, folder / &quot;actions.sqlite&quot;) as flow:
+    pending = flow.start(&quot;alice&quot;, &quot;reference-thread&quot;, &quot;Review my policy question&quot;,
+                         draft=&quot;Explicitly human-authored draft for a no-model exercise&quot;)
+    inspected = flow.inspect(&quot;alice&quot;, &quot;reference-thread&quot;)
+    completed = flow.decide(&quot;alice&quot;, &quot;reference-thread&quot;, &quot;approve&quot;)
+</code></pre>
+<p>The example records a synthetic local action after approval. The user/thread ownership binding survives restart. Repeat matching decisions reuse the result; conflicting decisions are rejected. Do not describe this as exactly-once delivery to an external service.</p>
+<h2>Navigation and modes</h2>
+<pre><code class="language-bash">uv run langchain-learning list
+uv run langchain-learning check
+uv run langchain-learning run 06 --check
+uv run langchain-learning run 15 --check
+</code></pre>
+<p>Each lab README lists topic-specific options. <code>--check</code> is model-free real local behavior; <code>--live</code> requires model/key configuration and explicit consent. Neither mode claims a completed learner mastery gate by itself.</p>
+<p><strong>Sources:</strong> <a href="https://docs.langchain.com/oss/python/migrate/langchain-v1">v1 migration</a>, <a href="https://docs.langchain.com/oss/python/langchain/models">models</a>, <a href="https://docs.langchain.com/oss/python/langgraph/interrupts">interrupts</a>, <a href="https://docs.langchain.com/oss/python/langchain/mcp/index">MCP</a>.</p></main></body></html>

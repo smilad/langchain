@@ -1,0 +1,6 @@
+[
+  {"item_id": "notebook", "name": "Recycled paper notebook", "price_cents": 1299, "currency": "USD", "stock": 12},
+  {"item_id": "pen-set", "name": "Three black ink pens", "price_cents": 599, "currency": "USD", "stock": 40},
+  {"item_id": "desk-lamp", "name": "Compact desk lamp", "price_cents": 3499, "currency": "USD", "stock": 3},
+  {"item_id": "sold-out", "name": "Pocket sketchbook", "price_cents": 999, "currency": "USD", "stock": 0}
+]

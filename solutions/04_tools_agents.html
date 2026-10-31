@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 04 solution — Locate the boundary before repairing it</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 04 solution — Locate the boundary before repairing it</h1>
+<p>Read only after attempting the <a href="../exercises/04_tools_agents.html">exercise</a>. This explains reference behavior, not independent learner evidence. Actual Python 3.14 local tool checks passed; <a href="../docs/VERIFICATION.html">verification</a> records exact versions and unverified live agent behavior. No invented model transcript is supplied.</p>
+<h2>Part A: real stock and strict-input boundaries</h2>
+<p>The catalog gives <code>desk-lamp</code> stock three at 3499 USD cents. Quoting three computes 10497 cents. Quoting four is shape-valid (integer between one and twenty) but returns <code>quoted=false</code>, <code>reason="insufficient_stock"</code>. <code>sold-out</code> is found but has no sellable units. An unknown valid identifier returns <code>found=false</code>; it should not become a fabricated replacement.</p>
+<p>This small regression exercise uses the real tool layer:</p>
+<pre><code class="language-python">from pydantic import ValidationError
+from langchain_learning.catalog import MAX_QUANTITY, catalog_tools
+from langchain_learning.runtime import DATA
+
+lookup, quote = catalog_tools()
+before = (DATA / &quot;catalog.json&quot;).read_bytes()
+item = lookup.invoke({&quot;item_id&quot;: &quot;desk-lamp&quot;})
+assert item[&quot;found&quot;]
+exact = quote.invoke({&quot;item_id&quot;: &quot;desk-lamp&quot;, &quot;quantity&quot;: item[&quot;stock&quot;]})
+assert exact[&quot;quoted&quot;]
+assert exact[&quot;total_cents&quot;] == item[&quot;stock&quot;] * item[&quot;price_cents&quot;]
+over = quote.invoke({&quot;item_id&quot;: &quot;desk-lamp&quot;, &quot;quantity&quot;: item[&quot;stock&quot;] + 1})
+assert not over[&quot;quoted&quot;] and over[&quot;reason&quot;] == &quot;insufficient_stock&quot;
+assert not quote.invoke({&quot;item_id&quot;: &quot;sold-out&quot;, &quot;quantity&quot;: 1})[&quot;quoted&quot;]
+assert not lookup.invoke({&quot;item_id&quot;: &quot;absent-item&quot;})[&quot;found&quot;]
+for quantity in (True, &quot;3&quot;, 2.5, 0, MAX_QUANTITY + 1):
+    try:
+        quote.invoke({&quot;item_id&quot;: &quot;desk-lamp&quot;, &quot;quantity&quot;: quantity})
+    except ValidationError:
+        continue
+    raise AssertionError(&quot;Invalid quantity accepted&quot;)
+assert (DATA / &quot;catalog.json&quot;).read_bytes() == before
+</code></pre>
+<p><code>strict=True</code> is important: Python considers <code>bool</code> an <code>int</code> subclass, and non-strict validators can coerce strings/floats. Direct domain calls validate through the same Pydantic models, so exposing them through MCP does not remove the boundary. Missing items and stock shortages are explicit results; invalid argument shape is an exception before successful execution.</p>
+<h2>Part B: bounded agent evidence</h2>
+<p>The committed lab already provides the four baseline live commands in its <a href="../labs/04_tools_agents/README.html">runbook</a>. For your changed prompt, keep a recursion limit and stream actual updates. Verify the requested call arguments, matched tool result and final claim. Do not accept “three items purchased” as a quote: the capability never performs purchasing.</p>
+<p>There is no supplied model transcript because model outputs vary and no live run is claimed here. A tiny budget may exhaust before a tool result exists; the proper artifact is a partial trace plus budget failure, not canned final prose. The step limit does not count exact tools when the model requests multiple calls in one step.</p>
+<h2>Part C: diagnosis reasoning</h2>
+<ul>
+<li>Unsupported final price: generation/evidence mismatch. Compare final numerical claims with tool cents before changing prompts.</li>
+<li>Four units versus stock three: business constraint, not schema bug. Return shortage explicitly; do not increase stock to satisfy a request.</li>
+<li>Extra <code>path</code>: schema-invalid input; <code>extra="forbid"</code> rejects it. No caller-supplied path is opened.</li>
+<li>Missing item then purchase claim: unsupported generation plus impossible action. The tool surface has no purchase action; preserve the failure.</li>
+<li>Timeout before tools: transport/configuration issue. Inspect safe provider error and timeout settings, never print credentials.</li>
+</ul>
+<p>The feedback contract is: <em>the answer must be tool-supported → the trace lacks that price/action → generation added unsupported claims → map claims to returned fields and rerun only after a targeted change</em>. A successful output by itself is not evidence that the boundary is correct.</p>
+<p>Sources consulted 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/tools">tools</a>, <a href="https://docs.langchain.com/oss/python/langchain/agents">agents</a>. Review with fresh inputs in Module 08 rather than memorizing the fixture's arithmetic.</p></main></body></html>

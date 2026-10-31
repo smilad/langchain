@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 02 solutions — representation versus execution</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 02 solutions — representation versus execution</h1>
+<p>Consult after the <a href="../exercises/02_models_messages.html">exercise</a>. <a href="../labs/02_models_messages/main.py">The runnable lab</a> implements actual local message operations and separate live execution methods; no fake model substitutes for credentials. <a href="../docs/VERIFICATION.html">Verification</a> records what actually ran.</p>
+<h2>Package and role corrections</h2>
+<p><code>langchain_learning</code> is this course. <code>langchain-core</code> supplies prompt/message/Runnable interfaces. <code>langchain-openai</code> supplies ChatOpenAI; its SDK handles provider transport. <code>langchain</code> exposes the higher-level agent harness. Identical method names do not imply identical capabilities.</p>
+<p>A template's <code>invoke</code> is local rendering. A model's <code>invoke</code> is remote generation. System instructions define the attempt; HumanMessage holds user data. AIMessage can contain generated output or explicitly authored history/fixtures, so provenance must be stated. ToolMessage links an execution result to a call ID; it does not cause that execution. Message roles do not grant permissions.</p>
+<h2>Prompt variation</h2>
+<p>This complete local variation illustrates the missing-context exercise:</p>
+<pre><code class="language-python">from langchain_core.prompts import ChatPromptTemplate
+prompt = ChatPromptTemplate.from_messages([
+    (&quot;system&quot;, &quot;Classify using this application rubric: {context}&quot;),
+    (&quot;human&quot;, &quot;{text}&quot;),
+])
+value = prompt.invoke({
+    &quot;context&quot;: &quot;billing=invoices; technical=software faults; other=everything else&quot;,
+    &quot;text&quot;: &quot;Literal braces {quantity}; my app crashes.&quot;,
+})
+messages = value.to_messages()
+</code></pre>
+<p><code>context</code> here must be trusted application configuration; untrusted text remains in the human slot. Rendering braces in a supplied value does not recursively parse them. That is a formatting property, not immunity to adversarial instructions. Supplying <code>request</code> instead of <code>text</code> is a deterministic missing-variable error before transport.</p>
+<h2>Chunk reconstruction answer</h2>
+<pre><code class="language-python">from langchain_core.messages import AIMessageChunk
+chunks = [AIMessageChunk(content=&quot;tech&quot;), AIMessageChunk(content=&quot;nical&quot;),
+          AIMessageChunk(content=&quot;&quot;, usage_metadata={
+              &quot;input_tokens&quot;: 3, &quot;output_tokens&quot;: 2, &quot;total_tokens&quot;: 5})]
+full = None
+for chunk in chunks:
+    full = chunk if full is None else full + chunk
+</code></pre>
+<p>These are authored exercise values, not provider token counts. Adding full chunks preserves information that <code>''.join(chunk.text for chunk in chunks)</code> loses. Display <code>text</code>, inspect <code>content</code>/<code>content_blocks</code>/tool calls/usage separately. Empty text is not an instruction to discard the envelope.</p>
+<h2>Execution diagnoses</h2>
+<ul>
+<li>A halfway stream failure may have already displayed partial text, but no complete-response success should be recorded. Keep the error visible and do not silently classify the fragment.</li>
+<li><code>ainvoke</code> awaits I/O; <code>async def</code> around blocking Python does not make it nonblocking.</li>
+<li><code>batch</code> runs multiple client calls with bounded concurrency and returns input-ordered results. It is not the provider Batch API, a discount guarantee or evidence of per-item latency. The lab reports unmeasured item duration as null.</li>
+<li>A compatible endpoint may omit usage or extra fields. Inspect integration docs instead of inventing counts or concluding that all providers behave identically.</li>
+<li>Missing integration imports point to environment/dependency issues; unsupported temperature is a model capability mismatch; neither is fixed by prompt tweaking.</li>
+</ul>
+<h2>Acceptance and later review</h2>
+<p>A complete gate explains an actual message sequence, deliberate prompt modification and reconstructed streaming envelope; live proof needs approved access. Authored message/chunk tests prove deterministic operations only. Review later with an unfamiliar content block and a new prompt variable, then compare genuine tool results in Module 04. Use goal→observed mismatch→cause→next action feedback; do not certify mastery from running the supplied source.</p></main></body></html>

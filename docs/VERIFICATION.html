@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Course verification — 2026-10-12</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Course verification — 2026-10-12</h1>
+<p><strong>Artifacts are implemented; all sixteen local checks and real gateway-mediated model paths have been exercised. JSON-schema compatibility, embeddings, and general model quality remain explicit limits. Advisor review was waived by the user.</strong> Read <a href="../README.html">the course entry point</a>, <a href="../lessons/README.html">lesson index</a>, and <a href="superpowers/plans/2026-10-12-langchain-learning-resources.html">implementation plan</a> for navigation and remaining evidence gates.</p>
+<h2>Environment actually exercised</h2>
+<p>Darwin arm64, Python <strong>3.14.0</strong>, <code>uv</code> <strong>0.12.19</strong>. Locked dependencies:</p>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Exercised version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>langchain</td>
+<td>1.4.4</td>
+</tr>
+<tr>
+<td>langchain-core</td>
+<td>1.6.9</td>
+</tr>
+<tr>
+<td>langchain-openai</td>
+<td>1.7.0</td>
+</tr>
+<tr>
+<td>langgraph</td>
+<td>1.2.14</td>
+</tr>
+<tr>
+<td>langgraph-checkpoint-sqlite</td>
+<td>3.1.1</td>
+</tr>
+<tr>
+<td>fastmcp</td>
+<td>4.1.0</td>
+</tr>
+<tr>
+<td>pydantic</td>
+<td>2.14.1</td>
+</tr>
+</tbody>
+</table>
+<p><code>uv sync --locked --system-certs</code> passed. It also passed in a <strong>fresh temporary project environment</strong>, followed by the actual <code>langchain-learning run 00 --check</code>, <code>langchain-learning list</code> (all sixteen modules), and <code>python -m langchain_learning check</code> entry points. External <code>langchain</code> resolved to that environment's <code>site-packages</code>, not the course source. The temporary environment was removed afterward.</p>
+<p>PyPI artifact DNS timed out during setup; the reachable Tsinghua TUNA mirror is explicitly configured in <code>pyproject.toml</code> and recorded in <code>uv.lock</code>. No TLS verification was disabled. The smoke is from this checkout on the stated OS/interpreter, not certification of every platform or standalone wheel packaging.</p>
+<h2>Actual module checks</h2>
+<p>Executed <code>uv run --no-sync python labs/&lt;module&gt;/main.py --check</code> for <strong>all sixteen modules</strong>, all exit <strong>0</strong>. After the live-discovered fixes below, affected checks also passed. This table describes check-mode scope, not live generation.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Observed local scope</th>
+<th>Exit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00 setup</td>
+<td>Interpreter, import origin, schemas/configuration checks</td>
+<td>0</td>
+</tr>
+<tr>
+<td>01 LLM baseline</td>
+<td>Actual deterministic input/configuration boundaries; no SDK generation</td>
+<td>0</td>
+</tr>
+<tr>
+<td>02 models/messages</td>
+<td>Actual message/prompt construction; no streamed model answer</td>
+<td>0</td>
+</tr>
+<tr>
+<td>03 structured output</td>
+<td>Actual typed validation/composition; no model extraction</td>
+<td>0</td>
+</tr>
+<tr>
+<td>04 tools/agents</td>
+<td>Real catalog tools, quantities/stock/missing-item boundaries</td>
+<td>0</td>
+</tr>
+<tr>
+<td>05 memory/context</td>
+<td>Real graph/checkpointer/store, identity separation, trimming; authored summary snapshots</td>
+<td>0</td>
+</tr>
+<tr>
+<td>06 retrieval</td>
+<td>Real lexical ranking, provenance, source edit/refresh, permission/current filtering</td>
+<td>0</td>
+</tr>
+<tr>
+<td>07 RAG</td>
+<td>Evidence inspection, empty-evidence abstention, citation-membership rejection/counterexample</td>
+<td>0</td>
+</tr>
+<tr>
+<td>08 evaluation</td>
+<td>Frozen twenty-case dataset, development retrieval and per-case report</td>
+<td>0</td>
+</tr>
+<tr>
+<td>09 graph workflows</td>
+<td>Actual state/routes/reducers and deterministic outcomes</td>
+<td>0</td>
+</tr>
+<tr>
+<td>10 durable approval</td>
+<td>Actual SQLite checkpoints/actions, review and replay boundaries</td>
+<td>0</td>
+</tr>
+<tr>
+<td>11 middleware/security</td>
+<td>Actual local authorization/validation/security boundaries</td>
+<td>0</td>
+</tr>
+<tr>
+<td>12 multi-agent</td>
+<td>Authored handoff fixtures and outside-source rejection; no quality comparison</td>
+<td>0</td>
+</tr>
+<tr>
+<td>13 MCP</td>
+<td>Real FastMCP stdio server, tool discovery/invocation, invalid quantity and cleanup</td>
+<td>0</td>
+</tr>
+<tr>
+<td>14 production</td>
+<td>Real HTTP server, authentication/ownership, concurrency, disconnect, restart, idempotent approval/rejection, consent and deadline</td>
+<td>0</td>
+</tr>
+<tr>
+<td>15 capstone</td>
+<td>Real retrieval and durable control with an explicit human-authored draft</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Module 13's additional <code>--scenario unavailable</code> and <code>--scenario disconnect</code> passed against actual transports. The unavailable endpoint stopped with a reported exception; the real direct client's call after context exit failed. The expected <code>LangChainBetaWarning</code> is visible, not suppressed.</p>
+<p>Module 08 additionally ran twelve development and eight held-out cases against a development-frozen <strong>local</strong> configuration: all returned evidence obeyed current/audience filtering, generated answers remained null, and model calls were zero. Changing k after freezing exited <strong>2</strong>; attempting human grading of a saved report with no generated answer exited <strong>2</strong>.</p>
+<h2>Regressions and fixes</h2>
+<p><code>uv run --no-sync python -m pytest -q</code>: <strong>16 passed</strong>. These cover retrieval freshness/access, persistent ownership/rejection/edit, separate-process interrupt restoration, idempotent replay, checkpoint/sink binding, live configuration before registration, human-review identity/absence/reassessment, and real tool-runtime owned/forbidden status reads.</p>
+<ul>
+<li>The initial real HTTP smoke accepted an unconsented live start when lexical retrieval found no evidence: deterministic abstention bypassed the later model constructor. A failing-before regression reproduced it. The workflow now validates actual live intent/configuration before registering a new model-driven thread; the regression and complete HTTP smoke pass. No question special case or relaxed assertion was used.</li>
+<li>An evaluation report initially attached a human semantic grade to an ungenerated answer; the reproduction showed <code>generated_answer: null</code> with one reported reviewed case. Human review now annotates a <strong>saved</strong> report offline, never a newly generated stochastic result. Unknown/unproduced case grades are rejected, and inappropriate abstention remains a semantic failure. Grader execution errors remain explicit and cause a nonzero CLI exit.</li>
+<li>Real specialist runs initially failed all four coordinator trials: a global one-tool limit counted the structured-response tool as well as delegation. Limits now target <code>retrieve_policy</code> and <code>policy_specialist</code> individually; all eight paired runs completed within the unchanged business-tool/model bounds. An injected invalid citation after a real specialist result stopped with zero validated handoffs and no replacement answer.</li>
+<li>The HTTP live smoke used a lexical query with no evidence, so it never reached generation and incorrectly expected a provider outage. Both live fixtures now use a corpus-matching returns question. A separate actual service request with evidence and an unreachable configured endpoint returned <strong>502 / OpenAIConnectionError</strong>.</li>
+<li>A genuine malformed model response was initially mislabeled HTTP <strong>400</strong>. The RAG generation boundary now raises <code>ModelOutputError</code>, separately handled as sanitized HTTP <strong>502</strong>; the actual same request path proved the corrected classification. Input/state errors still remain 400.</li>
+<li>The first live security trace exposed errors even for the owned Alice thread: an explicit schema forbade the framework-injected <code>runtime</code> argument. Inferred tool schema preserves runtime injection while the application still validates public arguments/identity. A real ToolNode reproduction failed before and returned minimal pending status after; the subsequent live agent read Alice, denied Bob, and left both action counts zero. The live lab now rejects missing successful owned inspection.</li>
+</ul>
+<p>Tests are deterministic boundary/state proof, not a substitute for the actual MCP/HTTP/CLI smokes or generated semantic review.</p>
+<h2>Prerequisites exercised as failures</h2>
+<p>With key/model/embedding settings empty and consent disabled, actual <code>--live</code> commands for Modules 01, 02, 03, 04, 06 semantic, 07, 12, 14, and 15 exited <strong>2</strong> visibly. No substitute provider, canned model answer, secret output, or paid request was used.</p>
+<p>To exercise real model-dependent gates, privately configure an accessible model and key, confirm required capabilities, and explicitly choose <code>COURSE_ALLOW_LIVE=1</code>. Semantic/hybrid retrieval needs an accessible embedding model. Hosted LangSmith tracing/evaluation additionally requires credentials and permission to upload content.</p>
+<h2>Documentation coverage and rendered surface</h2>
+<p>Rendered <strong>124 Markdown documents</strong> with the actual Markdown CLI. Verified all <strong>64 lessons</strong> (four per module), <strong>16 lab runbooks</strong>, <strong>16 exercises</strong>, and <strong>16 separate solutions</strong>. Checked <strong>750 local link occurrences</strong>: no missing targets. Counted 244 external reference links; this is not a claim that every remote URL/fragment was freshly reachable.</p>
+<p>Opened the rendered documentation in a real browser and followed README → sixteen-row lesson index → Module 08 lesson → evaluation runbook. Observed the real offline-review instructions and captured the rendered surface. The temporary preview tab/server were closed; no HTML course platform or scaffolding was added to the repository.</p>
+<h2>Additional offline evaluator smoke</h2>
+<p>The actual Module 08 CLI annotated an explicitly <strong>human-authored saved-report fixture</strong>, preserved the graded answer and original input file, and recorded inappropriate abstention as a semantic failure even with high numeric fixture grades. Exit <strong>0</strong>. This proves the offline annotation boundary, not a model-quality result.</p>
+<p>With configuration/consent empty, actual <code>--live --judge</code> execution produced twelve development rows, including one explicit missing-configuration grader error with no valid grade, and exited <strong>2</strong>. No provider request or successful model grade was substituted.</p>
+<h2>Gateway-mediated live execution</h2>
+<p>With explicit bounded-run consent, exercised real <strong><code>openai-codex/gpt-6.1-sol:low</code></strong> through OMP's credential-backed stdio gateway and a temporary authenticated loopback HTTP bridge. The bridge used a genuine local bearer credential; provider credentials stayed inside the native gateway. It forwarded actual model requests/responses without canned answers or output repair. No public OpenAI API key was provisioned or committed. Model fallback/native retries were disabled for these runs.</p>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Actual observation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01 direct SDK</td>
+<td>Responses classification returned <code>billing</code>, completed, 74 input / 5 output tokens; elapsed 3.649 seconds</td>
+</tr>
+<tr>
+<td>02 execution modes</td>
+<td><code>--live --mode all</code> completed invoke, stream aggregation, async, and two-item batch; labels included billing/technical</td>
+</tr>
+<tr>
+<td>03 extraction</td>
+<td>Function-calling method passed complete, missing, contradictory, and irrelevant cases with supported/unknown/contradictory/irrelevant records; default JSON Schema returned an invalid category and was rejected</td>
+</tr>
+<tr>
+<td>04 catalog agent</td>
+<td>Model requested/executed the real two-notebook quote: 2598 USD cents, no stock reservation; bounded termination</td>
+</tr>
+<tr>
+<td>05 memory/context</td>
+<td>Actual model/tool calls completed same-thread follow-up, separate user/new thread, model summary, and full/trimmed/summarized-context comparisons; not a general recall-quality score</td>
+</tr>
+<tr>
+<td>07 agentic RAG</td>
+<td>Actual ToolStrategy path answered the 30-calendar-day unused-item policy with RETURN citation, abstained on teleportation, and declined secret/unlimited-refund instructions while citing trusted RETURN rather than MALICIOUS</td>
+</tr>
+<tr>
+<td>07 two-step / 09 graph / 10 approval / 15 capstone</td>
+<td>Actual JSON-schema generation/classification failed output validation; no accepted model draft or successful live end-to-end approval is claimed</td>
+</tr>
+<tr>
+<td>08 frozen evaluation</td>
+<td>Actual twelve-row dev and eight-row held-out runs with the same frozen lexical/model/judge configuration both exited 2; failures published below</td>
+</tr>
+<tr>
+<td>11 security</td>
+<td>After the runtime-schema fix, actual model-selected Alice inspection succeeded, Bob inspection was denied, and action counts stayed zero</td>
+</tr>
+<tr>
+<td>12 comparison</td>
+<td>After the named-budget fix, all eight one-trial single/specialist runs completed; single used two model calls/one business tool, specialist four/two; invalid real-result handoff was separately rejected</td>
+</tr>
+<tr>
+<td>13 MCP</td>
+<td>Live agent completed real model-selected tool invocation against the actual FastMCP stdio server; beta warning remains visible</td>
+</tr>
+<tr>
+<td>14 HTTP failures</td>
+<td>Real configured-client transport failure and actual malformed model-output failure each returned sanitized 502; complete live RAG service scenario remains blocked by JSON-schema output incompatibility</td>
+</tr>
+</tbody>
+</table>
+<p>The stdio gateway <strong>buffers SSE until the stream ends</strong>. Stream reconstruction is exercised; real-time chunk arrival/first-token latency and the interactive input variant are not certified.</p>
+<p>Observed <strong>122 gateway model-response frames</strong>, all HTTP 200 at the gateway boundary; application validation still rejected unsuitable outputs. <strong>121 JSON responses</strong> reported a total <strong>41,401 input / 5,085 output tokens</strong>. One SSE response lacks gateway-level aggregate usage in this accounting: unknown, not zero. Counts include failed application trials and before/after runs. No currency charge, public-API pricing equivalence, or exact physical-provider-request count is invented.</p>
+<p>Frozen live development rows recorded <strong>11 execution/output-validation failures and one model-grader failure</strong>. Held-out rows recorded <strong>seven execution/output-validation failures, one model-grader failure, and one retrieval miss</strong>; failure categories can overlap. No valid quality score or human-reviewed case grade is claimed. The gateway returned natural text/invalid typed output on JSON-schema requests; schema validation was not relaxed or replaced with fake JSON.</p>
+<p>On this small paired sample the specialist doubled logical model calls without adding supported shipping facts; both arms also exposed a lexical returns miss. This is an engineering observation, not calibrated quality or a general architecture ranking.</p>
+<p>Temporary bridge processes exited <strong>0</strong>, their listeners stopped, and owned overlay/state directories were removed. No course credential, trace-upload permission, or gateway wrapper was persisted.</p>
+<h2>Explicitly unverified or blocked</h2>
+<ul>
+<li><strong>Advisor review waived:</strong> the user explicitly chose to skip the review and disable the session-only native advisor. The setting is false; no persistent configuration change or advisor sign-off is claimed. Earlier task-agent dispatch used the wrong interface.</li>
+<li>Direct public-provider endpoint compatibility and successful provider-native JSON-schema output. The available gateway failed those output checks; two-step RAG, live graph classification, model-drafted approval/capstone, rewrite/rerank, and valid model grades still need a compatible endpoint/model.</li>
+<li>Learned semantic/hybrid embedding relevance: the credential-backed catalog exposes no embedding model, and no public embedding API credential/model is configured. No fake vectors, provider substitution, or semantic-quality claim is used.</li>
+<li>Currency cost, interactive input, real-time stream delivery, stochastic robustness, and independent human grader calibration. Recorded token usage and limited generated examples do not prove them.</li>
+<li>Hosted tracing/evaluation/deployment and public/multi-host production suitability. The service is a bounded localhost/POSIX/SQLite lab, not a production security certification.</li>
+<li>Actual learner mastery, delayed retention, peer teach-back, and learning records. Authoring a course or running examples cannot establish them.</li>
+<li>Context7/codebase-memory MCP operations and graph-index updates: those tools were not exposed. LSP reference operations reported no configured server. Current official sources, file reads, runtime execution, and deterministic regressions were used instead; unavailable tooling is not claimed as successful.</li>
+</ul>
+<p>At the initial baseline, course key/model/live consent were absent. User-approved temporary child environments subsequently enabled genuine OpenAI-Codex gateway calls. That access does not supply public OpenAI JSON-schema/embedding capabilities. The remaining prerequisite is privately configured compatible provider/embedding access; advisor review is no longer a completion requirement.</p></main></body></html>

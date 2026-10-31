@@ -1,0 +1,11 @@
+{
+  "source_id": "SUPPORT",
+  "version": 1,
+  "current": true,
+  "audience": "public",
+  "title": "Support",
+  "text": "Support is available Monday through Friday from 09:00 to 17:00 UTC through the support portal. Weekend support is not offered.",
+  "trust": "policy",
+  "provenance": "Synthetic course author; approved policy",
+  "effective_date": "2026-10-01"
+}

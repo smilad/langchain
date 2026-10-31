@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>01.3 — Inspect the response, not only the text</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>01.3 — Inspect the response, not only the text</h1>
+<p><strong>Mission/objective:</strong> Advance the <a href="../../MISSION.html">mission</a> by executing one direct provider call when permitted and identifying request, response, timing and usage boundaries. Prerequisites: <a href="02.html">01.2</a>, a provider account, an explicitly chosen model and approved spend. Missing prerequisites block live evidence, not conceptual learning.</p>
+<p><strong>Sources/version:</strong> <a href="https://github.com/openai/openai-python">official OpenAI Python SDK</a>, <a href="https://platform.openai.com/docs/api-reference/responses">Responses API</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0/OpenAI SDK 3.29.0; exact resolution is in <code>uv.lock</code>. <a href="../../docs/VERIFICATION.html">Verification</a> records actual gateway-mediated Responses output, timing, and tokens—not direct public API certification. A Responses-capable model is required; there is no hardcoded model ID.</p>
+<h2>Retrieval warm-up</h2>
+<p>What is a 429? Why is a valid label not necessarily correct? Attempt before reading <a href="../../solutions/01_llm_baseline.html">diagnoses</a>.</p>
+<h2>Flow and worked example</h2>
+<p>The <a href="../../labs/01_llm_baseline/main.py">lab</a> obtains secret-bearing settings only in <code>--live</code>, removes the model from constructor settings and creates an SDK client inside a context manager:</p>
+<pre><code class="language-python">with OpenAI(**settings) as client:
+    started = perf_counter()
+    response = client.responses.create(**payload)
+    elapsed = perf_counter() - started
+</code></pre>
+<p>Never print <code>settings</code>. The printable payload has only synthetic input, instructions, model ID and output budget. API credentials travel in authentication, not in the printed request body. The response report includes response ID, actual model, status, full output items, output text and provider-reported usage when present.</p>
+<p>Elapsed time is a client wall-clock interval around the SDK call: it includes network and any permitted SDK retry, not only generation. The course permits at most one retry after the first attempt. Report missing usage as null; do not invent token counts or call token totals dollars without a dated price assumption.</p>
+<h2>Guided completion and real command</h2>
+<p>After independently choosing credentials/model/budget through the root setup instructions:</p>
+<pre><code class="language-sh">uv run python labs/01_llm_baseline/main.py --live --text &quot;The sign-in page crashes.&quot;
+</code></pre>
+<p>This requests one classification, potentially billable. A live flag alone is insufficient: <code>COURSE_ALLOW_LIVE=1</code> is also required. Before execution, fill the expected report columns without guessing their values. Afterwards copy only your actual synthetic result into your own evidence, distinguishing status, output text and validated label. No observed output is supplied here.</p>
+<h2>Failure investigation, transfer and exit</h2>
+<p>A non-completed response stops before label acceptance. Empty or unexpected output is an error, not a default <code>other</code>. Predict missing configuration, unavailable model, timeout, rate limit and contradictory rubric failures, then attempt the <a href="../../exercises/01_llm_baseline.html">exercise</a>. Exit by tracing every boundary and explaining which error class warrants changing a prompt. Next week review a new request without looking at imports; Module 08 revisits usage/timing as trace evidence. Reference: <a href="../../labs/01_llm_baseline/README.html">runbook</a>. Never paste raw authentication headers into a follow-up.</p></main></body></html>

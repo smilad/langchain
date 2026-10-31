@@ -1,0 +1,11 @@
+{
+  "source_id": "REMOTE-EXCEPTION",
+  "version": 1,
+  "current": true,
+  "audience": "public",
+  "title": "Remote work conflicting notice",
+  "text": "Remote work is limited to 3 days per week for all employees. Manager approval is required. This current notice conflicts with the current remote work policy; no precedence rule has been approved.",
+  "trust": "policy",
+  "provenance": "Synthetic course author; approved policy",
+  "effective_date": "2026-10-01"
+}

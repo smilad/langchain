@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12.3 — Context contracts are executable boundaries</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>12.3 — Context contracts are executable boundaries</h1>
+<p><strong>Mission/objective:</strong> advance <a href="../../MISSION.html">the mission</a> by rejecting an invalid specialist handoff and explaining why context ownership and termination belong in code.</p>
+<p><strong>Prerequisites:</strong> <a href="02.html">specialist pattern</a>, structured outputs, and filtered retrieval. Check: identify the difference between schema validity and authorized source membership.</p>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/multi-agent/subagents#context-engineering">context engineering for subagents</a> and <a href="https://docs.langchain.com/oss/python/langchain/middleware/built-in#model-call-limit">call-limit middleware</a>, checked 2026-10-12. Installed baseline Python 3.14.0, LangChain 1.4.4, LangChain OpenAI 1.7.0; <a href="../../uv.lock">uv.lock</a> defines exact dependencies and <a href="../../docs/VERIFICATION.html">verification</a> separates local evidence from unavailable live proof. Real model capability and consent remain prerequisites.</p>
+<h2>Recall</h2>
+<p>Who owns checkpoint state? Does another model inherit access because it received a question? After attempting: persistence belongs to the workflow/checkpointer; a question contains no authority.</p>
+<h2>Mental model</h2>
+<p>A handoff has three separate contracts: input scope, output meaning, and execution budget. The application fixes <code>user_id</code> and retrieved documents. The specialist receives only the question; it cannot query a broader identity. Its output has <code>answer</code>, <code>source_ids</code>, and <code>abstained</code>. Membership validation rejects citations outside the selected evidence. A non-abstaining answer requires citations, while an abstention must not imply supporting sources.</p>
+<p>These checks do <strong>not</strong> prove every cited claim is supported. Semantic review remains a separate gate. Also, a source can contain malicious instructions; retaining provenance is useful but does not make its prose trusted instructions.</p>
+<h2>Worked boundary</h2>
+<p><code>validate_handoff(proposal, permitted_ids)</code> runs both after the specialist and after the coordinator. Model-call middleware permits four drafter calls; the coordinator gets three. Tool-call limits allow two retrieval calls and one delegation. Graph recursion is separately capped at twelve per agent. Provider SDK retries can add physical network requests, so logical-call budgets are not a precise bill.</p>
+<p>Run <code>uv run python labs/12_multi_agent/main.py --live --trials 1 --fail-specialist</code>. After a real specialist generates a result, the lab deliberately replaces its citations with <code>not-retrieved</code>. This is a labeled boundary fault injection, <strong>not</strong> evidence that the model naturally produced that error. The validator stops propagation; no automatic fallback drafts a replacement.</p>
+<h2>Guided completion and variation</h2>
+<p>Predict the validator outcome before opening <a href="../../solutions/12_multi_agent.html">the solution</a>. Remove just the membership check in a private copy and explain the newly possible failure. Independently design a typed handoff that preserves conflicting-evidence status.</p>
+<h2>Exit and review</h2>
+<p>Show the fault's error category and call counts without printing secrets. Explain why rejecting a handoff is safer than silently trusting the coordinator to repair it. Review the same boundary when MCP tools enter the context in <a href="../13_mcp/03.html">Module 13</a>; consult <a href="../../reference/TROUBLESHOOTING.html">troubleshooting</a> for transport versus logic failures.</p></main></body></html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 09 — explicit graph workflows</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 09 — explicit graph workflows</h1>
+<p>Read <a href="../../lessons/09_graph_workflows/01.html">lesson 01</a>; environment setup: <code>uv sync --locked</code> from the repository root. Python &gt;=3.14, exact dependency versions in <a href="../../uv.lock">uv.lock</a>. Official <a href="https://docs.langchain.com/oss/python/langgraph/graph-api">Graph API</a>, checked 2026-10-12.</p>
+<h2>Runnable commands</h2>
+<pre><code class="language-sh">uv run python labs/09_graph_workflows/main.py --check
+uv run python labs/09_graph_workflows/main.py --live --question 'What is the return policy?'
+uv run python labs/09_graph_workflows/main.py --live --question 'Please escalate this request'
+uv run python labs/09_graph_workflows/main.py --live --question 'Describe Saturn'
+</code></pre>
+<p>Check is the default. It executes actual LangGraph routes for return/support, escalation/review and unrelated/unsupported inputs, shows partial updates, checks both parallel reducer contributions, intentionally executes a missing-reducer graph and a nonterminating graph, and requires their actual exceptions. Retrieval uses the actual local policy corpus and identity filters. The deterministic draft is labeled human exercise text, never a generated answer.</p>
+<p>Live uses runtime configuration <code>OPENAI_API_KEY</code>, <code>COURSE_MODEL</code>, <code>COURSE_ALLOW_LIVE=1</code> and calls a real structured classifier. A supported route then invokes real grounded RAG. Model routes may differ from fixture rules; record classification outcomes rather than silently forcing desired routes. Live RAG retrieves again internally; evidence displayed in the graph is an inspectable retrieval stage, not a claim of exact reused context.</p>
+<h2>Gate and limits</h2>
+<p>Trace every node's reads/writes; run all routes; explain the fan-in barrier and reducer; identify the two actual graph faults; complete <a href="../../exercises/09_graph_workflows.html">the independent variation</a>. Validate source support separately from schema shape. Parallel event order is not a semantic priority guarantee. The graph has bounded recursion and no side-effecting tool.</p>
+<p><strong>Evidence status:</strong> <a href="../../docs/VERIFICATION.html">verification</a> records actual local commands and outcomes separately from unavailable live proof. Installed baseline: Python 3.14.0, LangGraph 1.2.14, LangChain 1.4.4, langchain-openai 1.7.0, Pydantic 2.14.1. Live proof requires provider configuration, not a fake fallback. No learner progress is implied. This lab uses no persistent local state. <a href="../../solutions/09_graph_workflows.html">Solutions</a>.</p></main></body></html>

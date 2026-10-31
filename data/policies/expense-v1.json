@@ -1,0 +1,11 @@
+{
+  "source_id": "EXPENSE",
+  "version": 1,
+  "current": true,
+  "audience": "public",
+  "title": "Expense submission",
+  "text": "Submit expense receipts within 45 calendar days of purchase through the expense portal. Receipts must show the date, amount and vendor.",
+  "trust": "policy",
+  "provenance": "Synthetic course author; approved policy",
+  "effective_date": "2026-10-01"
+}

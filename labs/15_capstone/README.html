@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Capstone: source-grounded support workflow</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Capstone: source-grounded support workflow</h1>
+<p>Start with <a href="../../lessons/15_capstone/01.html">Lesson 15.1</a>; complete <a href="../../exercises/15_capstone.html">the exercises</a> before opening <a href="../../solutions/15_capstone.html">solutions</a>.</p>
+<h2>Setup and modes</h2>
+<p>From the repository root:</p>
+<pre><code class="language-bash">uv sync --locked
+uv run langchain-learning check
+uv run python labs/15_capstone/main.py --check
+</code></pre>
+<p><code>--check</code> exercises actual lexical retrieval, persistent LangGraph review state, edits, rejection, idempotent local action recording, and cross-user denial using an explicitly human-authored draft. It does not call an LLM or prove generated-answer quality. The temporary integration demonstration removes its own databases after printing evidence.</p>
+<p>Persistent learner experiments use <code>.course/capstone/</code>, or the directory chosen through <code>COURSE_STATE_DIR</code>. Use fresh thread identifiers to create new requests; reusing an existing ID inspects the same request rather than replacing its owner/input.</p>
+<pre><code class="language-bash">uv run python labs/15_capstone/main.py --action start --thread capstone-manual \
+  --draft 'Human-authored draft: confirm RETURN v2 and the delivery date before replying.'
+uv run python labs/15_capstone/main.py --action inspect --thread capstone-manual
+uv run python labs/15_capstone/main.py --action edit --thread capstone-manual \
+  --edited-draft 'The current policy allows 30 calendar days after delivery for an unused item with receipt.'
+uv run python labs/15_capstone/main.py --action inspect --thread capstone-manual
+</code></pre>
+<p>These are separate processes, so inspection/decision reopen persisted state. Repeat the identical edit to observe one local action. A different repeated decision should fail rather than create another record. Try Bob's identity against Alice's thread and require denial:</p>
+<pre><code class="language-bash">uv run python labs/15_capstone/main.py --action inspect --user bob --thread capstone-manual
+</code></pre>
+<p>This last command intentionally exits nonzero. Use a separate Bob-owned thread and <code>--action reject</code> to confirm zero Bob actions.</p>
+<h2>Real model path</h2>
+<p>Copy <code>.env.example</code> to <code>.env</code>, supply an accessible OpenAI or compatible model, and set <code>COURSE_ALLOW_LIVE=1</code> only with a chosen spending limit. Do not paste secrets into lessons or chat logs. Hosted LangSmith tracing is separate, optional consent.</p>
+<pre><code class="language-bash">uv run python labs/15_capstone/main.py --live --action start --thread capstone-live
+uv run python labs/15_capstone/main.py --action inspect --thread capstone-live
+# Inspect the retrieved evidence and draft before deciding:
+uv run python labs/15_capstone/main.py --action approve --thread capstone-live
+</code></pre>
+<p>A generated draft is not automatically approved. <code>--live</code> without configuration exits with an explicit prerequisite error; no fake model takes its place. An answer that abstains must be understood/reviewed, not interpreted as proof that a question was supported.</p>
+<h2>Evaluation and serving</h2>
+<p>Follow <a href="../08_evaluation/README.html">Module 08's runbook</a> to freeze configuration on development cases and evaluate the eight held-out cases. Keep semantic support review distinct from citation-ID checks. Follow <a href="../14_production/README.html">Module 14's runbook</a> for actual HTTP requests, authentication, concurrency, deadlines, and restart recovery.</p>
+<p>Record model IDs, exact resolved versions, trial count, timings, reported usage, any estimated-cost assumptions, and per-case failures. The twenty-case corpus is instructional and does not certify production quality.</p>
+<h2>Verification and scope</h2>
+<p>Observed local evidence and any inaccessible live prerequisites are recorded in <a href="../../docs/VERIFICATION.html">docs/VERIFICATION.md</a>. This runbook makes no claim that live model quality or an advisor review has passed.</p>
+<p>The action sink is a real local SQLite record—not email, a payment, or a production ticket. Its unique transactional action identity prevents duplicated <strong>local records</strong>; it does not promise exactly-once distributed delivery. Cancellation can occur after commit: inspect before retrying. Never delete a persistence directory while a workflow/server is running; use a fresh isolated <code>COURSE_STATE_DIR</code> for disposable experiments.</p></main></body></html>

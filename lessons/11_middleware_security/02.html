@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>11.2 — Bound execution and minimize what enters context</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>11.2 — Bound execution and minimize what enters context</h1>
+<p><a href="../../MISSION.html">Mission</a>. <strong>Objective:</strong> identify which budgets actually stop work and which private fields are excluded from a tool response.</p>
+<h2>Prerequisites and recall</h2>
+<p><a href="01.html">Middleware hooks</a>, Module 05 context selection and Module 08 latency/cost distinctions. Can a recursion limit bound input size? Can redacting a final answer undo a secret already sent to a provider? Attempt both before inspecting the code.</p>
+<h2>Sources and version note</h2>
+<p><a href="https://docs.langchain.com/oss/python/langchain/middleware/built-in">Built-in middleware</a> and <a href="https://docs.langchain.com/oss/python/langchain/tools">tool runtime context</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangChain 1.4.4, LangGraph 1.2.14, langchain-openai 1.7.0; <a href="../../uv.lock">lockfile</a>, <a href="../../docs/VERIFICATION.html">exercised evidence</a>. Budget APIs and provider capabilities must match the installed lock.</p>
+<h2>Mental model</h2>
+<p>Different budgets constrain different resources. The security agent permits at most three model calls and three tool calls per run, and uses a graph recursion bound. A model-call budget is not a dollar cap, a context-size cap, or protection against one expensive request. Provider timeout/retry settings come from the course runtime; their purpose differs from graph termination.</p>
+<p>The secure tool returns only thread ID, status, pending-review count and action count. It excludes questions, draft bodies, owner identifiers, documents and database paths. This is data minimization before transmission. Raw checkpoint dumps would contain much more than the model needs for a status question.</p>
+<h2>Worked example</h2>
+<p>Inspect <code>authorized_inspect</code> in <a href="../../src/langchain_learning/security.py">security.py</a>. Compare its four-field result with <code>SupportWorkflow.inspect</code> from Module 10. The application can inspect rich state locally; a model receives the narrow projection required for its task.</p>
+<p>Run <code>uv run python labs/11_middleware_security/main.py --check</code>. The allowed alice-thread call returns only that projection. In live mode examine tool messages, call counts and final claims. If the agent never uses its available tool, do not report successful tool execution merely because the final answer sounds plausible.</p>
+<h2>Guided completion and diagnosis</h2>
+<p>List fields you would remove before adding another tool. In an exercise copy, ask repeated status questions and compare the run budget with accumulated conversation length. Explain why reducing a call budget does not make previously retained context private. If a secret appears in a model response, inspect the outbound messages and tool results before adding redaction at the final display boundary.</p>
+<h2>Independent gate and review</h2>
+<p><a href="../../exercises/11_middleware_security.html">Exercise</a>: propose a narrow read-only capability and explicit budget rationale. Demonstrate the projection, diagnose one overbroad response, and state what each budget cannot guarantee. During Module 14 evaluate actual latency and capacity rather than inventing an SLA from these teaching limits. <a href="../../solutions/11_middleware_security.html">Solutions</a>.</p>
+<p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: which resource does your budget leave unbounded?</p></main></body></html>

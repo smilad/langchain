@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14.3 — Persistent state is operational data</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>14.3 — Persistent state is operational data</h1>
+<p><strong>Mission/objective:</strong> advance <a href="../../MISSION.html">the mission</a> by resuming approval after a real server restart and retaining useful, minimal failure evidence.</p>
+<p><strong>Prerequisites:</strong> <a href="02.html">cancellation semantics</a>, durable checkpoints, and idempotency. Check: explain why an in-memory request record is not durable workflow state.</p>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langgraph/durable-execution">LangGraph durable execution</a>, <a href="https://docs.python.org/3.14/library/sqlite3.html">Python SQLite</a>, and <a href="https://docs.langchain.com/oss/python/langgraph/persistence">persistence</a>, checked 2026-10-12. Python 3.14.0, LangGraph 1.2.14, checkpointer 3.1.1; see <a href="../../docs/VERIFICATION.html">verification</a>. Local persistence is real, but no exactly-once external email claim is made.</p>
+<h2>Recall</h2>
+<p>Why place the side effect after interrupt? Why bind an action ID to an owner? After an attempt: resumed execution can revisit nodes; stable identity prevents duplicate local recording and stops cross-user access.</p>
+<h2>Three stores, three responsibilities</h2>
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Lifetime</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SQLite checkpoints</td>
+<td>Process restart</td>
+<td>Graph state and pending review</td>
+</tr>
+<tr>
+<td>SQLite action sink</td>
+<td>Process restart</td>
+<td>Real synthetic approved-action records</td>
+</tr>
+<tr>
+<td>In-memory request outcomes</td>
+<td>Current process, last 256</td>
+<td>Diagnose cancellation/failure</td>
+</tr>
+</tbody>
+</table>
+<p>Each request's child process enters its own <code>SupportWorkflow</code> context and closes SQLite connections before returning its result. The workflow's cross-process lock protects serialized graph execution. Do not share a checkpointer connection between arbitrary HTTP threads and simply hope SQLite tolerates it.</p>
+<h2>Worked restart</h2>
+<p>The model-free <a href="../../labs/14_production/main.py">production lab</a> starts two human-authored drafts simultaneously, denies Bob access to Alice's thread, stops the actual service subprocess, and restarts using the same files. Alice approves twice with the same decision; her sink must have one action. Bob rejects; his sink must be empty. These are deterministic workflow invariants, not evidence of generated draft quality.</p>
+<p>Logs report event names, request IDs, status, elapsed time, and exception class. They omit bearer headers, prompts, drafts, document content, and raw provider exceptions. The returned workflow state still contains synthetic application data, so even authenticated responses need retention and access rules in a real deployment.</p>
+<h2>Guided completion and variation</h2>
+<p>Predict which data remains after restart; supply the missing state-inspection request before approval. Independently edit rather than approve a draft using <a href="../../exercises/14_production.html">the exercise</a>. Diagnose duplicate actions by inspecting action identity and workflow replay, not by hiding the second row.</p>
+<h2>Exit and review</h2>
+<p>Demonstrate restart, pending review, one approved action, and no rejected action. Explain what a schema change could invalidate: checkpoint serialization, ownership tables, and action uniqueness. There is no generic migration claim; a real schema change needs an explicit migration/backup/recovery design. Revisit state compatibility in <a href="04.html">rollback</a>, and consult <a href="../../reference/TROUBLESHOOTING.html">troubleshooting</a> before deleting local state.</p></main></body></html>

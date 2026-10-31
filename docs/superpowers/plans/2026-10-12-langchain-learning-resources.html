@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LangChain Learning Resources Implementation Plan</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../../lessons/README.html">Lesson index</a></nav><h1>LangChain Learning Resources Implementation Plan</h1>
+<blockquote>
+<p><strong>Execution status:</strong> all core lesson/lab/exercise/solution artifacts are delivered. Checked items mean authored or exercised work, not learner mastery or provider quality. The user explicitly waived advisor review and the session-only advisor is disabled. Bounded real OpenAI-Codex gateway runs have exercised generation and tools; JSON-schema compatibility and embedding access remain explicit limits. No advisor sign-off is claimed.</p>
+</blockquote>
+<p><strong>Goal:</strong> Turn the researched curriculum into a detailed, runnable Python learning course, from first model call to a measured, resumable support-assistant capstone.</p>
+<p><strong>Architecture:</strong> Markdown lessons explain one concept at a time; Python labs exercise real behavior; separate exercise/solution files support retrieval and independent practice. Four evolving projects reuse earlier work instead of creating unrelated demos. Learning records are created only after demonstrated understanding.</p>
+<p><strong>Tech stack:</strong> Existing Python <code>&gt;=3.14</code> and <code>uv_build</code>; <code>uv</code> for environment/locking; current LangChain 1.x APIs and separately installed integrations; LangGraph where explicit control is needed; optional LangSmith tracing/evaluation. Verify actual resolved versions and provider capabilities at implementation time.</p>
+<p><strong>Spec:</strong> <a href="../../../MISSION.html">MISSION.md</a>, <a href="../../../ROADMAP.html">ROADMAP.md</a>, and <a href="../../TEACHING_GUIDE.html">TEACHING_GUIDE.md</a>.</p>
+<h2>Global constraints</h2>
+<ul>
+<li>This living authoring plan records implemented artifacts and outstanding evidence. See <a href="../../VERIFICATION.html">VERIFICATION.md</a> for observed execution, version pins, and blockers.</li>
+<li>Keep the existing Python requirement <code>&gt;=3.14</code> unless a reproduced integration incompatibility requires an explicit compatibility decision.</li>
+<li>Rename the local distribution/package to <code>langchain-learning</code> / <code>langchain_learning</code> before adding the external <code>langchain</code> dependency. Remove old names/entrypoints in that same cutover; no aliases.</li>
+<li>Core curriculum: Modules 00–15, four lessons each, the stated module gates, and Projects A/B/C/capstone. Optional tracks are not substitutes for missing core material.</li>
+<li>English Markdown and runnable Python are authoring defaults, not confirmed learner preferences. Do not build an HTML course platform merely to follow a skill's default layout.</li>
+<li>Use synthetic/public data. Secrets, private documents, paid deployment, and hosted trace uploads require an explicit learner decision.</li>
+<li>No invented model answers, fake lookup tools, mocks presented as integrations, or unsupported claims of successful execution.</li>
+<li>Re-read current official documentation before implementing an API example; record versions actually exercised. Do not pin a release number merely because it was current during research.</li>
+<li>Every required lab has a no-secret setup check and an explicit live-run mode. A missing credential is a reported prerequisite, not a successful model-call demonstration.</li>
+</ul>
+<h2>Review focus</h2>
+<ol>
+<li>Clean checkout / wrong interpreter: environment commands and external-library imports must work outside the author's IDE.</li>
+<li>Unknown answer / invalid structured output: fail or abstain explicitly rather than fabricate data.</li>
+<li>Two users / filtered documents: histories and retrieval permissions must not leak across identities.</li>
+<li>Restart / interrupt replay: approved synthetic actions must not be duplicated and rejected actions must not occur.</li>
+<li>Nondeterministic generation / evaluation leakage: report per-case evidence and variability; keep held-out cases out of tuning.</li>
+</ol>
+<p>These conditions belong in the module lab gates below. Permanent regression tests should cover deterministic boundaries and state transitions where useful; live smoke evidence remains required for model/integration behavior.</p>
+<h2>File structure and responsibilities</h2>
+<p>Files created by the planning deliverable:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>README.md</code></td>
+<td>Entry point and honest status</td>
+</tr>
+<tr>
+<td><code>MISSION.md</code></td>
+<td>Goal, observable success, and assumptions</td>
+</tr>
+<tr>
+<td><code>ROADMAP.md</code></td>
+<td>Prerequisite sequence, lesson topics, projects, gates</td>
+</tr>
+<tr>
+<td><code>RESOURCES.md</code></td>
+<td>Annotated sources, skill recommendations, freshness</td>
+</tr>
+<tr>
+<td><code>docs/TEACHING_GUIDE.md</code></td>
+<td>Lesson format, feedback, mastery and retention</td>
+</tr>
+<tr>
+<td>This plan</td>
+<td>Ordered implementation tasks and verification</td>
+</tr>
+</tbody>
+</table>
+<p>Implemented artifact layout (learning records are created only after learner demonstration):</p>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/langchain_learning/__init__.py</code></td>
+<td>Renamed existing course package; migrate existing entrypoint consistently</td>
+</tr>
+<tr>
+<td><code>uv.lock</code></td>
+<td>Reproducible tested dependency resolution</td>
+</tr>
+<tr>
+<td><code>.env.example</code></td>
+<td>Variable names and safe examples only</td>
+</tr>
+<tr>
+<td><code>.gitignore</code></td>
+<td>Exclude credentials, local state/indexes, and transient output</td>
+</tr>
+<tr>
+<td><code>lessons/&lt;module-id&gt;_&lt;slug&gt;/01.md</code> through <code>04.md</code></td>
+<td>Four scoped lessons, each with source links and a lab/exercise pointer</td>
+</tr>
+<tr>
+<td><code>labs/&lt;module-id&gt;_&lt;slug&gt;/main.py</code></td>
+<td>Module lab with a documented direct command</td>
+</tr>
+<tr>
+<td><code>labs/&lt;module-id&gt;_&lt;slug&gt;/README.md</code></td>
+<td>Setup, input cases, expected behavior, observed evidence, limits</td>
+</tr>
+<tr>
+<td><code>exercises/&lt;module-id&gt;_&lt;slug&gt;.md</code></td>
+<td>Independent prompts without their answers</td>
+</tr>
+<tr>
+<td><code>solutions/&lt;module-id&gt;_&lt;slug&gt;.md</code></td>
+<td>Explanations, troubleshooting, and worked solutions</td>
+</tr>
+<tr>
+<td><code>data/catalog.json</code>, <code>data/policies/</code></td>
+<td>Small synthetic catalog and versioned source documents</td>
+</tr>
+<tr>
+<td><code>data/evaluations/rag.jsonl</code></td>
+<td>Labeled synthetic cases with stable IDs and development/held-out splits</td>
+</tr>
+<tr>
+<td><code>reference/GLOSSARY.md</code></td>
+<td>Consistent definitions and boundaries</td>
+</tr>
+<tr>
+<td><code>reference/API_MAP.md</code></td>
+<td>Verified APIs by concept and tested version, not a legacy alias list</td>
+</tr>
+<tr>
+<td><code>reference/TROUBLESHOOTING.md</code></td>
+<td>Diagnoses grounded in actually encountered failures</td>
+</tr>
+<tr>
+<td><code>learning-records/0001-&lt;insight&gt;.md</code></td>
+<td>First evidence-backed learning record; created only after learner demonstration</td>
+</tr>
+</tbody>
+</table>
+<p>The module directory names below are the contract for lesson/lab links. Do not create empty directories or placeholder lessons in advance.</p>
+<h2>Shared lesson-authoring loop</h2>
+<p>Apply this loop to each module in Tasks 2–6, using its exact topics and gate in the roadmap:</p>
+<ul>
+<li>[x] Read primary references and record source URLs/date, required credentials, and capability limits; central verification records exercised versions.</li>
+<li>[x] Write four lessons per module with explanations, worked examples, input/output shapes, and references.</li>
+<li>[x] Implement every lab plus independent exercise and separate solution using actual local behavior and real provider paths.</li>
+<li>[ ] Run the actual lab. Exercise the normal path and each named failure case; record observed behavior in its README, without publishing secrets or private data.</li>
+<li>[ ] Check the practical gate, teach-back, diagnosis, and transfer criteria. Add a deterministic regression test only for a meaningful boundary/invariant, not source text or mocked forwarding.</li>
+<li>[x] Maintain the glossary, API map, and root/lesson navigation for delivered content.</li>
+</ul>
+<p>A completed lesson has explanations, runnable behavior, exercise feedback, and evidence. A file with headings or a mock-backed demonstration does not satisfy this loop.</p>
+<h2>Task 1: Resolve setup hazards and deliver the first runnable module</h2>
+<p><strong>Files:</strong> modify <code>pyproject.toml</code>; rename <code>src/langchain/__init__.py</code> to <code>src/langchain_learning/__init__.py</code>; create <code>uv.lock</code>, <code>.env.example</code>, <code>.gitignore</code>, <code>lessons/00_setup/01.md</code>–<code>04.md</code>, <code>labs/00_setup/main.py</code>, <code>labs/00_setup/README.md</code>, <code>exercises/00_setup.md</code>, and <code>solutions/00_setup.md</code>.</p>
+<p><strong>Consumes:</strong> existing metadata and source behavior, read before editing; prerequisite diagnostic.</p>
+<p><strong>Produces:</strong> non-conflicting course package, reproducible environment, setup checker, documented commands.</p>
+<ul>
+<li>[x] Inspect existing source; preserve the user-authored <code>neuron</code>, remove the obsolete generated greeting.</li>
+<li>[x] Cut over to <code>langchain-learning</code> / <code>langchain_learning</code> and <code>langchain_learning.cli:main</code>; remove the conflicting old package and entrypoint without aliases.</li>
+<li>[x] Lock and exercise the selected LangChain/OpenAI/LangGraph/SQLite/MCP dependencies on Python 3.14.</li>
+<li>[x] Deliver a no-request setup checker with interpreter/library versions, import origin, and non-secret configuration-presence evidence.</li>
+<li>[x] Author Module 00 and its diagnostic exercise/solution, including interpreter and missing-configuration diagnosis.</li>
+<li>[x] Run locked sync and the actual setup CLI in a fresh temporary environment; external <code>langchain</code> resolves to that environment's site-packages.</li>
+<li>[x] Publish setup results/navigation; distinguish implemented later modules from their unverified provider-dependent gates.</li>
+</ul>
+<p><strong>Acceptance:</strong> Module 00 gate, reproducible commands, no namespace conflict, and no secret exposure. Setup success alone is not evidence of a successful provider request.</p>
+<h2>Task 2: Deliver the model-call foundations</h2>
+<p><strong>Modules / directories:</strong> <code>01_llm_baseline</code>, <code>02_models_messages</code>, <code>03_structured_output</code>.</p>
+<p><strong>Consumes:</strong> Task 1 environment; current model/messages/structured-output references.</p>
+<p><strong>Produces:</strong> direct-call baseline, equivalent LangChain model lab, schema-based extraction lab, and twelve lessons.</p>
+<ul>
+<li>[x] Author Modules 01–03 and actual direct-provider/model/structured-output paths, with local checks and independent practice.</li>
+<li>[x] Document <code>--live</code> commands and actual provider/model/consent prerequisites. Missing configuration fails visibly.</li>
+<li>[ ] Show response shape and reported usage from a real run. Exercise missing credentials, streamed content/events, and unsupported/invalid structured-output behavior where the chosen provider allows it.</li>
+<li>[x] Explain direct SDK versus LangChain responsibilities and actual Runnable/LCEL extraction composition without legacy agent aliases.</li>
+</ul>
+<p><strong>Acceptance:</strong> Modules 01–03 gates, not copied documentation output. No prerequisite is silently replaced with a fake model.</p>
+<h2>Task 3: Deliver Project A and conversation-state lessons</h2>
+<p><strong>Modules / directories:</strong> <code>04_tools_agents</code>, <code>05_memory_context</code>.</p>
+<p><strong>Additional files:</strong> <code>data/catalog.json</code>.</p>
+<p><strong>Consumes:</strong> typed outputs/model invocation; synthetic catalog owned by this task.</p>
+<p><strong>Produces:</strong> real local lookup/calculation tools, <code>create_agent</code> demonstration, isolated conversation state, eight lessons.</p>
+<ul>
+<li>[x] Author Modules 04–05, their actual tools/state labs, independent exercises, and solutions.</li>
+<li>[x] Define and exercise real synthetic-catalog identifiers, stock/integer-price rules, and missing-item behavior.</li>
+<li>[ ] Run the assistant and inspect requested tool arguments, actual tool outputs, and the final message for present/absent items and invalid arguments.</li>
+<li>[x] Exercise two identities/threads, graph/store operations, context trimming, and human-authored snapshots, then actual gateway-backed follow-up, personalization context, model summary, and context variants. These runs are not a general memory-quality or learner-mastery claim.</li>
+</ul>
+<p><strong>Acceptance:</strong> Modules 04–05 gates, bounded execution, explicit unavailable-item result, and no cross-user state.</p>
+<h2>Task 4: Deliver Project B and an evaluation baseline</h2>
+<p><strong>Modules / directories:</strong> <code>06_retrieval</code>, <code>07_rag</code>, <code>08_evaluation</code>.</p>
+<p><strong>Additional files:</strong> <code>data/policies/</code>, <code>data/evaluations/rag.jsonl</code>.</p>
+<p><strong>Consumes:</strong> invocation/structured output; trace concepts from Project A.</p>
+<p><strong>Produces:</strong> provenance-preserving index, two-step RAG assistant, evaluation report, twelve lessons.</p>
+<ul>
+<li>[x] Author Modules 06–08 with actual retrieval/generation/evaluation paths and separate practice.</li>
+<li>[x] Deliver provenance/version/permission metadata, current conflicts, and an explicitly untrusted malicious fixture.</li>
+<li>[x] Implement two-step RAG before optional agentic retrieval; expose evidence and preserve explicit failures.</li>
+<li>[x] Freeze exactly twenty cases and the 12/8 split; exercise configuration registration, mismatch rejection, and local development/held-out retrieval. Human grades annotate saved outputs without rerunning generation.</li>
+<li>[ ] Run normal, no-answer, conflicting/outdated, authorization-filter, and malicious-source cases. Verify citation support, not only citation formatting.</li>
+<li>[ ] Change one retrieval variable and compare per-case held-out outcomes, latency, and reported usage/cost when available. Clearly label estimated cost and its pricing assumptions.</li>
+</ul>
+<p><strong>Acceptance:</strong> Modules 06–08 gates and documented limitations of a small benchmark. Cloud tracing is optional; private data upload is never automatic.</p>
+<h2>Task 5: Deliver Project C, durable approval, and security</h2>
+<p><strong>Modules / directories:</strong> <code>09_graph_workflows</code>, <code>10_durable_approval</code>, <code>11_middleware_security</code>.</p>
+<p><strong>Consumes:</strong> Project B retrieval/evaluation and isolated state concepts.</p>
+<p><strong>Produces:</strong> explicit graph, persistent human-review pause, safe local action sink, twelve lessons.</p>
+<ul>
+<li>[x] Author Modules 09–11, actual graphs/approval/security paths, exercises, and solutions.</li>
+<li>[x] Exercise deterministic routes, partial updates, and reducers before optional real model classification.</li>
+<li>[x] Persist checkpoints/ownership/action identity; interrupt before the local synthetic action and enforce replay idempotency.</li>
+<li>[x] Exercise rejection, approval, edit, separate-process restoration, actual HTTP server restart, and owned action state.</li>
+<li>[x] Exercise local thread/tool/secret boundaries and treat retrieved instructions as data. Model injection resistance remains a live gate.</li>
+<li>[x] Preserve meaningful deterministic rejection/replay/ownership/consent regressions. Real agent-dependent traces remain unverified.</li>
+</ul>
+<p><strong>Acceptance:</strong> Modules 09–11 gates. Persistent pause/resume and no duplicate effect must be demonstrated across process restart.</p>
+<h2>Task 6: Deliver advanced integration and operational lessons</h2>
+<p><strong>Modules / directories:</strong> <code>12_multi_agent</code>, <code>13_mcp</code>, <code>14_production</code>.</p>
+<p><strong>Consumes:</strong> Project C, evaluation cases, and established security boundaries.</p>
+<p><strong>Produces:</strong> measured specialist experiment, actual local MCP client/server interaction, locally served workflow, twelve lessons.</p>
+<ul>
+<li>[x] Author Modules 12–14, actual bounded comparison/MCP/HTTP paths, exercises, solutions, and runbooks.</li>
+<li>[ ] Compare one specialist pattern against the single-agent baseline. A finding that the baseline is better is a valid lesson result.</li>
+<li>[x] Run the actual FastMCP server/client/tool adapter, invalid quantities, unavailable endpoint, disconnect, and context cleanup. Model-selected MCP tools remain unverified.</li>
+<li>[x] Deliver and exercise localhost HTTP serving with authentication, bounded workers/deadlines, durable state, and documented startup/shutdown.</li>
+<li>[ ] Launch the served application and exercise concurrent identities, a cancelled request, an upstream failure, and resumption after restart. Report observed latency and state behavior.</li>
+</ul>
+<p><strong>Acceptance:</strong> Modules 12–14 gates, no fake server, no unbounded execution, and a runbook usable without the IDE.</p>
+<h2>Task 7: Deliver capstone and learning-transfer evidence</h2>
+<p><strong>Module / directory:</strong> <code>15_capstone</code>.</p>
+<p><strong>Consumes:</strong> verified Projects A/B/C, evaluation method, and operational runbook.</p>
+<p><strong>Produces:</strong> integrated support assistant, four lessons, reproducible tutorial, evaluation/limitations report.</p>
+<ul>
+<li>[x] Author Module 15's integrated capstone, four lessons, runbook, exercise, and solution.</li>
+<li>[x] Run the local capstone with actual retrieved evidence, explicit human draft, restored review, ownership checks, reject/edit/approve, and exactly one idempotent local action. Fresh locked environment/setup CLI is also exercised; real model drafting remains unverified.</li>
+<li>[ ] Evaluate held-out and adversarial cases; publish failures as well as successes and distinguish estimated from observed cost.</li>
+<li>[ ] Ask the learner to adapt one corpus/input constraint independently and teach back the data/control flow. Record demonstrated understanding only after this occurs.</li>
+<li>[x] Publish authored/implemented status with local/live execution evidence and explicit remaining provider/learner gates. Advisor review was waived by the user; keep optional tracks separate.</li>
+</ul>
+<p><strong>Acceptance:</strong> complete core curriculum and runnable capstone, not an integrated happy-path demo alone.</p>
+<h2>Handoff</h2>
+<p>Recommended sequence: implement Task 1 first, then review one completed lesson and its lab before multiplying the format. Tasks 2–7 consume earlier projects; they are not independent work to dispatch blindly in parallel. Within a later task, source curation or independent exercise authoring may run concurrently once APIs and file ownership are fixed.</p>
+<p>Execution evidence is in <a href="../../VERIFICATION.html">VERIFICATION.md</a>. Real OpenAI-Codex model requests were sent with explicit user consent through the credential-backed gateway; no embedding calls, hosted uploads, learner-mastery record, or advisor sign-off are fabricated. Remaining unchecked gates require compatible provider/embedding access or an actual learner demonstration.</p></main></body></html>

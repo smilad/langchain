@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>00.1 — Choose the interpreter before choosing an API</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>00.1 — Choose the interpreter before choosing an API</h1>
+<p><strong>Mission/objective:</strong> Support the <a href="../../MISSION.html">course mission</a> by reproducing the environment and showing which Python owns an import. No prior Python knowledge is assumed. Before starting, locate a terminal and the repository root; do not paste a credential into a command.</p>
+<p><strong>Sources/version:</strong> <a href="https://docs.astral.sh/uv/guides/projects/">uv projects</a>, <a href="https://docs.python.org/3/library/venv.html">Python virtual environments</a>. Sources checked 2026-10-12; course requires Python ≥3.14. Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, Pydantic 2.14.1; exact resolution is in <code>uv.lock</code>. Consult <a href="../../docs/VERIFICATION.html">verification</a> for actual runtime evidence. No model capability or API key is needed.</p>
+<h2>Recall before reading</h2>
+<p>What is the difference between a directory name and an import name? If two Python installations exist, where does a package install go? Write a prediction, then use the separate <a href="../../solutions/00_setup.html">solution</a>.</p>
+<h2>Mental model and flow</h2>
+<p>The terminal launches an interpreter; that interpreter searches its import paths. An IDE can launch a different interpreter even while displaying the same files. A virtual environment isolates dependencies, not source code or credentials. <code>pyproject.toml</code> describes allowed dependencies; <code>uv.lock</code> records a specific resolution. Neither demonstrates that a provider integration works on your machine.</p>
+<table>
+<thead>
+<tr>
+<th>Boundary</th>
+<th>Input</th>
+<th>Output to inspect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>uv sync --locked</code></td>
+<td>metadata + lock + selected Python</td>
+<td>installed environment</td>
+</tr>
+<tr>
+<td><code>uv run python …</code></td>
+<td>script + project environment</td>
+<td>process and import paths</td>
+</tr>
+<tr>
+<td>preflight</td>
+<td>running interpreter and installed metadata</td>
+<td>version, interpreter, import origin</td>
+</tr>
+</tbody>
+</table>
+<h2>Worked example</h2>
+<p>From the repository root:</p>
+<pre><code class="language-sh">uv sync --locked
+uv run python labs/00_setup/main.py --check
+</code></pre>
+<p>These are implemented entrypoints, not an execution claim. Inspect <code>interpreter</code>, <code>packages</code>, and <code>langchain_origin</code> in the actual report. <code>langchain</code> must be the external framework; the course package is <code>langchain_learning</code>. Keeping the checkout directory named <code>langchain</code> is harmless; publishing a local package with that import name is not. The lab rejects an origin under the repository's <code>src</code> directory.</p>
+<h2>Guided completion and investigation</h2>
+<p>Select the lab's reported interpreter in your IDE, then rerun from the IDE yourself. Before comparing output, predict which field would expose a mismatch. Complete the explanation: “My editor's interpreter differs from <code>uv run</code> because ___; I will change ___, not reinstall packages randomly.” Diagnose <code>ModuleNotFoundError</code> by checking interpreter and installation first, not by renaming the external framework.</p>
+<h2>Transfer, exit, review</h2>
+<p>Attempt diagnostic tasks 1–2 in the <a href="../../exercises/00_setup.html">exercise</a>. Exit evidence is a reproduced environment, external import origin, and a teach-back of metadata versus lock versus installed files. Next session repeat with a fresh terminal; in Module 02 explain why provider integrations are separate distributions. See the <a href="../../labs/00_setup/README.html">lab runbook</a> and <a href="../../reference/TROUBLESHOOTING.html">troubleshooting reference</a>. A useful follow-up question names both interpreter paths, never a secret.</p></main></body></html>

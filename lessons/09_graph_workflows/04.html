@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>09.4 — Fan-out requires a meaningful fan-in</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>09.4 — Fan-out requires a meaningful fan-in</h1>
+<p><a href="../../MISSION.html">Mission</a>. <strong>Objective:</strong> show that a draft waits for two independent branches, then distinguish deterministic graph proof from live model-routing proof.</p>
+<h2>Prerequisites and warm-up</h2>
+<p><a href="02.html">Routing</a>, <a href="03.html">reducers</a>, and Module 07's grounded answers. Why can two branches share a snapshot safely? What is lost if a draft runs before retrieval? Can a schema-valid route be semantically wrong? Attempt these before running the lab.</p>
+<h2>Primary source and version boundary</h2>
+<p><a href="https://docs.langchain.com/oss/python/langgraph/graph-api">Graph API</a> and <a href="https://docs.langchain.com/oss/python/langchain/rag">RAG</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangGraph 1.2.14, LangChain 1.4.4, langchain-openai 1.7.0; <a href="../../uv.lock">lockfile</a>, <a href="../../docs/VERIFICATION.html">exercised evidence</a>. Live needs provider structured output; credentials/consent are prerequisites, not proof.</p>
+<h2>Mental model and worked flow</h2>
+<p>The supported route returns two destinations, retrieve and constraints. They execute in the same super-step, contribute events using the reducer, and join through <code>add_edge(['retrieve', 'constraints'], 'draft')</code>. The list-of-start-nodes edge is a barrier: draft should not proceed after just one contributor.</p>
+<p>Retrieve accesses the real filtered policy corpus. Constraints contributes the read-only policy event. It is deliberately small and deterministic; there is no fake external compliance service. Draft in check mode records explicit human exercise text. In live mode the graph invokes actual structured model classification and, for supported requests, <code>rag.answer</code>; RAG retrieves again inside its own contract. This is redundant retrieval, not an invented reuse optimization. Inspect the evidence channel and source IDs rather than assuming both stages retrieved identical context.</p>
+<p>Run <code>uv run python labs/09_graph_workflows/main.py --check</code>. Use updates to identify the branch contributions and final state to inspect their merge. Illustrative expectation: both retrieve and constraint events survive before draft. No ordering or provider result is claimed observed here.</p>
+<h2>Guided completion and diagnosis</h2>
+<p>Draw the graph before reading the edge declarations. Replace the barrier with an edge from only retrieve in your own copy and predict the dependency violation. Adding parallelism is safe only when branches are independent and the join expresses what downstream work needs. A reducer resolves competing updates; it does not create missing dependencies or authorization.</p>
+<h2>Independent gate and delayed review</h2>
+<p>Follow <a href="../../exercises/09_graph_workflows.html">the exercise</a>: add another independent check, update the barrier, and justify the graph instead of a tool loop. Run one live unfamiliar variation when credentials are available, record classification separately from grounding quality, and diagnose one deterministic graph fault. In Module 14 revisit what parallelism means for throughput under a serialized durable workflow. <a href="../../solutions/09_graph_workflows.html">Solutions</a>.</p>
+<p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: which new branch requires sequencing rather than parallelism?</p></main></body></html>

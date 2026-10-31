@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab 08 — freeze, run, inspect, then grade saved observations</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Lab 08 — freeze, run, inspect, then grade saved observations</h1>
+<p>Prerequisites: <a href="../../lessons/07_rag/01.html">Modules 06–07</a>, the <a href="../../lessons/08_evaluation/01.html">lesson sequence</a>, and the locked checkout environment. <a href="../../exercises/08_evaluation.html">Exercises</a> / <a href="../../solutions/08_evaluation.html">solutions</a>. Actual verification is <a href="../../docs/VERIFICATION.html">separate from learner mastery</a>.</p>
+<h2>Target and dataset</h2>
+<p><code>langchain_learning.evaluation</code> runs actual authorized retrieval, optionally real generation, deterministic boundary checks, and optional fallible model grading. The committed <code>data/evaluations/rag.jsonl</code> has exactly twenty synthetic cases: eight answerable, four unanswerable, four conflicting/outdated, four adversarial/access; twelve development and eight held-out. Byte hash and category/split checks reject unnoticed dataset edits. Expected evidence IDs are retrieval targets; they are not sufficient answer-quality scores.</p>
+<h2>Local development evidence, no API request</h2>
+<pre><code class="language-bash">uv run python labs/08_evaluation/main.py --check
+</code></pre>
+<p>Inspect per-case question, user, evidence metadata/text, expected-evidence recall, authorization/current flags, elapsed time, and failure categories. Generated answers and unexercised generation checks remain null. No fake model answers or semantic grades are substituted.</p>
+<p>To exercise registration locally without claiming generated quality:</p>
+<pre><code class="language-bash">uv run python labs/08_evaluation/main.py --check --freeze-config .course/local-rag-config.json --output .course/local-rag-dev.json
+uv run python labs/08_evaluation/main.py --check --split held_out --config .course/local-rag-config.json --output .course/local-rag-heldout.json
+</code></pre>
+<p>These paths must be new: output and registration use exclusive creation. Reuse an existing registration with <code>--config</code>, never overwrite it to erase a changed setting. Local registration has <code>live: false</code>; it cannot authorize a later live experiment.</p>
+<h2>Real generation protocol</h2>
+<p>Set actual <code>OPENAI_API_KEY</code>, <code>COURSE_MODEL</code>, and explicit <code>COURSE_ALLOW_LIVE=1</code> privately. Semantic/hybrid search also requires <code>COURSE_EMBEDDING_MODEL</code>. Confirm model capability, pricing, and data policy before paid requests. Defaults are lexical k=3 and one declared trial; configure different settings deliberately.</p>
+<pre><code class="language-bash">uv run python labs/08_evaluation/main.py --live --trials 2 --freeze-config .course/live-rag-config.json --output .course/live-rag-dev.json
+uv run python labs/08_evaluation/main.py --live --trials 2 --split held_out --config .course/live-rag-config.json --output .course/live-rag-heldout.json
+</code></pre>
+<p>Tune only on development cases, then freeze before the held-out command. Keep settings identical: the CLI compares them with the registration; it does not silently load different arguments from that file. Twenty small synthetic cases and two trials are instructional, not statistically strong evidence of production reliability.</p>
+<p>For a one-variable retrieval comparison add <code>--compare-strategy semantic</code> to <strong>both</strong> commands and choose fresh registration/output paths. For an optional real model grader add <code>--judge</code> to both before freezing. A grader call costs money, can be wrong, and cannot replace calibration against human review. Failed generation or grader execution is emitted per case and produces a nonzero command exit; semantic-quality failures remain explicit report categories.</p>
+<h2>Human review applies to saved answers, not a new run</h2>
+<p>Read one saved report's exact answer, selected passages, identity, case rubric, and trial. Prepare a private JSON list. Each entry contains:</p>
+<ul>
+<li><code>case_id</code>: the saved row's case identifier (for example <code>a01</code>).</li>
+<li><code>strategy</code>: the saved row's strategy, not the desired next strategy.</li>
+<li><code>trial</code>: its integer trial number.</li>
+<li><code>reviewer</code>: a nonempty reviewer identity.</li>
+<li><code>grade</code>: <code>groundedness</code>, <code>relevance</code>, <code>correctness</code> integers 0–2; <code>abstention_appropriate</code> boolean; <code>claim_evidence</code> list of actual claim-to-passage reasoning; <code>rationale</code> string.</li>
+</ul>
+<p>Apply those observations offline:</p>
+<pre><code class="language-bash">uv run python labs/08_evaluation/main.py --check --review-report .course/live-rag-heldout.json --human-review .course/human-reviews.json --output .course/live-rag-reviewed.json
+</code></pre>
+<p>This command annotates the saved report without retrieval, generation, or judge calls. Partial review is allowed; report how many rows remain unreviewed. Unknown case/strategy/trial keys, duplicate case keys, and grading a row with no generated answer fail visibly. <code>--human-review</code> without <code>--review-report</code> is rejected: rerunning a stochastic target would associate the old grade with a different observation. An inappropriate abstention is a human semantic failure even if the three numeric grades are high.</p>
+<h2>Diagnose before changing anything</h2>
+<p>A lexical miss is not automatically generation failure. Citation membership is not entailment. Outdated or forbidden evidence is a boundary defect, not something to average away. Distinguish target errors, retrieval relevance, unsupported claims, abstention decisions, grader errors, and missing environment configuration. Record usage only when actually reported; absent usage is not zero spend. Hosted traces require separate credentials and permission to upload content.</p>
+<p><strong>Acceptance:</strong> produce a registered per-case experiment, inspect errors and evidence, and justify the comparison without tuning on confirmatory results. With no provider, finish local retrieval/registration boundaries and mark generated semantic quality, model grades, embedding relevance, and hosted evaluation unverified.</p></main></body></html>

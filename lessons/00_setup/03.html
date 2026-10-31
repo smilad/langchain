@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>00.3 — Validation belongs at the request boundary</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>00.3 — Validation belongs at the request boundary</h1>
+<p><strong>Mission/objective:</strong> Serve the <a href="../../MISSION.html">mission</a> by defining a Pydantic request contract and interpreting its errors. Prerequisite: <a href="02.html">00.2</a>; explain why syntactically valid JSON may still be unacceptable.</p>
+<p><strong>Sources/version:</strong> <a href="https://docs.pydantic.dev/latest/concepts/models/">Pydantic models</a>, <a href="https://docs.pydantic.dev/latest/concepts/validators/">validators</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview">HTTP overview</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0/Pydantic 2.14.1. Exact resolution is in <code>uv.lock</code>; actual execution evidence is in <a href="../../docs/VERIFICATION.html">verification</a>. No credentials or network request.</p>
+<h2>Recall first</h2>
+<p>Which stage identifies a missing comma? Do annotations enforce integer bounds? What could <code>None</code> mean in a request? Attempt before reading <a href="../../solutions/00_setup.html">feedback</a>.</p>
+<h2>Mental model and worked example</h2>
+<p>A request is a proposed operation; validation decides whether the application accepts its inputs. A response describes what happened, not what the caller hoped would happen. HTTP carries these values across a network boundary, while Pydantic enforces a local Python contract.</p>
+<p>The <a href="../../labs/00_setup/main.py">setup lab</a> uses:</p>
+<pre><code class="language-python">class Request(BaseModel):
+    model_config = ConfigDict(extra=&quot;forbid&quot;, strict=True)
+    request_id: str = Field(min_length=1)
+    quantity: int = Field(ge=1, le=20)
+</code></pre>
+<p>A model validator separately rejects whitespace-only identifiers. <code>min_length=1</code> alone permits one space. <code>extra="forbid"</code> catches misspelled keys rather than discarding them. Strict integer validation makes the contract explicit: a JSON string <code>"2"</code> is not quantity 2. These choices are policy decisions, not universal defaults.</p>
+<p>The flow is <code>HTTP/JSON bytes → decode → validate → operation → response</code>. This lab exercises decode/validate only; it is not evidence of an HTTP exchange. Interpret the printed error <code>location</code> as the failed field path and <code>type</code> as the validation rule. We avoid echoing full invalid inputs in general error reports because real inputs might be private.</p>
+<h2>Guided task and transport diagnosis</h2>
+<p>Add a maximum length for an identifier in your own variation, predict its error, then execute it. Explain why your validation must happen before an operation, not after it has already charged someone.</p>
+<p>Now classify three hypothetical failures: no response before a deadline; HTTP 429; completed HTTP response containing a wrong business answer. The first is a timeout, the second a rate/quota boundary, the third an application/model correctness problem. A timeout does not prove the server did nothing; a 429 is not evidence of malformed JSON. Paid calls remain deferred to Module 01.</p>
+<h2>Transfer, exit and review</h2>
+<p>Attempt the HTTP/schema diagnostic in the <a href="../../exercises/00_setup.html">exercise</a>. Exit with a strict schema, a field-error explanation and a request/response diagram that includes transport failure. Review next week with a new field constraint; Module 03 adds cross-field and source-evidence checks. Use the <a href="../../reference/API_MAP.html">API map</a> for lookup, not as a substitute for reasoning. A useful follow-up includes an error location and the intended contract.</p></main></body></html>

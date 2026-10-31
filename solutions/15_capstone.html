@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Capstone solutions and diagnosis</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Capstone solutions and diagnosis</h1>
+<p>Attempt <a href="../exercises/15_capstone.html">the exercises</a> first. These are solution methods and expected invariants, not fabricated run output. Compare them with your actual evidence and <a href="../docs/VERIFICATION.html">the verification report</a>.</p>
+<h2>A. Smallest architecture</h2>
+<p>Token authentication binds identity; retrieval selects authorized current <code>Document</code> values with source metadata; the model proposes a typed <code>GroundedAnswer</code>; the workflow persists state and interrupts; a reviewer supplies a decision; a SQLite transaction inserts an action with stable identity. A different user must be rejected at the workflow boundary, even if the HTTP handler already authenticated. Unknown evidence permits abstention; conflicting current evidence needs an explicit qualification/abstention, not an invented resolution.</p>
+<p>There is no requirement for independent autonomous specialists here. A specialist is retained only if the Module 12 comparison justifies its extra cost/error surface. LangGraph makes the requested approval/recovery behavior explicit without requiring multiple agents.</p>
+<h2>B. Persistence and local effect identity</h2>
+<p>Run the exact separate-process commands in <a href="../labs/15_capstone/README.html">the capstone runbook</a> with a fresh thread ID. The second process should find a pending review because checkpoints live in SQLite, not Python memory. The edit decision supplies the intended text; resumption records it in the local sink.</p>
+<p>Retrying the same completed decision should inspect/reuse the completed state and existing action identity. A conflicting retry is not a new review request and must be rejected. The relevant guarantee is the unique transactional <strong>local</strong> record. Sending an external email after a database insert would require its own delivery/idempotency design and cannot inherit this guarantee automatically.</p>
+<p>A wrong thread ID selects another run; a wrong owner is denied; neither is a model-memory failure. Inspect configuration/state before changing prompts.</p>
+<h2>C. Rejection and ownership</h2>
+<p>A rejected review ends without inserting an action. Check the owner-filtered action list, not only the final assistant sentence. Another user's access must fail before the inspected state/draft is returned and before resume can mutate it. The ownership binding survives process restart.</p>
+<p>HTTP request bodies cannot select authenticated identity. A bearer token maps to a trusted user; the persisted workflow checks that identity again. If a test passes only because the model obeyed an instruction not to leak, you have not demonstrated an access-control boundary.</p>
+<h2>D. Evidence categories</h2>
+<p><code>RETURN</code> v1 is obsolete: the current-version filter prevents it competing with the current thirty-day policy. The two remote-work allowances are both current and intentionally conflict: provenance helps expose a real contradiction, but cannot decide authority without a rule. A generated answer should acknowledge this rather than choosing whichever passage appears first.</p>
+<p>A finance question as Alice tests authorization independently of relevance. The finance identity may retrieve the restricted source; Alice must not see it. Source membership establishes provenance, not claim support. Read the cited passage and inspect the period, eligibility, scope, and effective version of the generated claim.</p>
+<h2>E. Honest comparison</h2>
+<p>Use the development split for diagnosis/tuning, record/freeze configuration, then assess the holdout under a declared protocol. If you tune on inspected holdout failures, that set is no longer independent for the subsequent claim. Report case-level outcomes and uncertainty because eight held-out examples are too few for strong production claims.</p>
+<p>A lexical-to-semantic comparison changes only retrieval strategy (and necessarily the actual embedding implementation). Preserve the generation configuration and report that distinction. Report measured latency and provider-reported usage; compute cost only with explicit model pricing assumptions. Without a live provider, generated semantics, stochastic robustness, and model-judge calibration remain unverified.</p>
+<h2>F. Transfer and consumer documentation</h2>
+<p>A new policy needs stable source identity, version/access metadata, ingestion/reindexing, and an independent query. It should not require rewriting approval ownership or local-action uniqueness. Explain this separation before making changes.</p>
+<p>A usable tutorial includes the locked environment, no-cost local run, explicit paid/live consent, token-bound HTTP flow, process restart, rejection/edit, evaluation protocol, and known limitations. Client disconnect/deadline does not prove rollback; inspect persisted state before retry. Do not publish an exact stochastic sentence as a guaranteed output or claim peer/advisor approval without that review.</p>
+<p>The independent variation and later review must be performed by the learner. These solutions can support practice; reading them is not evidence that the learner has mastered the capstone.</p></main></body></html>

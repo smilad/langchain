@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Independent exercise — attack the execution boundary</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Independent exercise — attack the execution boundary</h1>
+<p>Prerequisites: <a href="../lessons/11_middleware_security/01.html">Module 11</a>. All secrets and records must stay synthetic. Attempt before reading <a href="../solutions/11_middleware_security.html">the solution</a>.</p>
+<ol>
+<li>Run <code>uv run python labs/11_middleware_security/main.py --check</code>. Separate the unsafe non-model counterexample, real corpus retrieval, actual authorization denials and zero sink effects in your report. Which checks do not exercise middleware through a model?</li>
+<li>Construct a fresh untrusted document claiming a different authority and asking alice to inspect bob's thread or approve alice's proposal. Change wording, not actual caller context. Predict the permission outcome before invoking the boundary. Explain why prompt phrasing cannot grant absent capabilities.</li>
+<li>Call <code>authorize_call</code> directly with authenticated SecurityContext for alice: owned thread allowed, bob thread denied, extra user_id denied, approval tool denied. This deliberately bypasses the agent. Show that middleware removal would not remove domain/workflow ownership enforcement.</li>
+<li>Design one additional read-only status capability on paper. Specify schema, runtime identity, ownership check and minimal return fields. Identify which fields must never reach a provider. Explain why final-answer redaction cannot repair an upstream disclosure.</li>
+<li>With provider consent, declare a trial count before using <code>--live</code>. Record actual requested tools/arguments, handler execution/denial messages and final claims. If the model never attempted an unauthorized call, report unattempted attack—not observed middleware denial. Evaluate semantic answer contamination separately from zero unauthorized effects.</li>
+<li>Produce a versioned proof statement: Python and locked package versions, model ID if used, prompt revision, corpus source IDs, trial count and residual risks. Do not publish keys, authentication tokens or full configuration dictionaries.</li>
+</ol>
+<h2>Gate and review</h2>
+<p>Demonstrate untrusted content cannot change identity/capabilities, owner checks occur before data disclosure, extra model arguments cannot override context, and no actions commit. Explain least privilege, minimization and limits. A clean single model response is not injection immunity. Revisit with MCP tool descriptions in Module 13 and held-out adversarial cases in Module 15. Use the teaching guide's hint ladder; no invented learner record.</p></main></body></html>

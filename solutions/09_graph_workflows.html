@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reasoned solution — explicit graph workflows</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Reasoned solution — explicit graph workflows</h1>
+<p>Start with your own predictions from <a href="../exercises/09_graph_workflows.html">the exercise</a>. Commands below are implemented, not claimed observed during authorship; integration evidence belongs in <a href="../docs/VERIFICATION.html">verification</a>.</p>
+<h2>Route and update reasoning</h2>
+<p><code>uv run python labs/09_graph_workflows/main.py --check</code> runs actual supported/review/unsupported paths. Classify writes a route plus one event. Supported fans out to retrieve and constraints; retrieve owns evidence, both contribute events, and the barrier waits for both before drafting. Review and unsupported go directly to END. The human draft is an explicit workflow fixture, not model quality evidence.</p>
+<p>The reducer belongs on events because more than one parallel writer contributes to it. Returning the full existing list would add old events again; returning <code>[]</code> would not clear additive state. Evidence needs no merging reducer because only retrieve writes it. The deliberate broken graph should reject concurrent event writes with InvalidUpdateError. A self-loop with no stopping condition should reach the recursion bound; increasing the bound merely delays the defect.</p>
+<h2>Changed branch</h2>
+<p>A provenance check that validates a static required source schema can run independently. Its event can be merged and the fan-in updated to include all required branch names. A check that inspects retrieved evidence depends on retrieve, so it must follow retrieval. It is wrong to run both in parallel and assume shared state contains retrieval's future update. Choosing the correct dependency is the central transfer test.</p>
+<p>For overlapping route words, document deterministic precedence. Live classification instead validates a closed Route label and can still choose the wrong meaning. Its supported path invokes actual rag.answer; generated source claims need separate grounding review. No deterministic fixture substitutes for this live gate.</p>
+<h2>Diagnostic feedback</h2>
+<p>Goal → missing evidence before draft → missing dependency or wrong update → inspect updates and join. Goal → one contribution per branch → duplicated events → node returned accumulated history → return only its own update. Goal → finite workflow → recursion exception → unconditional back edge → define termination. Use actual state and trace evidence before prompt edits.</p>
+<p>An independent variation must change the constraint, not simply rerun the provided return question. Retention review: reconstruct the graph in Module 10 and explain why checkpoint replay adds a different failure mode from reducer merging.</p></main></body></html>

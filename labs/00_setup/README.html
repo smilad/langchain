@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 00 lab — setup and Python readiness</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 00 lab — setup and Python readiness</h1>
+<p>This entrypoint exercises real local Python/Pydantic/async behavior and checks the external LangChain import origin. It sends <strong>no model request</strong>, even if <code>--live</code> is selected. Read <a href="../../lessons/00_setup/01.html">the four lessons</a> and attempt <a href="../../exercises/00_setup.html">the diagnostic</a> before opening <a href="../../solutions/00_setup.html">solutions</a>.</p>
+<h2>Prerequisites and commands</h2>
+<p>From the repository root, with <code>uv</code> and a Python ≥3.14 installation available:</p>
+<pre><code class="language-sh">uv sync --locked
+uv run python labs/00_setup/main.py --check
+</code></pre>
+<p>The distribution/import names are <code>langchain-learning</code> / <code>langchain_learning</code>; <code>langchain</code> belongs to the external dependency. The repository folder can retain its existing name. Use the reported interpreter for your IDE. Metadata/lock/environment/CLI are maintained at the course root, not by this lab.</p>
+<h2>Cases and expected boundaries</h2>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Expected behavior, not observed output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>preflight</td>
+<td>interpreter, installed versions, import origin, configuration booleans only</td>
+</tr>
+<tr>
+<td>valid JSON</td>
+<td>typed Request and JSON serialization round trip</td>
+</tr>
+<tr>
+<td>malformed JSON</td>
+<td>decoder error with line/column</td>
+</tr>
+<tr>
+<td>missing ID/string quantity/zero quantity/blank ID</td>
+<td>explicit validation location/type</td>
+</tr>
+<tr>
+<td>negative quantity</td>
+<td>actual traceback frame extraction for diagnosis</td>
+</tr>
+<tr>
+<td>cooperative coroutines</td>
+<td>both tasks execute; B starts before A ends; gathered results retain input order</td>
+</tr>
+</tbody>
+</table>
+<p>The lab asserts each invalid boundary rather than merely printing examples. Missing model/key configuration is reported as false, not printed or treated as model success. Importing <code>langchain</code> from repository <code>src</code> is rejected. If a dependency import fails, first inspect the running interpreter, then synchronize the locked environment. Package installation is not a provider capability check.</p>
+<h2>Evidence and limits</h2>
+<p>Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, Pydantic 2.14.1. Exact versions come from <code>uv.lock</code> and your actual preflight; consult <a href="../../docs/VERIFICATION.html">verification</a> for exercised local checks and integration limits. No authored example is an observed model result. No credential is needed for this lab. A green check would not verify authentication, billing, network access or selected model support; Module 01 performs that separate gate.</p>
+<p>This lab is stateless and creates no database or learning record. There is nothing to reset. Keep <code>.env</code> private; do not delete another module's <code>.course</code> state while diagnosing setup.</p>
+<h2>Diagnostic pacing</h2>
+<p>3–5 hours is a suggested setup allocation for someone with relevant Python readiness, not a beginner deadline. If functions, environments or exceptions are new, work through the diagnostic's remediation sequence over additional sessions and reassess on fresh inputs. Delayed review belongs to the learner after actual evidence, not a prefilled progress checklist.</p>
+<p>Sources: <a href="https://docs.astral.sh/uv/guides/projects/">uv</a>, <a href="https://docs.pydantic.dev/latest/concepts/models/">Pydantic</a>, <a href="https://docs.python.org/3/library/asyncio-task.html">asyncio</a>, checked 2026-10-12.</p></main></body></html>

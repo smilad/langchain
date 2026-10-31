@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12.1 — Earn the second agent</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>12.1 — Earn the second agent</h1>
+<p><strong>Mission/objective:</strong> advance <a href="../../MISSION.html">the mission</a> by deciding whether another model-driven component solves a measured problem. Explain and execute the single-agent baseline before adding a specialist.</p>
+<p><strong>Prerequisites:</strong> <a href="../08_evaluation/04.html">evaluation</a>, <a href="../09_graph_workflows/02.html">graph termination</a>, and <a href="../11_middleware_security/04.html">authorization</a>. Check: distinguish a model call, a tool call, and a graph step.</p>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/multi-agent/subagents">LangChain subagents</a>, checked 2026-10-12. Installed baseline Python 3.14.0, LangChain 1.4.4, LangChain OpenAI 1.7.0; exact dependencies in <a href="../../uv.lock">uv.lock</a>, runtime evidence and limits in <a href="../../docs/VERIFICATION.html">verification</a>. Live agents require configured OpenAI-compatible tool calling, structured output, model ID, key, and explicit paid-call consent. Live model proof is unavailable without those prerequisites.</p>
+<h2>Recall before reading</h2>
+<ol>
+<li>Does a valid citation identifier prove support?</li>
+<li>Can a tool description grant authorization?</li>
+</ol>
+<p>Correction after attempting: neither. Inspect the actual evidence and enforce identity outside the prompt.</p>
+<h2>Mental model and flow</h2>
+<p>The baseline is one <code>create_agent</code> with a request-scoped retrieval tool. Application code binds identity and freezes the retrieved evidence for both experimental arms. The agent drafts a <code>GroundedAnswer</code>; membership validation checks citations against that evidence. No arm approves or sends anything.</p>
+<p><code>question + authenticated identity → filtered evidence → agent/tool loop → typed draft → validation → human quality review</code></p>
+<p>This deliberately limits the experiment to Project C's drafting stage. Durable review remains the workflow's responsibility; adding a second agent does not change permission to execute an action.</p>
+<h2>Worked example</h2>
+<p>Run <code>uv run python labs/12_multi_agent/main.py --check</code>. It really retrieves policy documents and rejects an invalid citation handoff, but generates no model answer. Then, with live configuration, run <code>--live --trials 2</code>. Each printed row identifies its arm, case, trial, evidence, elapsed time, call counts, reported usage, and failure category. These are runtime records, not published example scores.</p>
+<h2>Guided completion and transfer</h2>
+<p>Explain why removing the frozen evidence boundary would confound the comparison. Supply the missing final check in a copy of <code>validate_handoff</code>: a non-abstaining answer needs at least one authorized evidence ID. Change one question using <a href="../../exercises/12_multi_agent.html">the exercise</a>, not the architectural variables simultaneously.</p>
+<h2>Failure investigation and exit</h2>
+<p>Predict what happens when a model answers without calling retrieval. The application rejects a bypassed boundary; fluent prose is not success. Exit by tracing one real row and identifying which quality claim still needs human review. Revisit this decision in Module 15; consult <a href="../../reference/GLOSSARY.html">the glossary</a> for agent versus workflow. Ask: which observed defect would justify delegation?</p></main></body></html>

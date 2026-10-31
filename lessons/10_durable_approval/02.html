@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10.2 — Interrupt before acting, then resume with a human decision</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>10.2 — Interrupt before acting, then resume with a human decision</h1>
+<p><a href="../../MISSION.html">Mission</a>. <strong>Objective:</strong> approve, reject and edit a proposed action using the same durable graph thread.</p>
+<h2>Prerequisites and recall</h2>
+<p><a href="01.html">Checkpoints</a>, graph conditional edges, and grounded-answer limitations. Where does the side effect belong relative to review? Is human-authored fixture text a model answer? What identifies the resumed checkpoint? Attempt before reading the worked path.</p>
+<h2>Sources and versions</h2>
+<p><a href="https://docs.langchain.com/oss/python/langgraph/interrupts">Interrupts</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangGraph 1.2.14, langgraph-checkpoint-sqlite 3.1.1; <a href="../../uv.lock">lockfile</a>, <a href="../../docs/VERIFICATION.html">exercised evidence</a>. Uses stable <code>interrupt(payload)</code> and <code>Command(resume=...)</code>, not a preview response-schema API. Human drafts need no model; real drafting requires provider consent.</p>
+<h2>Mental model</h2>
+<p><code>interrupt</code> suspends execution and surfaces JSON-serializable review information. A persistent checkpointer records the place to resume. The review node restarts from its beginning on resume; the supplied response becomes the interrupt's return value. Therefore pre-interrupt code must be safe to repeat, and no action should occur before review.</p>
+<p>The support graph is draft → review → either END or record. Draft origin is explicit: a supplied <code>draft=</code> means a human-authored exercise; omitted draft requires <code>live=True</code> and calls actual <code>rag.answer</code>. The provider may abstain; humans still review the exact proposal rather than assuming schema validity proves policy correctness.</p>
+<h2>Worked example</h2>
+<p>Start a human draft with the <a href="../../labs/10_durable_approval/main.py">CLI</a>. Inspect <code>pending_review</code>: it contains draft, origin, source IDs and allowed decisions. Resume with <code>--decision reject</code>; actions must remain empty. A fresh approve thread produces one local record. A third thread with <code>--decision edit --edited-draft 'Corrected reviewed text'</code> records the edited text rather than the initial proposal.</p>
+<p><code>decide</code> validates input, checks owner metadata, persists the immutable decision, then invokes the graph with <code>Command(resume=...)</code>. The review node checks that resume data matches that persisted decision. The record node checks again. Invalid edits fail before decision persistence; conflicting later decisions cannot silently change approval.</p>
+<h2>Guided completion and diagnosis</h2>
+<p>Predict the effect of a blank edit and of bob resuming alice's thread. Run both only against synthetic local state. If an action appears while pending, inspect node placement; a polite approval prompt cannot repair an early side effect. If an edit records old text, inspect the review update and sink content, not merely the displayed review payload.</p>
+<h2>Independent gate and review</h2>
+<p>Use <a href="../../exercises/10_durable_approval.html">the exercise</a> to vary draft contents and require all three decisions across process restart. Explain the actual interrupt/resume mechanism and show no preapproval effects. In Module 11 compare a model-requested action with a human-authorized action. <a href="../../solutions/10_durable_approval.html">Solutions</a>.</p>
+<p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: which statements before interrupt are safe to repeat?</p></main></body></html>

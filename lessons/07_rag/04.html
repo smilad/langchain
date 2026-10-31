@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>07.4 — Compare bounded agentic retrieval</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>07.4 — Compare bounded agentic retrieval</h1>
+<h2>Objective and prerequisites</h2>
+<p><a href="../../MISSION.html">course mission</a>: Run a real retrieval-tool agent against the fixed two-step baseline and decide whether its flexibility helps.</p>
+<p>Prerequisite check: Module 04 tool execution and Lessons 01–03.</p>
+<h2>Sources and execution status</h2>
+<p>Primary: <a href="https://docs.langchain.com/oss/python/deepagents/retrieval">retrieval guide</a>. Also consult the <a href="https://docs.langchain.com/oss/python/langchain/models">model interface</a> and <a href="https://reference.langchain.com/python/langchain-core/vectorstores/in_memory/InMemoryVectorStore">vector-store reference</a> where relevant. Documentation checked 2026-10-12. Installed baseline: Python 3.14.0, LangChain 1.4.4, core 1.6.9, OpenAI integration 1.7.0, Pydantic 2.14.1. Installation is not execution evidence; consult <a href="../../docs/VERIFICATION.html">verification</a>. Local lexical/check paths need no credentials. Live paths require explicit consent and paid provider access; semantic search additionally requires an embedding model, generation requires structured-output capability, and agentic comparison requires tool calling.</p>
+<h2>Recall before reading</h2>
+<p>Who chooses when to search in two-step RAG? Can a tool docstring authorize a caller? Attempt both questions before consulting the mental model; compare your reasoning afterward rather than copying definitions.</p>
+<h2>Mental model</h2>
+<p>Agentic RAG moves retrieval decisions inside a model-driven tool loop. The real create_agent instance receives a search_policies tool and ToolStrategy(GroundedAnswer). The agent may reformulate a query or search again; two-step RAG always retrieves once before generation. Extra flexibility introduces variable request count, latency and opportunities for evidence drift, so compare it with a baseline rather than assuming that an agent is an upgrade.</p>
+<p>The tool closes over the authenticated user_id and PolicyIndex. The model supplies a query only, not an identity or an audience. Every invocation rechecks current authorized sources. Collected evidence is deduplicated by chunk ID and returned for inspection. A hard three-search budget and graph recursion limit bound execution; exhausted budgets raise an explicit error. ToolStrategy handle_errors=False avoids an invisible corrective-output retry loop in this comparison. If the agent never retrieves any evidence, the published result is an abstention, not an answer from model memory.</p>
+<p>Citation membership is checked against actual trusted retrieved sources after the agent finishes. This does not prove claims are supported or resolve a contradiction across multiple searches. Read search traces, accumulated evidence and substantive claims. A model that fetches contradictory notices must still abstain. The agent has no write tool or finance permission bypass, and malicious source content cannot change the closure's identity.</p>
+<p>The lab compares both architectures on the same question, user, strategy and k with actual live calls. Its one paired trial is demonstration evidence, not general superiority. Repeat a declared number of development trials, count reported model usage, and include failures instead of selecting the nicest run. An agent can legitimately lose to the simpler architecture; retaining the baseline is an engineering result.</p>
+<h2>Data/control flow</h2>
+<p><code>Question → real agent → authorized search tool (0–3 calls) → structured proposal → membership check → evidence report</code></p>
+<h2>Worked example</h2>
+<p>Run from the repository root after <code>uv sync --locked</code>. This is implemented code/command guidance, <strong>not an observed output</strong>:</p>
+<pre><code class="language-python"># Real live paired comparison:
+# uv run python labs/07_rag/main.py --live --compare-agentic \
+#   --question &quot;How many remote work days per week are allowed?&quot;
+# Inspect two_step.trace versus agentic.trace.searches and model_calls.
+</code></pre>
+<p>Use the <a href="../../labs/07_rag/README.html">module lab</a> to inspect actual intermediate values. Predict the result first and preserve any disagreement as a diagnostic clue.</p>
+<h2>Guided completion and failure investigation</h2>
+<p>Explain why user_id is absent from the tool schema. Remove it from a hypothetical model-controlled tool signature and show where trusted identity must enter instead.</p>
+<p>Hint ladder: first name the failed stage and expected input/output; then inspect its evidence or metadata; only after your attempt read the <a href="../../solutions/07_rag.html">reasoned solution</a>. Repair the boundary rather than changing unrelated prompts.</p>
+<h2>Independent transfer and exit check</h2>
+<p>Take a changed constraint from the <a href="../../exercises/07_rag.html">exercise</a> without copying the worked example. Compare answer support, retrieval calls, model calls and latency. Demonstrate a bounded failure and state which behavior still needs live provider evidence.</p>
+<h2>Delayed review</h2>
+<p>Review this baseline-first decision during Module 12 specialist comparisons. Revisit next session and about a week later with a fresh question; those intervals are a practice policy, not evidence of mastery. Use the <a href="../../reference/GLOSSARY.html">glossary</a> and <a href="../../reference/API_MAP.html">API map</a> for focused lookup. Record only actual learner evidence, never progress inferred from reading this lesson.</p></main></body></html>

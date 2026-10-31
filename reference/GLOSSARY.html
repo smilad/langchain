@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Course glossary</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Course glossary</h1>
+<p>Use consistent terms in <a href="../README.html">the lessons</a> and inspect concrete representations in the corresponding lab. Definitions describe responsibilities; they do not imply that every provider exposes the same capability.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning and important boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td>A learned generator accessed through a provider/local runtime; it is not the complete application.</td>
+</tr>
+<tr>
+<td>Token</td>
+<td>A model's text/content encoding unit used for context limits and usage; not necessarily a word.</td>
+</tr>
+<tr>
+<td>Context window</td>
+<td>The input/output capacity for one model interaction; it is not persistent memory.</td>
+</tr>
+<tr>
+<td>Prompt</td>
+<td>Instructions and context supplied to a model; not an authorization mechanism.</td>
+</tr>
+<tr>
+<td>Message</td>
+<td>A role/content representation in a conversation; content can include structured blocks rather than a plain string.</td>
+</tr>
+<tr>
+<td>Content block</td>
+<td>A typed text, reasoning, tool, image, or other content unit; availability differs by provider.</td>
+</tr>
+<tr>
+<td>Tool call</td>
+<td>The model's request to execute a function with arguments; not proof that execution occurred.</td>
+</tr>
+<tr>
+<td>Tool</td>
+<td>Executable code with an input schema and description; permission checks belong at execution boundaries.</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>Model plus the surrounding loop/harness that executes tools and updates state.</td>
+</tr>
+<tr>
+<td>Harness</td>
+<td>The application machinery around model calls: prompts, tools, context, middleware, and policies.</td>
+</tr>
+<tr>
+<td>Structured output</td>
+<td>Output conforming to a declared schema; shape validity does not establish factual correctness.</td>
+</tr>
+<tr>
+<td>Runnable / LCEL</td>
+<td>Components and composition for deterministic application data flow; not an obsolete concept merely because agent APIs changed.</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Application data carried between steps; distinguish ephemeral values, checkpoint state, and cross-thread stores.</td>
+</tr>
+<tr>
+<td>Thread</td>
+<td>A workflow/conversation identity selecting persisted run state; ownership must be enforced separately.</td>
+</tr>
+<tr>
+<td>Checkpoint</td>
+<td>A saved graph-state snapshot enabling continuation/inspection; saving alone does not make external effects idempotent.</td>
+</tr>
+<tr>
+<td>Checkpointer</td>
+<td>Persistence implementation for thread-scoped graph state. An in-memory one loses it on process restart.</td>
+</tr>
+<tr>
+<td>Store</td>
+<td>Application-managed cross-thread memory; use an explicit identity namespace and retention policy.</td>
+</tr>
+<tr>
+<td>Context engineering</td>
+<td>Selecting instructions, evidence, messages, tools, and other context for a particular call.</td>
+</tr>
+<tr>
+<td>Reducer</td>
+<td>A rule for merging state updates, especially multiple/parallel updates; wrong rules can lose or duplicate data.</td>
+</tr>
+<tr>
+<td>Interrupt</td>
+<td>A persistent pause awaiting external input; resumed nodes may execute preceding code again.</td>
+</tr>
+<tr>
+<td>Resume</td>
+<td>Continuation of the same paused thread with a decision/value, not a new unrelated request.</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Repeating an operation preserves the intended result rather than causing another effect. The scope must be named.</td>
+</tr>
+<tr>
+<td>Local action sink</td>
+<td>This course's real SQLite records representing synthetic approved actions; not email or a production ticket system.</td>
+</tr>
+<tr>
+<td>Document</td>
+<td>Retrieved/ingested text plus metadata such as source ID, version, audience, and current status.</td>
+</tr>
+<tr>
+<td>Chunk</td>
+<td>A selected segment of a source; its boundary and provenance affect retrieval and support checks.</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td>A numeric representation of content. A lexical term vector and a learned semantic embedding have different capabilities.</td>
+</tr>
+<tr>
+<td>Vector store</td>
+<td>Storage/search over numeric representations and metadata; not inherently a durable or authorized database.</td>
+</tr>
+<tr>
+<td>Retriever</td>
+<td>A component selecting evidence for a query under explicit relevance and permission rules.</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>Retrieval-augmented generation: supplying selected external evidence to generation. Retrieval does not guarantee groundedness.</td>
+</tr>
+<tr>
+<td>Two-step RAG</td>
+<td>Fixed retrieve → generate flow, a useful measured baseline before dynamic agentic retrieval.</td>
+</tr>
+<tr>
+<td>Groundedness</td>
+<td>Whether substantive answer claims are supported by the selected evidence. Citation presence alone is insufficient.</td>
+</tr>
+<tr>
+<td>Abstention</td>
+<td>Explicitly declining to answer because required evidence/capability is missing; not a fabricated substitute answer.</td>
+</tr>
+<tr>
+<td>Trace</td>
+<td>Observed execution records: model calls, tool arguments/results, retrieval, state transitions, timing/errors.</td>
+</tr>
+<tr>
+<td>Evaluator</td>
+<td>A rule/person/model assessing an outcome. Model-based evaluators have their own failure modes and costs.</td>
+</tr>
+<tr>
+<td>Development split</td>
+<td>Cases used for diagnosis/tuning; their scores are not independent confirmation of those choices.</td>
+</tr>
+<tr>
+<td>Held-out split</td>
+<td>Cases reserved for a declared comparison; tuning after inspecting them compromises independence for later claims.</td>
+</tr>
+<tr>
+<td>Middleware</td>
+<td>Hooks/wrappers shaping agent model/tool behavior; it does not replace lower-level access control.</td>
+</tr>
+<tr>
+<td>Prompt injection</td>
+<td>Untrusted input attempting to change application/model instructions or cause unauthorized behavior.</td>
+</tr>
+<tr>
+<td>Authorization</td>
+<td>A code-enforced decision about which identity can access data or execute an operation.</td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Establishing an identity from a trusted credential rather than a client-supplied identity field.</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>A tool/context interoperability protocol; server connection is not automatic trust or a multi-agent architecture.</td>
+</tr>
+<tr>
+<td>Subagent</td>
+<td>A constrained delegated agent; context ownership and termination remain application responsibilities.</td>
+</tr>
+<tr>
+<td>Handoff</td>
+<td>A transfer of responsibility/context, potentially state-driven without a separate process.</td>
+</tr>
+<tr>
+<td>Deep Agents</td>
+<td>A higher-level harness built on LangChain; backend/version choices determine planning, files, and execution behavior.</td>
+</tr>
+<tr>
+<td>Cancellation</td>
+<td>A request to stop work. Client disconnect does not prove that already committed state/effects were rolled back.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sources:</strong> <a href="https://docs.langchain.com/oss/python/langchain/overview">LangChain overview</a>, <a href="https://docs.langchain.com/oss/python/langgraph/persistence">persistence</a>, <a href="https://docs.langchain.com/oss/python/deepagents/retrieval">retrieval</a>, <a href="https://docs.langchain.com/langsmith/evaluation-concepts">evaluation concepts</a>, <a href="https://docs.langchain.com/oss/python/langchain/mcp/index">MCP</a>.</p></main></body></html>

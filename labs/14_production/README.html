@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 14 lab — Operate a real localhost workflow application</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 14 lab — Operate a real localhost workflow application</h1>
+<h2>Scope, environment, and proof</h2>
+<p>The serving mechanism is a locked Python process using the standard library's HTTP server, restricted to <strong>127.0.0.1</strong>. This is an operations teaching application, not a hardened internet-facing deployment. Python explicitly <a href="https://docs.python.org/3.14/library/http.server.html">does not recommend http.server for production</a>. TLS, remote identity provisioning, distributed quotas, and a production proxy are outside this localhost lab; do not expose this port publicly.</p>
+<p>Installed authoring baseline: Python 3.14.0, LangGraph 1.2.14, SQLite checkpointer 3.1.1, langchain-openai 1.7.0, OpenAI SDK 3.29.0. <a href="../../uv.lock">uv.lock</a> records exact dependencies. <a href="../../docs/VERIFICATION.html">Verification</a> records actually exercised local paths and unavailable live gates. No latency/SLA or successful model output is invented.</p>
+<pre><code class="language-sh">uv sync --locked
+uv run python labs/14_production/main.py --check
+</code></pre>
+<p>That lab starts <strong>actual service subprocesses</strong> and uses real HTTP clients. It exercises public health/readiness, bearer authentication, two concurrent identities, body-identity rejection, cross-user denial, human-authored drafts, client disconnect visibility, clean process restart with pending review, approval replay/idempotent local action, rejection, missing live permission, and a short deadline trial. Temporary lab files are removed only after all launched servers stop; existing <code>.course/service</code> data is untouched.</p>
+<p><code>--live</code> additionally executes source-grounded RAG and an unreachable configured provider endpoint with genuine credentials. It needs a valid JSON-schema-capable endpoint/model and <code>COURSE_ALLOW_LIVE=1</code>. The live question matches current returns evidence so an empty-evidence abstention cannot masquerade as generation/outage proof. The available gateway failed JSON-schema output validation; see <a href="../../docs/VERIFICATION.html">observed results</a>. A model-free human draft is not generated text.</p>
+<h2>Manual start: private token bindings</h2>
+<p>Run from repository root. Generate throwaway tokens without printing their values. Do not enable shell tracing (<code>set -x</code>), commit these values, or use them as production credentials:</p>
+<pre><code class="language-sh">export COURSE_ALICE_TOKEN=&quot;$(uv run python -c 'import secrets; print(secrets.token_urlsafe(24))')&quot;
+export COURSE_BOB_TOKEN=&quot;$(uv run python -c 'import secrets; print(secrets.token_urlsafe(24))')&quot;
+export COURSE_AUTH_TOKENS=&quot;$(uv run python -c 'import json,os; print(json.dumps({os.environ[&quot;COURSE_ALICE_TOKEN&quot;]:&quot;alice&quot;,os.environ[&quot;COURSE_BOB_TOKEN&quot;]:&quot;bob&quot;}))')&quot;
+uv run python -m langchain_learning.service --port 8765 --deadline 30 --max-workers 4
+</code></pre>
+<p>Tokens must have at least sixteen ASCII non-whitespace characters and map to supported <code>alice</code>, <code>bob</code>, or <code>finance</code> identities. Default state is <code>${COURSE_STATE_DIR:-.course}/service/checkpoints.sqlite</code> and <code>actions.sqlite</code>. <code>--db PATH --actions PATH</code> can select an explicit matched pair. The service does not log token bindings. Curl examples below are localhost-only; command arguments can be visible to local processes, so do not reuse this pattern as a production secret-management guarantee.</p>
+<h2>Exact API contract</h2>
+<p>Success is HTTP 200; workflow routes return <code>{"result": ..., "request_id": "..."}</code>. <code>result</code> for a thread contains <code>thread_id</code>, <code>user_id</code>, <code>status</code>, <code>state</code>, <code>pending_review</code>, and <code>actions</code>. Actions returns an owner-filtered list. Bearer identity is the <strong>only</strong> request identity; <code>user_id</code> in bodies is rejected.</p>
+<table>
+<thead>
+<tr>
+<th>Method/path</th>
+<th>Authentication</th>
+<th>Body/meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /health</code></td>
+<td>Public</td>
+<td>Liveness; local-only flag</td>
+</tr>
+<tr>
+<td><code>GET /ready</code></td>
+<td>Public</td>
+<td>Local storage available and not stopping; provider not probed</td>
+</tr>
+<tr>
+<td><code>POST /threads/start</code></td>
+<td>Bearer</td>
+<td><code>thread_id</code>, nonempty <code>question</code>, optional human <code>draft</code>, optional boolean <code>live</code></td>
+</tr>
+<tr>
+<td><code>GET /threads/&lt;id&gt;</code></td>
+<td>Bearer</td>
+<td>Inspect owned persisted state</td>
+</tr>
+<tr>
+<td><code>POST /threads/&lt;id&gt;/decision</code></td>
+<td>Bearer</td>
+<td><code>decision</code>: <code>approve</code>, <code>reject</code>, or <code>edit</code>; edit requires <code>edited_draft</code></td>
+</tr>
+<tr>
+<td><code>GET /actions</code></td>
+<td>Bearer</td>
+<td>List only the owner's actual local actions</td>
+</tr>
+<tr>
+<td><code>GET /requests/&lt;request_id&gt;</code></td>
+<td>Bearer</td>
+<td>Owner-filtered transient request outcome; last 256/current process</td>
+</tr>
+</tbody>
+</table>
+<p>Thread/request IDs match <code>[A-Za-z0-9_-]{1,80}</code>. Optional <code>X-Request-ID</code> allows observing a disconnected request; duplicate request IDs return 409. Request IDs are observation identifiers, <strong>not</strong> idempotency keys. Workflow/action identity provides local action deduplication. Repeated owned thread start inspects existing input rather than replacing it; conflicting persisted decisions fail.</p>
+<pre><code class="language-sh">curl --fail http://127.0.0.1:8765/health
+curl --fail http://127.0.0.1:8765/ready
+curl --fail -H &quot;Authorization: Bearer $COURSE_ALICE_TOKEN&quot; -H 'Content-Type: application/json' \
+  -d '{&quot;thread_id&quot;:&quot;review-a&quot;,&quot;question&quot;:&quot;What is the return policy?&quot;,&quot;draft&quot;:&quot;This response was explicitly authored by a human for the approval exercise.&quot;}' \
+  http://127.0.0.1:8765/threads/start
+curl --fail -H &quot;Authorization: Bearer $COURSE_ALICE_TOKEN&quot; http://127.0.0.1:8765/threads/review-a
+</code></pre>
+<p>Stop with Ctrl-C; restart with the same state paths and token bindings. Inspect <code>review-a</code> again before resuming:</p>
+<pre><code class="language-sh">curl --fail -H &quot;Authorization: Bearer $COURSE_ALICE_TOKEN&quot; -H 'Content-Type: application/json' \
+  -d '{&quot;decision&quot;:&quot;edit&quot;,&quot;edited_draft&quot;:&quot;Human-reviewed replacement text.&quot;}' \
+  http://127.0.0.1:8765/threads/review-a/decision
+curl --fail -H &quot;Authorization: Bearer $COURSE_ALICE_TOKEN&quot; http://127.0.0.1:8765/actions
+</code></pre>
+<p>To use actual RAG, configure the provider privately and send a <strong>new</strong> thread with <code>{"thread_id":"live-a","question":"What is the returns deadline for an unused item?","live":true}</code> and no human draft. No retrieved evidence means explicit abstention without a model call. Do not overwrite an existing human thread and call its retained draft model-generated.</p>
+<h2>Bounds, cancellation, and failure diagnosis</h2>
+<p>The server bounds admitted connections, the TCP backlog, body size (16 KiB), socket reads, and the whole workflow deadline (0.1..60 seconds). Overload returns 503 with Retry-After; there is no per-user distributed rate limiter. Independent spawned workers own SQLite contexts. Workflow-level cross-process locking serializes graph runs safely, so more HTTP workers do not imply more concurrent SQLite effects. The model runtime allows one SDK retry; the service adds none.</p>
+<ul>
+<li>401: bearer missing/invalid; 403: ownership/permission denied.</li>
+<li>400: invalid fields/state or missing model settings; 413/415: body/content-type rejected.</li>
+<li>502: workflow/upstream worker failure, including <code>ModelOutputError</code> for malformed or ungrounded generated output; sanitized exception class only. 504: deadline expired.</li>
+<li>503: overloaded, stopping, or storage not ready; 409: reused observation ID.</li>
+</ul>
+<p>The server checks real client disconnects while a worker runs. It terminates/joins the child on cancellation, deadline, or shutdown, and records status plus <code>effects_may_have_committed</code>. <strong>No rollback guarantee:</strong> SQLite checkpoints or actions may already have committed. Inspect <code>/threads/&lt;id&gt;</code> and <code>/actions</code> before retry. A disconnect during response writing is separately visible as <code>response_disconnected</code>. Request-outcome records vanish on restart; workflow state does not.</p>
+<p>Logs contain event/status/request ID/latency/error class, never bearer headers, prompts, drafts, or raw provider error text. Failures are not swallowed into success. Responses still contain synthetic state and require appropriate handling in a real system. <code>--live</code> lab's outage uses <code>OPENAI_BASE_URL=http://127.0.0.1:1/v1</code> only in its isolated child service; it does not alter your <code>.env</code> or fabricate a key.</p>
+<h2>Clean stop, backup, and observable rollback</h2>
+<p>SIGINT/SIGTERM stops admission, cancels active child work, joins it, closes the socket, and emits <code>stopped</code>. Stop <strong>all</strong> processes using the same workflow files before backup/restore. Check that the old port is closed and no worker remains; a forced kill is not clean-shutdown evidence.</p>
+<p>Use SQLite's backup API rather than copying an active database/WAL pair. The following example assumes default <code>.course</code> state; adjust both paths together when using <code>COURSE_STATE_DIR</code> or explicit CLI paths:</p>
+<pre><code class="language-sh">uv run python -c 'import sqlite3; from pathlib import Path; root=Path(&quot;.course/service&quot;); backup=root/&quot;backup-before-change&quot;; backup.mkdir(exist_ok=True); names=(&quot;checkpoints.sqlite&quot;,&quot;actions.sqlite&quot;);
+for name in names:
+    with sqlite3.connect(root/name) as source, sqlite3.connect(backup/name) as target:
+        source.backup(target)'
+</code></pre>
+<p>Record the current revision, lockfile, and backup location locally. For a code rollback, use a separate known-good checkout/worktree and <code>uv sync --locked</code>; do not destructively reset unrelated user changes. Start that revision on port 8766 against <strong>copies</strong> of a matched, schema-compatible checkpoint/action backup using <code>--db</code> and <code>--actions</code>. Probe readiness, inspect a known pending thread with its owner token, and verify owner-filtered action counts before selecting it as the serving process. Then stop the failed version. Never restore only one file or silently erase already committed actions.</p>
+<p>No automatic schema migration is claimed. If an incompatible change has occurred, restoring a matched backup is a recovery decision that can discard newer local state; preserve evidence and obtain an explicit data-recovery decision. Rehearse using synthetic lab state first. Rollback does not undo external email/payment; this course's sink records local actions only.</p>
+<p>After manual practice, stop the process before removing your <strong>selected synthetic state directory</strong>. Do not delete shared policy/catalog fixtures or another learner's state. Derive latency/cost targets from your measured workload, not from the worker count. Continue with <a href="../../lessons/14_production/01.html">lessons</a>, <a href="../../exercises/14_production.html">exercise</a>, and <a href="../../solutions/14_production.html">solutions</a>.</p></main></body></html>

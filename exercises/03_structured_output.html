@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 03 — reject typed fiction and preserve unknowns</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 03 — reject typed fiction and preserve unknowns</h1>
+<p><strong>Objective:</strong> Deliver validated extraction or an explicit error/abstention and justify structured-output strategy/composition. Prerequisites: Module 02 and Pydantic validation; <a href="../lessons/03_structured_output/01.html">lessons</a>, <a href="../labs/03_structured_output/README.html">runbook</a>. Start with your own schema diagram before reading <a href="../solutions/03_structured_output.html">solutions</a>.</p>
+<h2>Retrieval warm-up</h2>
+<p>Does valid JSON prove a fact? How does required nullable differ from a missing field? Which LCEL stage must retain the original source? Answer closed-note, then use documentation for code.</p>
+<h2>Guided fading</h2>
+<p>Recreate a minimal version of SupportRecord with required nullable fields. Supply the missing cross-field rule: supported requires ID/category/quote; other statuses must not select an order. Parse authored JSON with PydanticOutputParser, then add a separate source guard. Never call authored JSON an API response.</p>
+<p>Draw every edge of the live pipeline, labeling values as input dictionary, prompt value/messages, raw/parsed/error envelope, original source and validated record. Explain why the guard cannot run correctly if source text has been discarded.</p>
+<h2>Independent domain change</h2>
+<p>Use synthetic booking requests with <code>BOOK-</code> followed by four digits, not the worked ORDER domain. Define complete, missing, contradictory and irrelevant cases. Migrate identifier pattern, instruction policy, schema consistency and source checks together. Every field remains required; missing facts are null, not guessed defaults. Introduce an evidence quote that is present in the source but does not contain the selected identifier, and reject it.</p>
+<p>Add a deliberately contradictory input containing two distinct booking IDs. State the policy before running: do not pick the first, last or most convenient ID. If your domain permits multiple IDs, redesign the output as a list with its own evidence contract instead of quietly weakening this single-record schema.</p>
+<h2>Failure investigation</h2>
+<p>Predict the failed boundary for missing input key, blank text, omitted required null, unsupported JSON Schema capability, invalid enum, unsupported cross-field combination, fabricated ID, fabricated quote and semantically wrong category. Demonstrate reachable deterministic cases with real validation/composition; do not create a fake model for unavailable live branches. Explain why automatic retries cannot recover an absent booking identifier.</p>
+<h2>Optional approved live strategy comparison</h2>
+<p>Run one synthetic case with the model engine and inspect raw/parsed/parsing_error. If your model supports it, compare <code>json_schema</code> and <code>function_calling</code> explicitly. Then inspect an agent result's <code>structured_response</code> using a declared provider or tool strategy. Tool-strategy schema arguments are not business effects. Record actual messages, errors, trial count and missing capability branches; do not infer provider strategy solely from your requested option.</p>
+<h2>Gate and delayed reassessment</h2>
+<p>Submit validated records or explicit unknown/contradiction/irrelevance/errors for fresh inputs, a strategy explanation, a source-boundary failure diagnosis and an independent domain variation. Human review still assesses relevance/category/eligibility; exact quote membership alone is not complete factual verification. Next session rebuild a two-stage local parser/source chain from memory. Next week reassess on a different nullable field, then revisit evidence checks in Modules 07–08.</p>
+<p><a href="../docs/VERIFICATION.html">Verification</a> distinguishes implementation from actual execution; no claimed learner mastery is stored by these exercises.</p></main></body></html>

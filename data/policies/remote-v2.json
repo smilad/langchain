@@ -1,0 +1,11 @@
+{
+  "source_id": "REMOTE",
+  "version": 2,
+  "current": true,
+  "audience": "public",
+  "title": "Remote work",
+  "text": "Remote work is limited to 2 days per week for all employees. Manager approval is required.",
+  "trust": "policy",
+  "provenance": "Synthetic course author; approved policy",
+  "effective_date": "2026-10-01"
+}

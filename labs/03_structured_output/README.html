@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 03 lab — typed extraction without invented records</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 03 lab — typed extraction without invented records</h1>
+<p>SupportRecord is extracted from synthetic support text; <strong>no refund or external action executes</strong>. A typed consumer receives validated data or an explicit error/unknown/contradiction/irrelevance. See <a href="../../lessons/03_structured_output/01.html">lessons</a>, <a href="../../exercises/03_structured_output.html">independent exercise</a>, and <a href="../../solutions/03_structured_output.html">reasoned solutions</a>.</p>
+<h2>Real deterministic boundaries</h2>
+<pre><code class="language-sh">uv run python labs/03_structured_output/main.py --check
+</code></pre>
+<p>The lab exercises PydanticOutputParser and an actual LCEL sequence on authored JSON, all four status fixtures, exact input keys/nonblank limits, missing required fields, cross-field consistency, source-ID membership and exact quotation. It rejects well-shaped data against missing, contradictory and mismatched-quote source texts. Fixture data is labeled authored; no model is created or imitated.</p>
+<h2>Real model and agent paths</h2>
+<p>After explicit credential/model/budget configuration:</p>
+<pre><code class="language-sh">uv run python labs/03_structured_output/main.py --live --case complete
+uv run python labs/03_structured_output/main.py --live --case missing
+uv run python labs/03_structured_output/main.py --live --case contradictory
+uv run python labs/03_structured_output/main.py --live --case irrelevant
+uv run python labs/03_structured_output/main.py --live --method function_calling --case complete
+uv run python labs/03_structured_output/main.py --live --engine agent --strategy tool
+uv run python labs/03_structured_output/main.py --live --engine agent --strategy provider
+</code></pre>
+<p>Run only the paths your approved model supports. Default engine is model with <code>json_schema</code>; <code>--method</code> affects that engine only. <code>--strategy</code> affects the agent engine only. <code>--text</code> overrides the selected case (including an explicitly empty string, which is rejected). These are separate requests, not one bundled experiment. Models must accept runtime temperature zero. The model pipeline retains source alongside the prompt→structured-model branch and inspects <code>raw</code>, <code>parsed</code>, <code>parsing_error</code> before the source guard. An unsupported capability, refusal or parse error is not replaced with fake success.</p>
+<p>The agent uses <code>create_agent</code>, no business tools, explicit ProviderStrategy or ToolStrategy, recursion limit eight and tool-strategy <code>handle_errors=False</code>. Actual message/profile inspection matters: requested strategy is not proof of provider mechanism. The agent may take multiple model turns; provider transport retry is limited to one. Generation uses provider defaults; no fixed dollar ceiling is claimed.</p>
+<h2>Semantics and limits</h2>
+<p>All fields are required; unavailable values are null. More than one distinct ORDER identifier is contradictory by this lab's deliberately conservative policy. Non-supported states must not choose an order or quote. Supported fields require exact literal source evidence. This catches invention of identifiers/quotes, not every semantic error: relevance/category and real eligibility still need a human rubric. Do not retry missing facts into existence. There is no automatic semantic repair loop.</p>
+<h2>Evidence and reset</h2>
+<p>Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0, Pydantic 2.14.1. <a href="../../docs/VERIFICATION.html">Verification</a> records four successful real function-calling cases and a rejected gateway JSON-schema result. Agent/provider strategies are separate capability gates, not certified by those model-level cases. Exact versions are locked in <code>uv.lock</code>. This lab writes no state and requires no reset; keep printable text synthetic and configure private compatible access/consent.</p>
+<p>Primary sources checked 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/models#structured-output">models</a>, <a href="https://docs.langchain.com/oss/python/langchain/structured-output">agent strategies</a>, <a href="https://reference.langchain.com/python/langchain-core/runnables/base/RunnableSequence">RunnableSequence</a>, <a href="https://docs.pydantic.dev/latest/concepts/validators/">Pydantic validators</a>.</p></main></body></html>

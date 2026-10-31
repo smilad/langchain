@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>01.4 — Decide what the framework should own</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>01.4 — Decide what the framework should own</h1>
+<p><strong>Mission/objective:</strong> Support the <a href="../../MISSION.html">mission</a> by identifying what LangChain standardizes and justifying whether this classifier needs it. Prerequisites: <a href="03.html">01.3</a>; when live access is unavailable, explain the implemented request path and retain the live gate as pending.</p>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/overview">LangChain overview</a>, <a href="https://docs.langchain.com/oss/python/langchain/models">models</a>, <a href="https://docs.langchain.com/oss/python/integrations/chat/openai">OpenAI integration scope</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0, OpenAI SDK 3.29.0, LangChain 1.4.4/langchain-openai 1.7.0. Exact resolution is in <code>uv.lock</code>; actual execution evidence is in <a href="../../docs/VERIFICATION.html">verification</a>. This comparison requires no extra paid call.</p>
+<h2>Recall</h2>
+<p>Which functions in the baseline are deterministic? Does a completed provider response prove a correct label? Try before opening <a href="../../solutions/01_llm_baseline.html">feedback</a>.</p>
+<h2>Mental model</h2>
+<p>A framework is an adapter and composition vocabulary, not an alternative source of truth. A provider SDK exposes that provider's response shape. LangChain supplies common messages, invocation methods, Runnable composition, tool schemas and agent orchestration. It does not own your business rubric, credentials policy, authorization or factual verification.</p>
+<table>
+<thead>
+<tr>
+<th>Responsibility</th>
+<th>Direct baseline</th>
+<th>LangChain version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Configure model/consent</td>
+<td>shared runtime + explicit SDK construction</td>
+<td>shared runtime + integration class</td>
+</tr>
+<tr>
+<td>Input boundary</td>
+<td>typed Python helper</td>
+<td>typed Python helper + prompt template</td>
+</tr>
+<tr>
+<td>Remote request</td>
+<td><code>responses.create</code></td>
+<td><code>invoke</code>/<code>stream</code>/<code>ainvoke</code>/<code>batch</code></td>
+</tr>
+<tr>
+<td>Output envelope</td>
+<td>Responses items/text/usage</td>
+<td>AIMessage content/blocks/usage</td>
+</tr>
+<tr>
+<td>Accept business output</td>
+<td>application parser/review</td>
+<td>still application parser/review</td>
+</tr>
+</tbody>
+</table>
+<p>Read both <a href="../../labs/01_llm_baseline/main.py">baseline</a> and <a href="../../labs/02_models_messages/main.py">next lab</a>. The latter separates prompt rendering from model invocation and inspects the full message. This is a code comparison, not observed provider equivalence. ChatOpenAI targets OpenAI specifications; third-party extra fields are not guaranteed to survive its adapter.</p>
+<h2>Worked choice and guided fading</h2>
+<p>For one small classification call, ordinary Python plus the provider SDK is a reasonable architecture. If your application needs reusable prompt/model/validation stages or a later tool loop, a standard interface can reduce wiring. Complete this design note: “I would keep the direct SDK here because ___; I would introduce LangChain when ___.” Cite a concrete requirement, not popularity.</p>
+<h2>Failure investigation and independent variation</h2>
+<p>Suppose swapping providers preserves <code>invoke</code> but rejects a content block or sampling parameter. Predict why common method names do not guarantee common capabilities. Inspect integration documentation before adjusting the design. In the <a href="../../exercises/01_llm_baseline.html">exercise</a>, inventory deterministic versus stochastic behavior and defend a minimal architecture.</p>
+<h2>Exit and delayed review</h2>
+<p>Explain all responsibilities in the table with your own request example. Diagnose an adapter mismatch separately from a bad prompt, and vary one input without changing architecture. Next session build Module 02's message representation; in Module 04 justify when an agent loop is actually needed. Reference: <a href="../../reference/API_MAP.html">API map</a>. A useful follow-up asks what responsibility an extra abstraction removes, and what contract it preserves.</p></main></body></html>

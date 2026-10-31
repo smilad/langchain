@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 01 lab — one direct SDK classification</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 01 lab — one direct SDK classification</h1>
+<p>The complete lab implements the direct <strong>OpenAI Responses API</strong>, not a LangChain model or fake classifier. It prints synthetic input/request, actual response items/text/status/model, elapsed client time and provider-reported usage. <a href="../../lessons/01_llm_baseline/01.html">Lessons</a> explain the boundary; <a href="../../exercises/01_llm_baseline.html">exercise</a> and <a href="../../solutions/01_llm_baseline.html">solution</a> are separate.</p>
+<h2>Safe default</h2>
+<pre><code class="language-sh">uv run python labs/01_llm_baseline/main.py --check
+</code></pre>
+<p>This invokes no model. It exercises actual request construction, 4000-character/nonblank input limits and exact-label parser acceptance/rejection. Authored strings are explicitly parser fixtures; they do not classify user text or demonstrate model behavior. <code>--text</code> applies only to the live request; check mode runs the fixed boundary suite.</p>
+<h2>Real request, only after deliberate approval</h2>
+<p>Use the private <code>.env</code> setup described in the root README. Configure <code>OPENAI_API_KEY</code>, a Responses-capable <code>COURSE_MODEL</code>, and <code>COURSE_ALLOW_LIVE=1</code> only after approving remote transmission/billing. Never copy secrets into published commands or evidence.</p>
+<pre><code class="language-sh">uv run python labs/01_llm_baseline/main.py --live --text &quot;The sign-in page crashes.&quot;
+</code></pre>
+<p>One initial request is made; configured SDK policy permits one transport retry. Output budget is 128 tokens, which can be insufficient for reasoning-heavy models; an incomplete response is reported and rejected, not silently retried until success. The direct baseline omits temperature because accepted controls vary by model. Choose a suitable small classification model through official capability/pricing documentation.</p>
+<h2>Cases and interpretation</h2>
+<ul>
+<li>Double charge: rubric suggests billing; actual output must still be reviewed.</li>
+<li>Crashing sign-in page: rubric suggests technical.</li>
+<li>Poetry request: rubric suggests other.</li>
+<li>Blank/oversized text: rejected before transport.</li>
+<li><code>Billing</code>, explanation prose, empty response or JSON-shaped label: rejected by the exact-label parser.</li>
+<li>Missing configuration/consent, timeout, API error or rate limit: explicit nonzero error; never a default label.</li>
+<li>Completed but wrong label: semantic/model/rubric failure, not transport success as correctness.</li>
+</ul>
+<p>Elapsed time includes the SDK/network and allowed retry. Usage may be null. No dollar estimate is invented; calculate cost only with dated pricing and the reported usage categories. Full output may include reasoning or refusal items, so <code>output[0]</code> is not assumed to contain text. Only synthetic inputs belong in this printable report.</p>
+<h2>Evidence, compatibility, state</h2>
+<p>Installed authoring snapshot: Python 3.14.0/OpenAI SDK 3.29.0; exact dependencies are in <code>uv.lock</code>. <a href="../../docs/VERIFICATION.html">Verification</a> records actual gateway-mediated Responses classification (<code>billing</code>, 79 reported tokens) and direct-public-endpoint limits. No state is persisted and no reset is needed. Check mode does not contact a remote endpoint; live requires privately configured Responses-capable access and consent. Review data-retention and optional hosted-tracing configuration before using real data.</p>
+<p>Primary references checked 2026-10-12: <a href="https://github.com/openai/openai-python">SDK</a>, <a href="https://platform.openai.com/docs/guides/text">text generation</a>, <a href="https://platform.openai.com/docs/api-reference/responses">Responses</a>.</p></main></body></html>

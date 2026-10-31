@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Independent exercise — graph contracts under a changed constraint</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Independent exercise — graph contracts under a changed constraint</h1>
+<p>Prerequisites: all <a href="../lessons/09_graph_workflows/01.html">Module 09 lessons</a>. Do not read the <a href="../solutions/09_graph_workflows.html">solution</a> until you have a route table and a prediction.</p>
+<ol>
+<li>Run <code>uv run python labs/09_graph_workflows/main.py --check</code>. Draw supported, review and unsupported paths from actual updates. Label channels replaced versus reduced and identify where the supported branches join.</li>
+<li>In your own exercise copy, add an independent <code>provenance_check</code> branch that examines evidence requirements without mutating the shared input. Include its event in the reducer. Update the fan-in dependency so draft waits for every required branch. Explain whether this branch can truly run alongside retrieval if it needs retrieval output; move it after retrieval if necessary. Dependency correctness wins over cosmetic parallelism.</li>
+<li>Change the deterministic classification rules for a new support topic. Write a route matrix first, including an overlap case and an unrelated request. Explain rule precedence. Do not describe fixture text as generated output.</li>
+<li>Reproduce the missing-reducer and nontermination failures. Predict the colliding key or repeating node before execution. Repair the contract, not just the exception visibility.</li>
+<li>With explicit provider consent, run all three <code>--live --question</code> commands from the lab README and an unfamiliar wording. Record actual classification, source support and draft origin separately. Missing credentials mark the live gate unverified; local graph evidence remains meaningful.</li>
+</ol>
+<h2>Submission and gate</h2>
+<p>Supply commands/output, a node read/write table, the route matrix, your repaired graph and the dependency justification. Practical execution, explanation, fault diagnosis and the changed constraint are required; the model's chosen label need not match your expectation to prove graph execution, but a bad classification must be reported.</p>
+<h2>Hint ladder</h2>
+<p>First locate the node that supplies the missing field. Next inspect the edge/barrier and reducer declaration. Only then consult the official Graph API and solution. A week later draw the graph from memory and implement a fresh branch with documentation allowed. No learning record is created until you demonstrate the behavior.</p></main></body></html>

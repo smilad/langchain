@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>09.1 — State is a contract, not a bag of shared mutations</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>09.1 — State is a contract, not a bag of shared mutations</h1>
+<p><a href="../../MISSION.html">Mission</a>: make orchestration inspectable. <strong>Objective:</strong> reconstruct a request's state from node updates and explain why a graph is appropriate here.</p>
+<h2>Prerequisites and warm-up</h2>
+<p>Modules 04, 05 and 08. Before reading the example, answer: does a tool description execute Python? Does conversation history live in model weights? Which trace boundary separates retrieval from generation? Compare your answers with the relevant earlier labs after attempting them.</p>
+<h2>Source and version</h2>
+<p>Read <a href="https://docs.langchain.com/oss/python/langgraph/graph-api">Graph API</a>, checked 2026-10-12. Installed baseline: Python 3.14.0, LangGraph 1.2.14, LangChain 1.4.4, Pydantic 2.14.1; <a href="../../uv.lock">lockfile</a>. Actual exercised commands and proof limits are in <a href="../../docs/VERIFICATION.html">verification</a>. <code>--check</code> needs no provider; live classification requires structured output and paid-call consent.</p>
+<h2>Mental model and flow</h2>
+<p>A <code>StateGraph</code> describes computation over named state channels. A node receives a snapshot, returns a partial update, and the runtime applies the update. An edge selects the next node. Compilation checks graph structure; it does not prove business correctness or termination.</p>
+<p>The <a href="../../labs/09_graph_workflows/main.py">lab</a> declares <code>RequestState</code>: question and user identity enter once; route, evidence and draft appear later; events accumulate. Its flow is:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Reads</th>
+<th>Writes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>classify</td>
+<td>question</td>
+<td>route, event</td>
+</tr>
+<tr>
+<td>retrieve</td>
+<td>question, user_id</td>
+<td>evidence, event</td>
+</tr>
+<tr>
+<td>constraints</td>
+<td>existing snapshot</td>
+<td>event</td>
+</tr>
+<tr>
+<td>draft</td>
+<td>question/evidence</td>
+<td>draft, origin, status, event</td>
+</tr>
+</tbody>
+</table>
+<p>Run <code>uv run python labs/09_graph_workflows/main.py --check</code>. The output exposes actual per-node updates and final state for three inputs. No output is claimed observed in this lesson; compare your run with the intended contracts. A supported fixture should finish drafted, an escalation should request human review, and Saturn should finish unsupported.</p>
+<h2>Worked reasoning and guided completion</h2>
+<p>Notice that retrieve returns evidence and one event, not a mutated copy of the entire input. Keeping updates narrow makes responsibility visible. Predict which keys survive if classify returns only route. Then temporarily remove the retrieve-to-join edge in your own exercise copy; identify the missing dependency before changing anything else.</p>
+<h2>Independent variation and failure diagnosis</h2>
+<p>Use <a href="../../exercises/09_graph_workflows.html">the exercise</a> to add a new constraint branch. If a draft lacks evidence, inspect the updates and fan-in edge rather than modifying the model prompt. A graph is justified here by a prescribed workflow and inspectable dependencies; an open-ended agent loop would obscure that contract.</p>
+<h2>Exit and delayed review</h2>
+<p>Explain a snapshot versus an update, trace every node, and implement the changed branch independently. In Module 10 revisit which of these snapshots becomes a checkpoint. <a href="../../solutions/09_graph_workflows.html">Solutions</a> contain diagnoses, not learner evidence.</p>
+<p>Reference: <a href="../../reference/API_MAP.html">API map</a> and <a href="../../reference/GLOSSARY.html">glossary</a>. Focused follow-up: which channel's update rule would you change, and why?</p></main></body></html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 00 solutions — reasoning before repairs</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 00 solutions — reasoning before repairs</h1>
+<p>Use after a genuine <a href="../exercises/00_setup.html">diagnostic attempt</a>, not as evidence of independent mastery. The complete executable diagnostic is <a href="../labs/00_setup/main.py">main.py</a>. Runtime proof is recorded separately in <a href="../docs/VERIFICATION.html">verification</a>.</p>
+<h2>Recall corrections</h2>
+<p>A checkout directory name is not necessarily an import name. Python's selected environment/import paths determine where <code>langchain</code> resolves. Metadata permits dependency ranges; the lock records exact versions/hashes; installed files are what your interpreter actually executes. An annotation is documentation/static-tool input, not automatic runtime validation. <code>async def</code> does not make a blocking function cooperative.</p>
+<h2>A changed typed JSON boundary</h2>
+<p>This illustrative complete variation can be copied into your own scratch file after an attempt; it is not reported as executed course evidence:</p>
+<pre><code class="language-python">import json
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
+
+class Ticket(BaseModel):
+    model_config = ConfigDict(strict=True, extra=&quot;forbid&quot;)
+    ticket_id: str = Field(min_length=1, max_length=40)
+    priority: int = Field(ge=1, le=3)
+
+    @field_validator(&quot;ticket_id&quot;)
+    @classmethod
+    def nonblank(cls, value: str) -&gt; str:
+        if not value.strip():
+            raise ValueError(&quot;ticket_id must not be blank&quot;)
+        return value
+
+def read_ticket(raw: str) -&gt; Ticket:
+    return Ticket.model_validate(json.loads(raw))
+
+for raw in ['{&quot;ticket_id&quot;:&quot;T-01&quot;,&quot;priority&quot;:2}',
+            '{&quot;priority&quot;:2}', '{&quot;ticket_id&quot;:&quot;T-02&quot;,&quot;priority&quot;:4}']:
+    try:
+        print(read_ticket(raw).model_dump())
+    except json.JSONDecodeError as error:
+        print(&quot;invalid JSON&quot;, error.lineno, error.colno)
+    except ValidationError as error:
+        print([{&quot;location&quot;: e[&quot;loc&quot;], &quot;type&quot;: e[&quot;type&quot;]} for e in error.errors()])
+</code></pre>
+<p>The decoder must run before model validation because the schema expects a Python value. Missing ID and priority 4 fail different field rules; valid syntax alone proves neither. Strict mode deliberately rejects string priority. Returning a default Ticket in <code>except</code> would erase the failure and mislead consumers.</p>
+<p>Environment reporting should be <code>bool(os.environ.get(name))</code>, never the value. A harmless synthetic variable suffices to prove the boundary. The lab's preflight reports presence and import origin; it does not authenticate with a provider.</p>
+<h2>Diagnosis feedback</h2>
+<ul>
+<li><strong>Goal:</strong> reproduce the environment. <strong>Observation:</strong> IDE import fails but <code>uv run</code> succeeds. <strong>Hypothesis:</strong> interpreter mismatch. <strong>Next action:</strong> compare <code>sys.executable</code>/preflight paths and select the project interpreter before reinstalling anything.</li>
+<li><strong>Goal:</strong> accept positive quantity. <strong>Observation:</strong> validation points to <code>quantity</code>. <strong>Cause:</strong> declared lower bound. <strong>Next action:</strong> follow <code>main → read_request</code>; repair input or revise the legitimate contract, not dependency installation.</li>
+<li><strong>Goal:</strong> cooperative concurrency. <strong>Observation:</strong> tasks run one after another without an await. <strong>Cause:</strong> no yielding point. <strong>Next action:</strong> inspect the actual blocking operation; choose an async client or explicit offload where appropriate.</li>
+</ul>
+<p>HTTP timeout means no timely response, not proof that the server made no change. HTTP 429 means rate/quota pressure; a completed wrong label means application/model semantics. These demand different repairs.</p>
+<h2>Gate and remediation</h2>
+<p>Demonstrate changed schemas, invalid cases, safe environment reporting and interpreter ownership. Solution-assisted execution is practice, not independent evidence. A new Python learner may need much more than 3–5 hours: use functions/dictionaries → JSON/exceptions → environments → schema → HTTP → async as a remediation sequence, with a fresh reassessment after each gap. Delayed review should ask a new domain/constraint, not repeat the same source. No credential is needed until Module 01's explicitly approved live gate.</p></main></body></html>

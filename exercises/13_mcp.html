@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 13 exercises — cross the real protocol boundary</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 13 exercises — cross the real protocol boundary</h1>
+<p>Read <a href="../lessons/13_mcp/01.html">the lessons</a> and <a href="../labs/13_mcp/README.html">the runbook</a>. Do the reasoning before <a href="../solutions/13_mcp.html">solutions</a>.</p>
+<h2>1. Separate protocol roles</h2>
+<p>Draw agent → LangChain-adapted tool → MCP client/transport → FastMCP server → catalog operation. Explain tool discovery, execution, and structured results. Distinguish the wider MCP protocol's tools/resources/prompts from the capabilities implemented by this beta LangChain wrapper.</p>
+<h2>2. Invoke the actual local server</h2>
+<p>Run <code>uv run python labs/13_mcp/main.py --check</code>. Inspect the discovered <code>catalog_lookup</code> and <code>catalog_quote</code> tools, real notebook lookup, missing-item result, two-unit integer-cent quote, and zero-quantity tool error. Identify <code>ToolMessage</code> content, status, and structured artifact. An invalid argument is not a successful quote with a warning sentence.</p>
+<h2>3. Vary the request</h2>
+<p>Use a read-only tool invocation for another actual catalog item and predict stock/quantity behavior before running. Keep the function/adapter/server boundary; do not replace it with a local copied answer. Explain why a missing catalog item and an unavailable MCP server are different error classes.</p>
+<h2>4. Exercise failure and disconnect</h2>
+<p>Run <code>--check --scenario unavailable</code>, then <code>--check --scenario disconnect</code>. The first connects to an actual unavailable endpoint and stops; the second closes a real client context and verifies the direct client cannot call afterward. Explain why adapted tools' reentrant behavior must not be conflated with an already connected direct client. No alternate server is selected silently.</p>
+<h2>5. Review trust and lifecycle</h2>
+<p>State which tools are exposed, what they can read/write, where identity/authentication would be bound for a remote deployment, and who owns transport shutdown. A discovered schema/docstring is not authorization. A path target deliberately launches reviewed local code; an arbitrary model-generated filesystem path must not become executable configuration.</p>
+<h2>6. Optional agent integration</h2>
+<p>Only with provider consent run <code>--live</code>. Inspect actual tool messages and final source-supported catalog claims. Protocol checks can pass while a model chooses poor arguments or invents prose. Keep those quality findings separate.</p>
+<p><strong>Gate:</strong> demonstrate actual client/server calls, invalid input, unavailable transport, disconnect, and cleanup. Report the expected beta warning rather than suppressing it. Later explain the same boundaries for a new read-only tool without granting broader capabilities.</p></main></body></html>

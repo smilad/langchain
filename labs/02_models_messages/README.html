@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 02 lab — common messages, real execution modes</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 02 lab — common messages, real execution modes</h1>
+<p>Rebuild the three-label classifier using <code>ChatOpenAI</code> through the shared runtime. The lab exposes raw content, normalized blocks, text, tool calls, usage and metadata separately. It delivers an exact permitted label or prints the rejected envelope and raises an error; label membership still does not prove semantic correctness. Read <a href="../../lessons/02_models_messages/01.html">lessons</a>, then <a href="../../exercises/02_models_messages.html">exercise</a>; <a href="../../solutions/02_models_messages.html">solutions</a> explain failure stages.</p>
+<h2>Local check</h2>
+<pre><code class="language-sh">uv run python labs/02_models_messages/main.py --check
+</code></pre>
+<p>The check actually renders a prompt, verifies missing-variable failure and literal braces, projects text from authored blocks, constructs a tool-result envelope and combines authored message chunks including a usage-only chunk. It also validates the accumulated label and rejects explanation prose. Those are <strong>data fixtures, not a mock model or invented API result</strong>. Nonblank/4000-character limits are exercised. No remote client is created.</p>
+<h2>Live paths and spend</h2>
+<p>Configure the private environment and explicit budget consent as in Module 01. The selected model must accept temperature zero and support the selected execution mode. These commands are implemented but unverified until actual execution:</p>
+<pre><code class="language-sh">uv run python labs/02_models_messages/main.py --live --mode invoke
+uv run python labs/02_models_messages/main.py --live --mode stream --interactive
+uv run python labs/02_models_messages/main.py --live --mode async --text &quot;The app crashes.&quot;
+uv run python labs/02_models_messages/main.py --live --mode batch
+</code></pre>
+<p><code>invoke</code>, <code>stream</code> and <code>async</code> each make one initial request. <code>batch</code> makes two, capped at two concurrent calls. <code>--mode all</code> makes <strong>five</strong>, not one; any allowed SDK retry is additional. The interactive mode reads exactly one line, not a perpetual paid loop. <code>--interactive</code> without <code>--live --mode stream</code> is rejected. Model output limits use provider/runtime defaults here; there is no claimed universal cost ceiling.</p>
+<h2>Inspection and failure cases</h2>
+<p>Streaming text goes to stderr as chunks arrive; structured complete-response inspection goes to stdout after aggregation. Preserve all chunks including empty metadata chunks. A midstream error must remain a failed run, not accepted partial classification. No tool executes in this lab: an authored ToolMessage teaches the envelope only.</p>
+<p>Batch responses retain input order, not completion order. Only whole-batch duration is measured; per-response duration is null. Client-side batch is not a provider Batch API or cost discount. Async awaits native model I/O; it does not make CPU-heavy Python nonblocking. Report missing usage as unavailable, especially with custom compatible endpoints. Common interfaces do not imply identical multimodal or provider-specific fields.</p>
+<h2>Evidence and state</h2>
+<p>Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0. <a href="../../docs/VERIFICATION.html">Verification</a> records actual gateway-mediated invoke, stream aggregation, async, and batch. The gateway buffers streams; real-time delivery and interactive input remain unverified. Exact versions live in <code>uv.lock</code> and actual preflight. No state is written, so there is nothing to reset. Configure compatible private access/consent; disable/review hosted tracing before sending private content.</p>
+<p>Sources checked 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/models">models</a>, <a href="https://docs.langchain.com/oss/python/langchain/messages">messages</a>, <a href="https://docs.langchain.com/oss/python/integrations/chat/openai">ChatOpenAI</a>.</p></main></body></html>

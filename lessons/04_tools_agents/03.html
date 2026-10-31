@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>04.3 — Build a bounded `create_agent` loop</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>04.3 — Build a bounded <code>create_agent</code> loop</h1>
+<h2>Objective and prerequisites</h2>
+<p>Serve the <a href="../../MISSION.html">mission</a> by constructing the simplest catalog agent and explaining its stopping boundary. Prerequisites: <a href="02.html">requested versus executed calls</a>, validated outputs and message roles. Warm-up: who computes a quote? Is temperature zero a guarantee of termination? Attempt before reading the exit corrections.</p>
+<p><strong>Source/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/agents">LangChain agents</a>, consulted 2026-10-12. <a href="../../docs/VERIFICATION.html">Verification</a> records exercised Python 3.14/locked versions and bounded real quote-agent execution. <code>--live</code> needs privately configured tool-capable access, <code>COURSE_ALLOW_LIVE=1</code>, and a network-call budget. The local <code>--check</code> is not proof of model behavior.</p>
+<h2>Mental model</h2>
+<p>An agent is a model plus a harness. <code>create_agent</code> supplies the message-state loop and local tool execution. Our factory supplies only the real model, two catalog tools and a bounded-behavior instruction. It exposes no arbitrary calculator, browser, checkout or write capability.</p>
+<pre><code class="language-python">from langchain_learning.catalog import build_catalog_agent
+agent = build_catalog_agent()
+result = agent.invoke(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Quote 2 notebooks.&quot;}]},
+    config={&quot;recursion_limit&quot;: 8},
+)
+</code></pre>
+<p>The instruction says to stop rather than repeat a failed operation. This is useful guidance, but the <strong>code-level recursion limit</strong> is the backstop. It bounds graph supersteps, not tokens, exact dollars, elapsed wall-clock time or a fixed number of individual tool calls. Provider timeout and retries are separate controls in the shared runtime. Multiple calls can occur in one tools step.</p>
+<p>The normal path is model request → tools → model response with no more calls. A missing-item result may also lead directly to a final explanation. A repeated loop reaches <code>GraphRecursionError</code>; no grounded final answer should be invented after that failure.</p>
+<h2>Worked bounded case</h2>
+<p>The <a href="../../labs/04_tools_agents/README.html">lab</a> uses limit eight for normal, missing and invalid requests. Its <code>bounded</code> case uses limit one on a real prompt requesting tool work, prints partial updates and reports either observed budget exhaustion or observed termination. It does not assume a model will choose the same plan on every trial. The outputs are not pre-recorded success claims.</p>
+<p>Guided completion: before running, sketch a plausible two-step tool sequence and identify where one superstep is insufficient. Then annotate the actual trace. Independent variation: ask for two different items at limit three, predict whether the provider may issue parallel tool calls, and compare the actual run with the <a href="../../exercises/04_tools_agents.html">exercise</a>.</p>
+<h2>Failure diagnosis and exit</h2>
+<p>Distinguish a step-budget failure from schema rejection, insufficient stock and transport timeout. Raising a budget may permit additional progress; it does not repair bad arguments or missing catalog data. Do not silently retry an impossible request until it “looks successful.”</p>
+<p>Exit: demonstrate one tool-using answer and one bounded execution, explaining what the bound guarantees and what it does not. Corrections: deterministic Python computes cents; low temperature does not guarantee termination or correctness. Review stopping policies in Modules 09 and 11. Reference: <a href="../../reference/API_MAP.html">API map</a>. Focused follow-up: why can a run obey its step bound yet exceed an unacceptable monetary budget?</p></main></body></html>

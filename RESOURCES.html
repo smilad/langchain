@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LangChain learning resources</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="lessons/README.html">Lesson index</a></nav><h1>LangChain learning resources</h1>
+<p>Research baseline: <strong>2026-10-12</strong>. Prefer these sources over unversioned tutorial collections. Read only the resource needed for the current lesson; the list is a reference map, not a requirement to consume everything before coding.</p>
+<h2>Knowledge</h2>
+<h3>First resources: orientation and foundations</h3>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>When to use it</th>
+<th>What to extract / caveat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/learn">Official Python Learn index</a></td>
+<td>Orientation and finding current tutorials</td>
+<td>Ecosystem/use-case map. A card's title does not guarantee its implementation layer: the RAG Agent card currently points to Deep Agents material.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/overview">LangChain overview</a></td>
+<td>Modules 01–04</td>
+<td>LangChain <code>create_agent</code>, LangGraph, Deep Agents, and LangSmith responsibilities. Our primitive-first teaching order differs from the docs' fastest-start Deep Agents recommendation.</td>
+</tr>
+<tr>
+<td><a href="https://academy.langchain.com/courses/foundation-introduction-to-langchain-python">Introduction to LangChain — Python, Academy</a></td>
+<td>Modules 02–05, then revisit for 11–13</td>
+<td>Verified public curriculum: models, tools, short-term memory, multimodal messages, MCP, context/state, multi-agent, middleware, HITL, and projects. Listed free with 30 lessons and 1.5 hours of video; video duration is not lab completion time. Enrollment may be needed for lesson access.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/quickstart">Python quickstart</a></td>
+<td>First agent in Module 04</td>
+<td>Model/tool/prompt setup and message-based invocation. Adapt model availability and provider credentials; do not copy its Python 3.11 setup into this project's <code>&gt;=3.14</code> constraint.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/migrate/langchain-v1">LangChain v1 migration guide</a></td>
+<td>Before adapting any external example</td>
+<td>Modern agent APIs, middleware, structured output, content blocks, provider packages, and namespace changes. This is a compatibility reference, not the primary beginner lesson.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/langsmith/trace-with-langchain">Trace LangChain applications</a></td>
+<td>Trace concepts from Module 02; full lab in 08</td>
+<td>Model/tool/retrieval execution, metadata, projects, and tracing configuration. Hosted tracing requires an account/key and care with sensitive inputs/outputs.</td>
+</tr>
+</tbody>
+</table>
+<h3>Retrieval and evidence-based application evaluation</h3>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>When to use it</th>
+<th>What to extract / caveat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">Build a semantic search engine</a></td>
+<td>Module 06</td>
+<td>Documents, loaders, splitting, embeddings, vector stores, similarity search, retrievers. In-memory examples do not establish durable indexing; integrations are separate dependencies.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/deepagents/retrieval">Retrieval / RAG architectures</a></td>
+<td>Module 07</td>
+<td>Two-step, agentic, and hybrid retrieval; reuse existing knowledge sources where appropriate. The conceptual page is under Deep Agents but also uses LangChain examples. Verify incidental older URLs/imports before copying.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/langsmith/evaluation-quickstart">LangSmith evaluation quickstart</a></td>
+<td>Module 08</td>
+<td>Dataset + target function + evaluator + experiment. Model-based grading has its own cost and error modes; cloud evaluation is optional for initial learning.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/langsmith/evaluate-rag-tutorial">Evaluate a RAG application</a></td>
+<td>Modules 07–08</td>
+<td>Distinguish answer correctness, answer relevance, groundedness, and retrieval relevance. A small tutorial dataset is not evidence of production reliability.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/langsmith/evaluation-concepts">Evaluation concepts</a></td>
+<td>Modules 08 and 14</td>
+<td>Offline dataset comparisons versus evaluation of live runs/threads. Feed observed failures back into regression datasets without contaminating the held-out benchmark.</td>
+</tr>
+</tbody>
+</table>
+<h3>Graph state, durable execution, and human approval</h3>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>When to use it</th>
+<th>What to extract / caveat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://academy.langchain.com/courses/intro-to-langgraph">Introduction to LangGraph — Python, Academy</a></td>
+<td>Modules 09–10</td>
+<td>State, reducers, routers, memory, streaming/HITL, parallelization, subgraphs, long-term memory, deployment. Listed free, 55 lessons, 6 hours of video. Review older breakpoint examples against current interrupt guidance.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langgraph/persistence">LangGraph persistence</a></td>
+<td>Modules 05 and 10</td>
+<td>Thread-scoped checkpoints versus cross-thread stores; stable thread identity. An in-memory checkpointer cannot demonstrate recovery after process restart.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langgraph/interrupts">LangGraph interrupts</a></td>
+<td>Module 10</td>
+<td><code>interrupt()</code> and <code>Command(resume=...)</code>; same-thread continuation. Resumed nodes restart from their beginning: placement/idempotency of side effects matters. Newer response-schema features have version floors.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/human-in-the-loop">LangChain human-in-the-loop middleware</a></td>
+<td>Modules 10–11</td>
+<td>Tool approval via <code>HumanInTheLoopMiddleware</code>, checkpointing, and decisions. Current docs include approve/edit/reject/respond; <code>respond</code> is not rejection.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/migrate/langgraph-v1">LangGraph v1 migration guide</a></td>
+<td>Auditing graph notebooks</td>
+<td>Custom graphs retain the core state/checkpoint/interrupt model; deprecated prebuilt-agent APIs are a separate concern. Do not label every older graph example invalid.</td>
+</tr>
+</tbody>
+</table>
+<h3>Integration, advanced harnesses, and deployment</h3>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>When to use it</th>
+<th>What to extract / caveat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/index">Multi-agent patterns</a></td>
+<td>Module 12</td>
+<td>Subagents, handoffs, skills, routers, and custom workflows; context ownership and token/latency tradeoffs. Complex tasks do not automatically need multiple agents.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/langchain/mcp/index">LangChain MCP integration</a></td>
+<td>Module 13</td>
+<td>Current Python docs use <code>langchain.mcp.MCPAdapter</code> and <code>list_tools()</code>, with async lifecycle and transport/auth concerns. The namespace is beta and requires <code>langchain[mcp]&gt;=1.4.0</code>; re-check at authoring time.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/migrate/langchain-mcp-adapters">MCP adapter migration</a></td>
+<td>Auditing MCP examples</td>
+<td>The previous <code>MultiServerMCPClient</code> path is not the current docs' baseline. The new wrapper does not implement every protocol capability; teach tools separately from the wider protocol's resources/prompts.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/deepagents/overview">Deep Agents overview</a></td>
+<td>Optional Deep Agents track</td>
+<td>Filesystem/context/delegation capabilities and <code>create_deep_agent</code>. Planning is opt-in starting in v0.7; persistence/shell/sandbox behavior depends on the backend. Do not treat a virtual filesystem as automatically durable or sandboxed.</td>
+</tr>
+<tr>
+<td><a href="https://academy.langchain.com/courses/foundation-introduction-to-deepagents">Introduction to Deep Agents, Academy</a></td>
+<td>Optional advanced synthesis</td>
+<td>Public curriculum covers execution environments, context management, memory, delegation, and combined projects. Listed free with 46 lessons; the short video-time figure does not represent total study time.</td>
+</tr>
+<tr>
+<td><a href="https://academy.langchain.com/courses/langsmith-deployment">LangSmith Deployment course</a></td>
+<td>Module 14, if that deployment path is chosen</td>
+<td>Deployment, clients/UI/routes, memory, and authentication/authorization. Listed free with 37 lessons; free learning content does not imply free production hosting.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/langsmith/deployment">Deployment concepts and options</a></td>
+<td>Module 14</td>
+<td>Agent runtime versus observability/evaluation hosting, local/cloud/self-hosted choices, and product requirements. Paid hosting is not a prerequisite for the course.</td>
+</tr>
+<tr>
+<td><a href="https://docs.langchain.com/oss/python/release-policy">Release policy</a> and <a href="https://docs.langchain.com/oss/python/versioning">versioning</a></td>
+<td>Setup and maintenance</td>
+<td>Support windows, semantic versioning, package-specific compatibility, and pre-1.0 risks. Current versions must be locked after a real compatibility run, not copied from this document.</td>
+</tr>
+<tr>
+<td><a href="https://pypi.org/project/langchain/">LangChain package metadata</a></td>
+<td>Module 00 compatibility check</td>
+<td>Research snapshot: 1.4.4 declares Python <code>&gt;=3.10,&lt;4.0</code> and lists 3.14. This does not prove compatibility for all optional integrations; the repository remains <code>&gt;=3.14</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>How to choose a tutorial</h3>
+<ol>
+<li>Check its date, imports, dependency versions, model availability, and actual source URL.</li>
+<li>For new agents, prioritize <code>from langchain.agents import create_agent</code>.</li>
+<li>Treat <code>initialize_agent</code>, <code>LLMChain</code>, <code>ConversationBufferMemory</code>, old <code>langchain.chains</code> imports, and <code>langgraph.prebuilt.create_react_agent</code> as legacy signals. Use the migration guide to distinguish obsolete syntax from useful underlying concepts.</li>
+<li>Do not reject valid Runnable/LCEL composition just because it is not an agent loop.</li>
+<li>Compare course notebooks with live docs. A course can remain useful while its MCP import or default harness behavior has changed.</li>
+<li>Separate copying code from testing a concept: reproduce the example, change a constraint, and investigate a failure.</li>
+</ol>
+<h3>Teaching and learning evidence</h3>
+<p>These sources inform the teaching design; none validates this particular adult LangChain course. Review intervals, lesson lengths, and assessment gates in this repository are practical course-policy choices.</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Use in the course</th>
+<th>Evidence boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://acs.ist.psu.edu/ist521/dunloskyRMNW13.pdf">Dunlosky et al. (2013): effective learning techniques</a></td>
+<td>Retrieval practice with corrective feedback and practice distributed across sessions</td>
+<td>Broad review rates practice testing/distributed practice highly; it is not a LangChain or adult-programming trial. Rereading documentation still has a useful reference role.</td>
+</tr>
+<tr>
+<td><a href="https://files.eric.ed.gov/fulltext/ED498555.pdf">Pashler et al. (2007): IES instruction/study practice guide</a></td>
+<td>Alternate worked solutions with learner attempts; ask explanatory questions and revisit earlier skills</td>
+<td>Explicit evidence grades: active-retrieval quizzes strong; spacing/worked-example alternation moderate. Read via the government-hosted ERIC mirror after original endpoints timed out.</td>
+</tr>
+<tr>
+<td><a href="https://pubmed.ncbi.nlm.nih.gov/19076480/">Cepeda et al. (2008): spacing and retention</a></td>
+<td>Schedule delayed retrieval and adapt review to the retention goal</td>
+<td>Primary-study abstract plus an accessible manuscript were checked. Fact-learning results do not establish a universal 1/3/7/14-day coding schedule.</td>
+</tr>
+<tr>
+<td><a href="https://mrbartonmaths.com/resourcesnew/8.%20Research/Explicit%20Instruction/Structuring%20the%20Transition%20From%20Example%20Study%20to%20Problem%20Solving.pdf">Renkl &amp; Atkinson (2003): worked-example fading</a></td>
+<td>Full example → complete a missing final step → larger completion task → independent variant</td>
+<td>Small studies mainly use probability/physics tasks; near transfer is not proof of broad software-design transfer. The link is an accessible paper mirror.</td>
+</tr>
+<tr>
+<td><a href="https://assess.ucr.edu/sites/default/files/2019-02/hattietimperley_2007.pdf">Hattie &amp; Timperley (2007): feedback</a></td>
+<td>Feedback identifies goal, observed mismatch, and next diagnostic action</td>
+<td>Broad review: effects vary and can be negative. Generic praise and always-immediate answers are not equivalent to informative feedback.</td>
+</tr>
+<tr>
+<td><a href="https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/mastery-learning">EEF: mastery learning</a></td>
+<td>Fixed objectives, variable support/time, corrective instruction, fresh-task reassessment</td>
+<td>School-focused synthesis with low evidence security; do not translate its school outcome estimates or customary percentage thresholds into adult-course guarantees.</td>
+</tr>
+</tbody>
+</table>
+<p>The <a href="docs/TEACHING_GUIDE.html">teaching guide</a> turns these principles into concrete lesson and assessment mechanics.</p>
+<h2>Skills used and recommended</h2>
+<p>Searched the skills.sh leaderboard and CLI for <code>superpowers</code>, <code>teaching curriculum</code>, and <code>instructional design</code>; inspected source content and GitHub repository metadata for the selected skills. This is a curated selection, not a claim to have found or applied every teaching skill.</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Purpose in this repository</th>
+<th>Observed popularity snapshot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://skills.sh/obra/superpowers/brainstorming">Superpowers: brainstorming</a></td>
+<td>Separate goals from assumptions; compare approaches and establish the curriculum before implementation.</td>
+<td>About 388K installs; source repository about 298K stars.</td>
+</tr>
+<tr>
+<td><a href="https://skills.sh/obra/superpowers/writing-plans">Superpowers: writing-plans</a></td>
+<td>Map files/interfaces, decompose checkable deliverables, and define acceptance/handoff before authoring.</td>
+<td>About 270K installs; same source repository.</td>
+</tr>
+<tr>
+<td><a href="https://skills.sh/obra/superpowers/verification-before-completion">Superpowers: verification-before-completion</a></td>
+<td>Evidence before completion claims; actual course/lab execution is recorded separately from provider-dependent gates.</td>
+<td>About 235K installs; same source repository.</td>
+</tr>
+<tr>
+<td><a href="https://skills.sh/mattpocock/skills/teach">Matt Pocock: teach</a></td>
+<td>Mission-led workspace, curated knowledge, practice, references, and evidence-backed learning records. Markdown/Python remains the course format, not its default HTML output.</td>
+<td>About 795K installs; source repository about 287K stars.</td>
+</tr>
+</tbody>
+</table>
+<p>Popularity is a discovery signal, not proof of instructional effectiveness. The selected sources are community-authored, not official LangChain documentation. Search also surfaced narrower curriculum/cognitive-load skills with substantially lower adoption; they were not bulk-installed or treated as evidence for learning claims.</p>
+<p><strong>Installation is optional and was not performed.</strong> Review the current skill content before installing into an agent environment:</p>
+<pre><code class="language-bash">npx skills add obra/superpowers --skill brainstorming writing-plans verification-before-completion
+npx skills add mattpocock/skills --skill teach
+</code></pre>
+<p>These commands install agent workflow instructions, not course dependencies. Do not install unrelated image/video-generation packages merely because their repository name contains “superpowers”.</p>
+<h2>Wisdom (communities)</h2>
+<ul>
+<li><a href="https://github.com/langchain-ai/langchain">LangChain GitHub</a>: use issue discussions and contribution guidance to understand real failure reports; search existing reports before filing a reproducible issue. Package metadata identifies this as the official repository.</li>
+<li><a href="https://www.langchain.com/join-community">Official community entry point</a>: optional Slack discussion, events, and project sharing. The community guidelines direct technical/product-help questions to the <a href="https://forum.langchain.com/">LangChain Forum</a>; bring a concrete experiment or minimal reproduction there.</li>
+</ul>
+<p>No community participation preference has been established; joining is optional.</p>
+<h2>Freshness and gaps</h2>
+<ul>
+<li>Public official docs and individual Academy course pages were read. Some Academy catalog/collection pages returned HTTP 403; no claim is made that the complete catalog or enrolled videos were reviewed.</li>
+<li>Context7 instructions were read, but its MCP tools were not exposed; direct official documentation was used. Codebase-memory MCP tools were also unavailable, and no LSP server was configured, so no graph-index update or LSP-backed reference verification is claimed.</li>
+<li>Provider/budget diagnostics remain required before paid labs. The user approved bounded OpenAI verification; genuine OpenAI-Codex generation/tool access was subsequently exercised through the credential-backed gateway. Its catalog exposes no direct OpenAI or embedding models. Advisor review was explicitly waived by the user and the session-only advisor disabled; no review sign-off is claimed.</li>
+<li>The locked environment is exercised on Python 3.14, including catalog operations, lexical retrieval, durable graph approval, MCP, and localhost serving. <a href="docs/VERIFICATION.html">Verification</a> separates observed live successes/failures from unverified JSON-schema, embedding quality, currency cost, and hosted evaluation.</li>
+<li>Source URLs and API defaults can change. Re-check before authoring a lesson and after changing a relevant dependency. Annotate the exact exercised versions in each lab README.</li>
+<li>Skill install/star counts and PyPI versions above are discovery snapshots, not compatibility pins or quality guarantees.</li>
+</ul></main></body></html>

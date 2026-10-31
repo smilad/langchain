@@ -1,0 +1,32 @@
+# Module 03 lab — typed extraction without invented records
+
+SupportRecord is extracted from synthetic support text; **no refund or external action executes**. A typed consumer receives validated data or an explicit error/unknown/contradiction/irrelevance. See [lessons](../../lessons/03_structured_output/01.md), [independent exercise](../../exercises/03_structured_output.md), and [reasoned solutions](../../solutions/03_structured_output.md).
+
+## Real deterministic boundaries
+```sh
+uv run python labs/03_structured_output/main.py --check
+```
+The lab exercises PydanticOutputParser and an actual LCEL sequence on authored JSON, all four status fixtures, exact input keys/nonblank limits, missing required fields, cross-field consistency, source-ID membership and exact quotation. It rejects well-shaped data against missing, contradictory and mismatched-quote source texts. Fixture data is labeled authored; no model is created or imitated.
+
+## Real model and agent paths
+After explicit credential/model/budget configuration:
+```sh
+uv run python labs/03_structured_output/main.py --live --case complete
+uv run python labs/03_structured_output/main.py --live --case missing
+uv run python labs/03_structured_output/main.py --live --case contradictory
+uv run python labs/03_structured_output/main.py --live --case irrelevant
+uv run python labs/03_structured_output/main.py --live --method function_calling --case complete
+uv run python labs/03_structured_output/main.py --live --engine agent --strategy tool
+uv run python labs/03_structured_output/main.py --live --engine agent --strategy provider
+```
+Run only the paths your approved model supports. Default engine is model with `json_schema`; `--method` affects that engine only. `--strategy` affects the agent engine only. `--text` overrides the selected case (including an explicitly empty string, which is rejected). These are separate requests, not one bundled experiment. Models must accept runtime temperature zero. The model pipeline retains source alongside the prompt→structured-model branch and inspects `raw`, `parsed`, `parsing_error` before the source guard. An unsupported capability, refusal or parse error is not replaced with fake success.
+
+The agent uses `create_agent`, no business tools, explicit ProviderStrategy or ToolStrategy, recursion limit eight and tool-strategy `handle_errors=False`. Actual message/profile inspection matters: requested strategy is not proof of provider mechanism. The agent may take multiple model turns; provider transport retry is limited to one. Generation uses provider defaults; no fixed dollar ceiling is claimed.
+
+## Semantics and limits
+All fields are required; unavailable values are null. More than one distinct ORDER identifier is contradictory by this lab's deliberately conservative policy. Non-supported states must not choose an order or quote. Supported fields require exact literal source evidence. This catches invention of identifiers/quotes, not every semantic error: relevance/category and real eligibility still need a human rubric. Do not retry missing facts into existence. There is no automatic semantic repair loop.
+
+## Evidence and reset
+Installed authoring snapshot: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9/langchain-openai 1.7.0, Pydantic 2.14.1. [Verification](../../docs/VERIFICATION.md) records four successful real function-calling cases and a rejected gateway JSON-schema result. Agent/provider strategies are separate capability gates, not certified by those model-level cases. Exact versions are locked in `uv.lock`. This lab writes no state and requires no reset; keep printable text synthetic and configure private compatible access/consent.
+
+Primary sources checked 2026-10-12: [models](https://docs.langchain.com/oss/python/langchain/models#structured-output), [agent strategies](https://docs.langchain.com/oss/python/langchain/structured-output), [RunnableSequence](https://reference.langchain.com/python/langchain-core/runnables/base/RunnableSequence), [Pydantic validators](https://docs.pydantic.dev/latest/concepts/validators/).

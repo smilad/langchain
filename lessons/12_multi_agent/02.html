@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12.2 — One specialist, not a zoo of agents</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>12.2 — One specialist, not a zoo of agents</h1>
+<p><strong>Mission/objective:</strong> support <a href="../../MISSION.html">the mission</a> by implementing and explaining one synchronous subagent-as-tool pattern. Distinguish it from a router, handoff, and supervisor without implementing four architectures.</p>
+<p><strong>Prerequisites:</strong> <a href="01.html">the baseline</a> and tool argument/execution boundaries. Check: who decides whether a requested tool runs?</p>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/multi-agent/subagents">official subagent patterns</a> and <a href="https://docs.langchain.com/oss/python/langchain/multi-agent">multi-agent overview</a>, checked 2026-10-12. Installed baseline Python 3.14.0, LangChain 1.4.4, LangChain OpenAI 1.7.0; <a href="../../uv.lock">lockfile</a> records dependencies and <a href="../../docs/VERIFICATION.html">verification</a> records exercised behavior. Live proof requires consent and a tool-capable, structured-output model; no generated output is invented in its absence.</p>
+<h2>Retrieval warm-up</h2>
+<p>Before reading, name the owner of user identity and explain why another agent cannot authorize an action. Correction: application authentication owns identity; model-generated intentions are proposals.</p>
+<h2>Pattern vocabulary</h2>
+<p>A <strong>router</strong> chooses a destination, often once. A <strong>handoff</strong> transfers active conversational responsibility. A <strong>supervisor</strong> keeps central control and can delegate repeatedly. Our narrower experiment gives a central agent exactly one specialist tool and permits at most one invocation. The specialist is another actual <code>create_agent</code>, not a Python function renamed “agent.” It has its own prompt and retrieval tool; the supervisor has neither direct retrieval nor action tools.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Receives</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coordinator</td>
+<td>Original question</td>
+<td>Structured final draft</td>
+</tr>
+<tr>
+<td>Specialist tool</td>
+<td>Question only</td>
+<td>Validated JSON findings</td>
+</tr>
+<tr>
+<td>Specialist agent</td>
+<td>Question and request-scoped policy tool</td>
+<td>GroundedAnswer</td>
+</tr>
+</tbody>
+</table>
+<p>No hidden conversation transcript is shared. The question passed by the coordinator cannot broaden the frozen retrieval scope. This favors isolation over dynamic search; state this limitation when interpreting quality.</p>
+<h2>Worked example</h2>
+<p>Inspect <code>policy_specialist</code> in <a href="../../src/langchain_learning/advanced.py">advanced.py</a>. <code>RunnableConfig</code> carries child callbacks so nested calls contribute to the same measurement ledger. The specialist's return is validated before the supervisor sees it. Run <code>uv run python labs/12_multi_agent/main.py --live --trials 1</code> only with explicit consent. Expected behavior is a real nested agent run; actual results are not asserted here.</p>
+<h2>Guided exercise and diagnosis</h2>
+<p>Sketch the edge that would transfer control in a handoff, then explain why our tool does not create that edge. Independently vary the specialist's context contract using <a href="../../exercises/12_multi_agent.html">the exercise</a>. If the coordinator never delegates, inspect actual boundary-call counts: that trial fails rather than being labeled a specialist success.</p>
+<h2>Exit and review</h2>
+<p>Teach back why two prompts can add latency without adding useful evidence. Identify where a specialist exception stops the trial. Reconsider router versus delegation during <a href="../15_capstone/02.html">capstone architecture</a>; use <a href="../../reference/API_MAP.html">the API map</a>, not legacy supervisor imports.</p></main></body></html>

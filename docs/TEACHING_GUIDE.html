@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Teaching guide: detailed learning without tutorial dependence</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Teaching guide: detailed learning without tutorial dependence</h1>
+<p>Use with <a href="../MISSION.html">the mission</a>, <a href="../ROADMAP.html">the roadmap</a>, and <a href="../RESOURCES.html">the source guide</a>. This is an authoring/assessment specification, not evidence that a learner has completed a lesson.</p>
+<h2>1. What “highly detailed” means</h2>
+<p>A detailed lesson explains the mental model, the data/control flow, why an API is used, what it guarantees, where it fails, and how to inspect it. It does not introduce every adjacent API at once.</p>
+<p>Separate three layers:</p>
+<ul>
+<li><strong>Lesson:</strong> one observable skill, a small worked example, and its explanation.</li>
+<li><strong>Lab:</strong> run the behavior, inspect intermediate state, vary a constraint, and diagnose a failure.</li>
+<li><strong>Reference:</strong> concise terminology, verified API shapes, compatibility notes, and troubleshooting that can be reused later.</li>
+</ul>
+<p>Authoring default: 15–25 minutes for the explanation/example and 30–60 minutes for a small lab segment, with larger project work split across sessions. These timings are adjustable design choices, not limits established by working-memory research.</p>
+<h2>2. Evidence-informed design</h2>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Concrete implementation</th>
+<th>Important limit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Retrieval practice</td>
+<td>Begin with 2–3 short earlier-topic prompts; learner answers before seeing corrections. Ask for data flow, prediction, or explanation rather than memorized imports.</td>
+<td><a href="https://acs.ist.psu.edu/ist521/dunloskyRMNW13.pdf">Dunlosky et al.</a> support retrieval/distributed practice broadly, not a guarantee of adult coding transfer.</td>
+</tr>
+<tr>
+<td>Spaced practice</td>
+<td>Reuse the concept next session, roughly a week later, and in a later project; vary the question and adjust after errors.</td>
+<td><a href="https://pubmed.ncbi.nlm.nih.gov/19076480/">Cepeda et al.</a> show timing depends on retention horizon. This schedule is an initial policy, not a universal optimum.</td>
+</tr>
+<tr>
+<td>Worked examples with fading</td>
+<td>Show one small complete solution, remove its final meaningful step, then remove more support before a fresh task. Ask why each boundary exists.</td>
+<td><a href="https://mrbartonmaths.com/resourcesnew/8.%20Research/Explicit%20Instruction/Structuring%20the%20Transition%20From%20Example%20Study%20to%20Problem%20Solving.pdf">Renkl &amp; Atkinson</a> do not establish automatic far transfer from completing blanks.</td>
+</tr>
+<tr>
+<td>Explanatory questions</td>
+<td>Connect a concrete observed value to its abstraction: message, tool call, retrieved document, state update, checkpoint.</td>
+<td><a href="https://files.eric.ed.gov/fulltext/ED498555.pdf">IES practice guide</a> offers evidence-graded recommendations, not a rigid course recipe.</td>
+</tr>
+<tr>
+<td>Informative feedback</td>
+<td>Name the intended contract, the observed mismatch, and the next diagnostic action after a genuine attempt.</td>
+<td><a href="https://assess.ucr.edu/sites/default/files/2019-02/hattietimperley_2007.pdf">Hattie &amp; Timperley</a> distinguish useful task/process feedback from generic praise; timing effects vary.</td>
+</tr>
+<tr>
+<td>Mastery-oriented progression</td>
+<td>Fix objectives while allowing time/support to vary; correct a missed criterion and reassess with a fresh equivalent task.</td>
+<td><a href="https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/mastery-learning">EEF mastery review</a> concerns school contexts with limited evidence security, not an adult-course productivity forecast.</td>
+</tr>
+</tbody>
+</table>
+<p>Interleave already introduced skills during later practice—for example, compare a tool result, model message, and retrieved passage. Do not mix several unfamiliar topics into the first explanation. Assess actual delayed performance rather than claiming a teaching technique worked because it was used.</p>
+<h2>3. Required lesson structure</h2>
+<p>Each lesson file must contain the following, adapted to its single objective:</p>
+<ol>
+<li><strong>Mission link and objective.</strong> State a behavior: “Diagnose a retrieval miss by inspecting the retrieved passages,” not “Understand RAG.”</li>
+<li><strong>Prerequisites.</strong> Link to earlier concepts and give one small check; do not invent the learner's prior knowledge.</li>
+<li><strong>Source and version note.</strong> Primary URL, date checked, Python/dependency versions actually exercised, required model capabilities, and any credentials/cost.</li>
+<li><strong>Retrieval warm-up.</strong> Two or three earlier-topic questions, with corrections available only after an attempt.</li>
+<li><strong>Mental model.</strong> Explain responsibilities and boundaries before presenting syntax.</li>
+<li><strong>Data/control-flow view.</strong> Use a diagram or table where it makes an actual structure clearer. Include the shape of inputs, outputs, and intermediate values.</li>
+<li><strong>Worked example.</strong> Small runnable behavior, rationale alongside relevant steps, and observed output clearly distinguished from illustrative output.</li>
+<li><strong>Guided completion.</strong> Remove a meaningful step and ask the learner to supply it. Explain why it belongs there.</li>
+<li><strong>Independent exercise.</strong> Change input, schema, evidence, state, or another constraint. Link to the exercise file, not an inline answer.</li>
+<li><strong>Failure investigation.</strong> Include an in-scope fault; ask for a prediction and hypothesis before running it.</li>
+<li><strong>Exit check.</strong> Practical behavior, explanation, diagnosis, and independent variation. Keep model variability distinct from deterministic contract checks.</li>
+<li><strong>Review and reference.</strong> Name a later review opportunity, link relevant glossary/API entries, and invite a focused follow-up question.</li>
+</ol>
+<p>The lab README additionally states setup commands, the actual entrypoint, input cases, expected behavior, observed evidence, provider limitations, and how to remove/reset local state safely. Mark commands as planned until they have been implemented and exercised.</p>
+<h2>4. Feedback and hints</h2>
+<h3>Hint ladder</h3>
+<p>Offer the least revealing support that permits another genuine attempt:</p>
+<ol>
+<li>Ask the learner to identify the failed stage and its expected input/output.</li>
+<li>Point to a trace, intermediate value, or documentation section.</li>
+<li>Explain the specific concept or contract they missed.</li>
+<li>Show a smaller analogous example.</li>
+<li>Provide the worked solution only after an attempt or an explicit request.</li>
+</ol>
+<p>Record support used. Completion with a supplied solution is practice, not evidence of independent implementation.</p>
+<h3>Feedback format</h3>
+<p><strong>Goal → observation → cause/hypothesis → next action.</strong></p>
+<p>Example: “The answer must be supported by retrieved passages. Your response cites source P3, but the trace contains P1 and P2 only. Inspect the source-ID propagation between retrieval and response construction; regenerate only after the citations can be checked against actual evidence.”</p>
+<p>Avoid “Try again,” “Great job,” or “The model is wrong” as the complete explanation. Distinguish environmental failures, missing prerequisites, logic defects, and stochastic model errors; they need different interventions.</p>
+<p>For novices, feedback soon after an authentic attempt is the default. Delay revealing answers long enough for the learner to reason; do not claim immediate feedback is optimal in every situation.</p>
+<h2>5. Mastery rubric</h2>
+<p>Use criterion-based decisions rather than averaging away a serious misconception.</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Evidence required</th>
+<th>Not sufficient</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Practical execution</td>
+<td>Actual lab meets the module's stated behavior, including named failure cases</td>
+<td>Notebook cell runs once; test mocks echo the intended result</td>
+</tr>
+<tr>
+<td>Conceptual explanation</td>
+<td>Learner explains essential responsibilities/boundaries and limitations in their own words</td>
+<td>Repeats the lesson definition or memorizes an import</td>
+</tr>
+<tr>
+<td>Diagnosis</td>
+<td>Learner predicts, inspects evidence, identifies a cause, and explains a repair</td>
+<td>Changes prompts/parameters repeatedly until something works</td>
+</tr>
+<tr>
+<td>Independent variation</td>
+<td>Learner meets the objective under one changed constraint without copying the worked solution</td>
+<td>Re-runs the exact example or has an assistant write the entire solution</td>
+</tr>
+<tr>
+<td>Delayed retention</td>
+<td>Later fresh recall plus a small documentation-allowed coding variation</td>
+<td>Same-session fluency alone</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Initial gate:</strong> all first four criteria and the module-specific gate must be demonstrated. A missing security/state/evidence boundary cannot be offset by a high quiz score. Documentation lookup is allowed for realistic coding tasks; conceptual recall checks are short and closed-note.</p>
+<p><strong>Retention:</strong> initial mastery remains provisional until a later check. Continue unrelated work while waiting for the review, but remediate a delayed miss before major dependent project work. Do not silently label the prerequisite permanently learned.</p>
+<p><strong>Reassessment:</strong> identify the exact missed criterion, reteach only the relevant concept, then use a different equivalent task. More time/support is allowed; repeated access to the same answer is not reassessment.</p>
+<p><strong>Assessment validity:</strong> unavailable credentials, network/provider outages, or billing limits are environment blockers, not evidence of conceptual incompetence. Mark live execution unverified and record reachable conceptual/deterministic evidence separately; never replace the missing behavior with fake success.</p>
+<h2>6. Detailed lesson blueprint: supported citations in RAG</h2>
+<p>This blueprint demonstrates the authoring method; <a href="../lessons/07_rag/01.html">Module 07</a> now implements the evidence-first RAG lesson and lab. Local boundaries are exercised; generated claim support still requires the live and human-review evidence described in <a href="VERIFICATION.html">verification</a>.</p>
+<p><strong>Objective:</strong> Given a question, retrieved passages, and an answer with source IDs, determine whether each substantive claim is supported and identify an appropriate abstention.</p>
+<p><strong>Prerequisites:</strong> document metadata, retrieval inspection, schema validation, and the difference between generated text and evidence.</p>
+<p><strong>Primary sources:</strong> the semantic-search tutorial and RAG evaluation tutorial in <a href="../RESOURCES.html">RESOURCES.md</a>.</p>
+<p><strong>Mental model:</strong> ingestion establishes source identity; retrieval selects passages; generation proposes an answer; verification checks whether the proposed claims are supported. A citation label alone does not verify a claim.</p>
+<p><strong>Warm-up prompts:</strong>
+- If the retriever returns no relevant passage, can schema validation make the answer factual?
+- What information must survive chunking for a learner to locate the original source?</p>
+<p><strong>Worked case design:</strong> use synthetic policy P1 stating a return period, P2 stating a different condition, and P3 with an outdated date. Inspect actual retrieved text before presenting the generated answer. Explain which claim uses which passage and why the version matters.</p>
+<p><strong>Fading task:</strong> provide the proposed answer and retrieved passages but omit the claim-to-source mapping. The learner supplies the mapping and identifies unsupported claims.</p>
+<p><strong>Independent variation:</strong> change the question so the corpus does not contain the answer. The learner designs an abstention without inventing a policy or citing an irrelevant passage.</p>
+<p><strong>Failure investigation:</strong> intentionally lose source metadata during ingestion, or pair a valid source ID with a passage that does not support the claim. Require inspection of the ingestion/retrieval/output boundary rather than prompt tweaking alone.</p>
+<p><strong>Gate:</strong> actual sources are present in retrieval, cited claims are supported, unavailable evidence produces abstention, and the learner can distinguish source-ID validity from factual support. Repeat with a different question during Module 08 evaluation.</p>
+<p><strong>Limit:</strong> automated checks can verify IDs/schema membership; semantic support requires an explicit rubric, human review, or a calibrated evaluator. A model judge is not an infallible source of truth.</p>
+<h2>7. Learning records and progress</h2>
+<p>Use the <code>teach</code> skill's useful distinction: coverage is not learning. Create <code>learning-records/</code> lazily, only after a real learner demonstration. Do not create fictional progress records during course authoring.</p>
+<p>A record should capture:
+- The non-obvious concept, corrected misconception, or established prior knowledge.
+- Evidence: task/input, observed behavior, explanation, and hints used.
+- Implications: what this unlocks and what still needs review.
+- A later review opportunity if retention has not yet been demonstrated.</p>
+<p>Use sequential files such as <code>0001-retrieval-is-not-groundedness.md</code>. If a later insight corrects an earlier record, mark the earlier one superseded rather than losing the history. Keep ordinary session logs separate; do not inflate them into mastery evidence.</p>
+<p>The mission changes only when the user changes the goal; a teacher's preference for a new framework is not a mission change.</p>
+<h2>8. AI-assisted teaching rules</h2>
+<p>An assistant is a coach and source-checking partner, not a substitute for learner evidence.</p>
+<ul>
+<li>Before explanation, inspect demonstrated prerequisites and ask one focused question when a misconception is unresolved.</li>
+<li>Cite actual sources; say when an API/version/capability has not been checked.</li>
+<li>During practice, ask for a prediction or attempt before supplying the solution.</li>
+<li>Use the hint ladder and respond to the learner's actual reasoning, not a canned answer.</li>
+<li>Ask “why this component?” and “what would break under this changed constraint?” after a passing run.</li>
+<li>Never mark an AI-generated implementation as the learner's independent work.</li>
+<li>Record observed understanding and uncertainty honestly. A learner saying “got it” is useful feedback, not a durable-mastery gate.</li>
+</ul>
+<p>Suggested practice request: “Coach me through the Module 06 retrieval exercise. Ask for my prediction first, provide one hint at a time, inspect my retrieved passages, and do not reveal the solution until I attempt it. Use the module sources and report unverified assumptions.”</p>
+<h2>9. Quality checklist before publishing a module</h2>
+<ul>
+<li>[ ] Mission, single-lesson objectives, and prerequisites are explicit.</li>
+<li>[ ] Four lessons cover the module topics without skipping its practical gate.</li>
+<li>[ ] Official source URLs, exercised versions, provider capabilities, and costs/credentials are stated.</li>
+<li>[ ] The real lab ran; named normal/failure cases were observed and limitations recorded.</li>
+<li>[ ] Exercises require a changed constraint; solutions are separate and explained.</li>
+<li>[ ] Feedback identifies reasoning/contracts rather than only a pass/fail result.</li>
+<li>[ ] Stochastic model behavior is evaluated separately from deterministic logic.</li>
+<li>[ ] Private data and secrets are absent from committed examples and trace evidence.</li>
+<li>[ ] Local links and commands point to implemented files, not future placeholders.</li>
+<li>[ ] Glossary/reference entries reflect the APIs actually taught; obsolete paths are not promoted as the new default.</li>
+<li>[ ] Later retrieval/transfer checks are scheduled without claiming a universal review interval.</li>
+<li>[ ] Learning progress is recorded only when demonstrated by the learner.</li>
+</ul></main></body></html>

@@ -1,0 +1,32 @@
+[project]
+name = "langchain-learning"
+version = "0.1.0"
+description = "A project-based Python course from LangChain foundations to durable, evaluated agents"
+authors = [
+    { name = "milad.soleymani", email = "milad.soleymani@snapp.cab" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "langchain[mcp]>=1.4,<2",
+    "langchain-openai>=1,<2",
+    "langgraph>=1.2,<2",
+    "langgraph-checkpoint-sqlite>=3,<4",
+    "fastmcp>=4.0.11,<5",
+    "python-dotenv>=1,<2",
+    "pydantic>=2.7,<3",
+]
+
+[project.scripts]
+langchain-learning = "langchain_learning.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8,<10"]
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"
+
+[[tool.uv.index]]
+name = "tuna"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true

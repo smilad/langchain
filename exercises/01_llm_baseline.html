@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 01 — trace and vary a direct model boundary</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 01 — trace and vary a direct model boundary</h1>
+<p><strong>Objective:</strong> Explain the request path, separate deterministic contracts from model behavior, and diagnose a bad rubric versus transport failure. Prerequisite: Module 00 gate; <a href="../lessons/01_llm_baseline/01.html">lessons</a>, <a href="../labs/01_llm_baseline/README.html">runbook</a>. Attempt without an AI-written implementation. Live access is optional for reachable deterministic work but required for the live gate.</p>
+<h2>Recall and prediction</h2>
+<p>Before opening the lab, name where application state lives, what a timeout means and what label validation proves. Predict the stage that rejects a string with valid JSON syntax but the wrong classification representation.</p>
+<h2>Guided fading</h2>
+<p>Recreate <code>validate_label</code> with the three permitted labels after reading its contract, not its implementation. Test lowercase, whitespace, capitalization, a sentence, a JSON-shaped string and empty output. Do not count these authored fixtures as generated classifications.</p>
+<p>Build a request diagram with explicit Python text, instructions, model ID, SDK client, HTTPS boundary, response object, text projection and consumer acceptance. Mark every deterministic versus model/provider-dependent stage. Add the location of secret authentication without printing its value.</p>
+<h2>Independent variations</h2>
+<ol>
+<li>Choose a new synthetic input combining a payment and a software fault. Write an overlap policy before any model call, then revise the instructions intentionally to match it. Keep parser representation unchanged.</li>
+<li>Define a four-category classifier in your own separate implementation. Update instruction rubric, accepted-label contract and consumer together; do not add a shim accepting obsolete labels.</li>
+<li>Explain when the direct SDK is enough and identify one concrete future requirement that would justify LangChain. Do not claim either architecture is inherently more intelligent.</li>
+<li>Write a comparison of character limits, token context and output budget. Show why this lab's 4000-character check is not a token-cost calculation.</li>
+</ol>
+<h2>Failure investigation</h2>
+<p>For each case, state expected stage, evidence to inspect, likely cause and next action: missing model/key, absent consent, unavailable model, HTTP 429, timeout, non-completed response, unexpected output format, semantically wrong valid label. Do not make a paid request merely to provoke a transport failure. Configuration failure is safely reachable by using an unconfigured environment; do not print or erase another learner's credential file.</p>
+<h2>Optional approved live evidence</h2>
+<p>Only after independently approving credentials/model/budget, run one unfamiliar synthetic text with <code>--live</code>. Record actual request, status/model, output envelope/text, elapsed time and usage when available. Distinguish reported tokens from any explicitly priced cost estimate. State trial count before comparing variability; one call does not establish reliability. Never copy illustrative documentation output as your own run.</p>
+<h2>Exit and delayed transfer</h2>
+<p>Submit behavior, conceptual explanation, diagnosis and one independently changed constraint. If live access is unavailable, label live classification unverified and retain your reachable boundary evidence; do not use a fake model. Next session explain the deterministic boundary closed-note; roughly a week later construct a fresh direct request with documentation lookup. Revisit model state in Module 05 and measurements in Module 08.</p>
+<p><a href="../solutions/01_llm_baseline.html">Solutions</a> explain diagnoses after an attempt. <a href="../docs/VERIFICATION.html">Verification</a> separates implemented paths from exercised proof. No learner progress is prefilled.</p></main></body></html>

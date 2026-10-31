@@ -1,0 +1,11 @@
+{
+  "source_id": "WARRANTY",
+  "version": 1,
+  "current": true,
+  "audience": "public",
+  "title": "Warranty",
+  "text": "The warranty covers manufacturing defects for 12 months from purchase. Accidental damage and normal wear are excluded. Keep the purchase receipt.",
+  "trust": "policy",
+  "provenance": "Synthetic course author; approved policy",
+  "effective_date": "2026-10-01"
+}

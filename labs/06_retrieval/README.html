@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 06 — provenance-preserving retrieval</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 06 — provenance-preserving retrieval</h1>
+<h2>Setup and commands</h2>
+<p>From the repository root, run <code>uv sync --locked</code>. Installed baseline is Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9 and langchain-openai 1.7.0; consult the lockfile and <a href="../../docs/VERIFICATION.html">central verification</a> for actual exercised results rather than inferring them from installation.</p>
+<pre><code class="language-sh">uv run python labs/06_retrieval/main.py --check
+uv run python labs/06_retrieval/main.py --check --query 'SHIP-42' --user bob
+uv run python -m unittest discover -s labs/06_retrieval -p 'test_invariants.py'
+# Requires a real OpenAI key, COURSE_ALLOW_LIVE=1 and COURSE_EMBEDDING_MODEL:
+uv run python labs/06_retrieval/main.py --live --strategy semantic
+uv run python labs/06_retrieval/main.py --live --strategy hybrid
+</code></pre>
+<p><code>--check</code> (also the no-flag default) performs actual lexical TF-IDF retrieval, checks audience/current invariants, rejects an unknown identity, and edits a real source in a temporary copy. It does not call a model or claim semantic retrieval. <code>--live --strategy lexical</code> still performs lexical retrieval; the output explicitly states whether remote embedding ran. Choose semantic/hybrid to exercise OpenAIEmbeddings plus InMemoryVectorStore and its actual retriever interface.</p>
+<p>No embedding model is hardcoded. Choose an available OpenAI embedding model in <code>COURSE_EMBEDDING_MODEL</code>. Semantic/hybrid search sends eligible synthetic policy text and queries remotely and may incur charges. Generation's <code>COURSE_MODEL</code> is not needed for this retrieval-only lab. Never copy private documents into this course corpus without a separate data/upload decision. There is no automatic hosted tracing setup.</p>
+<h2>Inspect these cases before generating anything</h2>
+<ul>
+<li>Returns: current RETURN v2 is 30 calendar days after delivery with receipt/unused conditions; old v1 remains inspectable but ineligible.</li>
+<li>Exact identifier: SHIP-42 is lexical-friendly; inspect SHIPPING.</li>
+<li>Paraphrase: “money back for dinner while travelling” tests vocabulary mismatch against MEAL. Nonempty retrieval is not itself success.</li>
+<li>No-match: “quasar lunar habitat” returns no lexical evidence; semantic top-k may still return irrelevant passages.</li>
+<li>Public finance query: FINANCE must not enter alice/bob candidates, even when its terms match exactly. The untrusted public MALICIOUS note may match; it does not confer permission.</li>
+<li>Source edit: the copied RETURN v2 becomes 37 days; the temporary index must expose changed text without a stale 30-day duplicate. Committed sources remain untouched.</li>
+</ul>
+<p>Each returned Document carries source_id, version, audience, current, trust, provenance, content hash and chunk ID. Locate it in <code>data/policies</code>, explain each field's purpose, and distinguish a revision from a passage. Experiment with <code>PolicyIndex(chunk_size=200, overlap=40)</code> in a disposable corpus to observe boundaries rather than assuming tiny sources demonstrate splitting.</p>
+<h2>Failure diagnosis, state and limits</h2>
+<p>Unknown users fail at code-level authorization. Duplicate active source IDs fail ingestion. Missing consent/key/embedding model is a prerequisite error, not a fake semantic success. Sources are re-read before search; changed snapshots replace the document list and invalidate identity-scoped vector stores. Semantic caches are process-local and rebuilding repeats embedding requests; no disk vector database is claimed. Temporary source copies are automatically removed. The lab writes no persistent index; an externally saved report is yours to remove by its exact chosen path.</p>
+<p>Regression tests cover actual authorization, current-only source selection, source edit/deletion replacement, duplicate-active-source rejection and trusted citation membership. They do not mock a provider or prove semantic relevance. <a href="../../exercises/06_retrieval.html">Exercise</a> and <a href="../../solutions/06_retrieval.html">solution</a> explain the independent variation. Real live embedding evidence remains subject to credentials and the central verification report.</p>
+<p>Primary references: <a href="https://docs.langchain.com/oss/python/langchain/knowledge-base">semantic search</a>, <a href="https://reference.langchain.com/python/langchain-core/vectorstores/in_memory/InMemoryVectorStore">InMemoryVectorStore</a>. Checked 2026-10-12.</p></main></body></html>

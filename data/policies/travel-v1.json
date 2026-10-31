@@ -1,0 +1,11 @@
+{
+  "source_id": "TRAVEL",
+  "version": 1,
+  "current": true,
+  "audience": "public",
+  "title": "Travel booking",
+  "text": "Book business travel through the travel portal. Economy class is required for flights shorter than 6 hours. Manager approval is required before booking.",
+  "trust": "policy",
+  "provenance": "Synthetic course author; approved policy",
+  "effective_date": "2026-10-01"
+}

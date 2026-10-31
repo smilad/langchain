@@ -1,0 +1,11 @@
+{
+  "source_id": "MEAL",
+  "version": 1,
+  "current": true,
+  "audience": "public",
+  "title": "Travel meals",
+  "text": "The travel meal reimbursement limit is 40 USD per day. Alcohol is not reimbursable. Receipts are required.",
+  "trust": "policy",
+  "provenance": "Synthetic course author; approved policy",
+  "effective_date": "2026-10-01"
+}

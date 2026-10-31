@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 08 exercises — measure failures without leaking the answer</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 08 exercises — measure failures without leaking the answer</h1>
+<p>Use <a href="../lessons/08_evaluation/01.html">the lessons</a> and <a href="../labs/08_evaluation/README.html">the evaluation runbook</a>. Attempt the analysis before <a href="../solutions/08_evaluation.html">solutions</a>.</p>
+<h2>1. Write the evaluation contract</h2>
+<p>Explain the difference between a target, a dataset case, a deterministic check, a human rubric, a model grade, and an experiment. Inspect the twenty-case dataset: eight answerable, four unanswerable, four conflicting/outdated, four adversarial/access cases; twelve development and eight held-out. Explain why this is instructional, not a production reliability estimate.</p>
+<h2>2. Inspect real development evidence</h2>
+<p>Run <code>uv run python labs/08_evaluation/main.py --check</code>. Select one retrieval miss and one access-boundary case. Explain <code>expected_evidence_recall</code>, <code>authorized_current_only</code>, and the deliberately null generated-answer/semantic measurements. Why is a null unexercised check different from a successful score of zero or one?</p>
+<h2>3. Freeze a comparison protocol</h2>
+<p>Declare strategy, k, trials, comparison strategy, model/embedding identifiers, dataset/corpus hashes, and grading mode before the confirmatory run. Freeze a new configuration on development cases, then use the same settings with <code>--config</code> on the held-out split. Attempt one changed setting or freeze on held-out; the guard must reject the inconsistent protocol. Do not edit hashes or overwrite the original registration to bypass this rule.</p>
+<h2>4. Compare one variable</h2>
+<p>With real provider consent, compare lexical and semantic retrieval while keeping generation configuration/cases/trials fixed. Report per-case outcomes, latency, usage when available, missing usage, and human semantic review. State any estimated-price assumptions. If you inspect holdout failures and tune on them, explain why they cease to be independent evidence for the next claim.</p>
+<h2>5. Calibrate the evaluator</h2>
+<p>Review an actual generated answer against its passages and case rubric. Score groundedness, relevance, and correctness separately; record claim-to-evidence reasoning and reviewer identity. If using <code>--judge</code>, compare its opinion with human review before trusting it. Diagnose grader disagreement rather than averaging away an access leak.</p>
+<h2>6. Move from offline to monitoring</h2>
+<p>Describe which operational failures and live-run quality signals you would inspect in production, how privacy affects trace uploads, and how an observed failure becomes a future regression case without contaminating the existing holdout. Cloud tracing/grades require their own credentials and spending/data-upload decision.</p>
+<p><strong>Gate:</strong> publish per-case evidence and failure categories, distinguish retrieval/generation/evaluator/environment errors, and state which checks were actually exercised. A missing provider is not learner incompetence, but it leaves stochastic quality unverified. Reassess with a fresh case explanation later.</p></main></body></html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15.4 — Teach the application and state its limits</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>15.4 — Teach the application and state its limits</h1>
+<p><strong>Objective:</strong> write a reproducible tutorial and demonstrate transfer to a changed question or corpus constraint without hiding failures.</p>
+<p><strong>Prerequisites:</strong> <a href="01.html">the architecture</a>, <a href="02.html">execution</a>, <a href="03.html">evaluation</a>, and <a href="../14_production/01.html">production operations</a>. Cite the exercised dependency versions from <a href="../../docs/VERIFICATION.html">the verification report</a>, not whichever release is newest when you publish.</p>
+<h2>Recall</h2>
+<p>Explain why a smooth demo can conceal a retrieval miss, an authorization defect, or a replayed side effect. Sketch the system from memory, then compare it with your actual source and observed trace. Correct the diagram if it describes intended rather than real behavior.</p>
+<h2>The tutorial is a consumer contract</h2>
+<p>A new learner must be able to start with a checkout rather than your IDE state. Include Python/<code>uv</code> prerequisites, the exact locked installation command, safe environment-variable configuration, the no-cost local path, and the explicit live path. Explain the TUNA package-mirror choice and how a user with accessible PyPI can deliberately re-resolve; changing the index is an environment change, not an invisible workaround.</p>
+<p>Never include your <code>.env</code>, bearer tokens, provider credentials, private traces, or generated data copied from a real workplace. The course corpus and action sink are synthetic. Give a reader the question and expected <em>behavior</em>, not an exact model sentence that a stochastic system cannot guarantee.</p>
+<h2>Worked runbook outline</h2>
+<ol>
+<li>Check interpreter, dependency versions, and external <code>langchain</code> import origin.</li>
+<li>Inspect authorized current passages for the selected question.</li>
+<li>Start a manual-draft workflow to learn durable approval without paying for a model.</li>
+<li>Start a live grounded draft only with consent; inspect evidence and review it explicitly.</li>
+<li>Stop/restart, resume the same owned thread, and observe the local action record.</li>
+<li>Run the evaluation protocol and read per-case failures.</li>
+<li>Serve the application locally with token-bound identities; exercise concurrent users and documented failure behavior.</li>
+</ol>
+<p>Explain what cancellation guarantees: a disconnected client does not prove that a database operation was rolled back. Inspect persisted thread/action state before retrying. Similarly, the atomic unique local action record does not establish exactly-once delivery to an arbitrary external service.</p>
+<h2>Independent transfer</h2>
+<p>Choose the warranty policy rather than the return policy, or add a new synthetic public source with explicit ID/version metadata. Predict the ingestion/retrieval changes, rebuild the relevant index, and show the new evidence before generating an answer. Keep ownership, review, and action identity invariants unchanged.</p>
+<p>Ask another learner to follow your tutorial. Record concrete points where setup or concepts were unclear; revise those explanations rather than adding a new abstraction. If no peer is available, rehearse from a clean environment and say that external learner feedback has not been collected.</p>
+<p>For a failure investigation, remove a prerequisite from your runbook and identify the exact command that becomes unusable. Add the missing explanation with its diagnosis, not a vague “install everything” instruction.</p>
+<p><strong>Exit check:</strong> supply diagrams, reproducible commands, evidence-supported behavior, evaluation/limitations report, and an independently explained variation. A learning record is written only after the learner actually demonstrates the skill; no course-generation process can manufacture that evidence.</p>
+<p><strong>Review:</strong> revisit the architecture and changed-domain task after a delay. The purpose is retained reasoning, not memorized commands.</p>
+<p><strong>Sources:</strong> <a href="https://docs.langchain.com/langsmith/deployment">deployment concepts</a>, <a href="https://docs.langchain.com/oss/python/release-policy">release policy</a>, <a href="../../docs/TEACHING_GUIDE.html#5-mastery-rubric">the teaching rubric</a>. Ask the assistant to review your explanation without rewriting it for you.</p></main></body></html>

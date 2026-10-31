@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 12 solutions — extra agents must earn their overhead</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 12 solutions — extra agents must earn their overhead</h1>
+<p>Attempt <a href="../exercises/12_multi_agent.html">the exercises</a> first. <a href="../docs/VERIFICATION.html">Verification</a> records local contract proof; paid comparisons are not invented.</p>
+<h2>1. Pattern selection</h2>
+<p>A single agent owns one tool loop. A router selects an appropriate bounded destination. A handoff transfers conversational control and requires explicit context/identity ownership. Delegation returns a specialist result to an owner who remains accountable. Skills may change one agent's instructions without creating another process or authority. This lab compares one bounded specialist against a single-agent baseline; it does not implement every pattern named in the conceptual lesson.</p>
+<h2>2. Evidence scope</h2>
+<p>The application retrieves authorized evidence for the original request and fixes permitted source IDs outside model arguments. <code>validate_handoff</code> rejects outside-source citations and inconsistent abstention. Its accepted shape does not prove the draft's claims follow from those sources. The check-mode answer fixtures are labeled authored boundary inputs, not real model outputs or a successful quality experiment.</p>
+<h2>3. Comparison</h2>
+<p>Four questions × two patterns × two trials produces sixteen real runs. Alternate pattern order to reduce one order effect; preserve evidence and question between patterns. The specialist path includes orchestration plus specialist calls, so compare total nested work, not only the final outer message. Keep enough actual outputs for human support/security review.</p>
+<h2>4. Bounds and accounting</h2>
+<p>Single pattern bounds four logical model calls and two tool calls; the nested specialist pattern bounds seven logical model calls and three tool calls across its outer and inner loops. Recursion limits bound graph execution as well. Provider retries may produce more network requests than callbacks count, and long generations change monetary cost. Report actual boundary counts, provider-reported tokens where present, missing usage, and elapsed time. Do not turn absent usage into zero spend.</p>
+<h2>5. Fault injection</h2>
+<p>After a real specialist result, the explicit fault mode replaces its source IDs with an outside ID. The handoff validator must reject it; the trial records a failed status/error type and performs no action. That demonstrates a boundary stop, not natural model failure frequency. The ordinary comparison raises visibly for failed trials; explicit fault mode records expected failures for diagnosis.</p>
+<h2>6. Decision</h2>
+<p>Review correctness, grounding, abstention, instruction resistance, latency, and reported usage case by case. Retain the specialist only when the measured benefit justifies complexity. Without credentials, a useful completed local exercise proves the handoff guard and specifies the comparison protocol; it cannot choose a winner from imaginary model results.</p></main></body></html>

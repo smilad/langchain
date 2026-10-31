@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson index</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="README.html">Lesson index</a></nav><h1>Lesson index</h1>
+<p>Follow <a href="../ROADMAP.html">the roadmap</a> and demonstrate the module gates rather than merely reading every file. Each lesson links a real lab, an independent exercise, a separate solution, and primary sources. Read <a href="../docs/VERIFICATION.html">the verification report</a> for exercised behavior and remaining live/review prerequisites.</p>
+<h2>Foundations</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Lesson 1</th>
+<th>Lesson 2</th>
+<th>Lesson 3</th>
+<th>Lesson 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00 Setup</td>
+<td><a href="00_setup/01.html">Environment</a></td>
+<td><a href="00_setup/02.html">Python/data</a></td>
+<td><a href="00_setup/03.html">Validation/HTTP</a></td>
+<td><a href="00_setup/04.html">Async/tracebacks</a></td>
+</tr>
+<tr>
+<td>01 LLM baseline</td>
+<td><a href="01_llm_baseline/01.html">Tokens/context</a></td>
+<td><a href="01_llm_baseline/02.html">Instructions/sampling</a></td>
+<td><a href="01_llm_baseline/03.html">Direct call</a></td>
+<td><a href="01_llm_baseline/04.html">Framework boundary</a></td>
+</tr>
+<tr>
+<td>02 Models/messages</td>
+<td><a href="02_models_messages/01.html">Initialization</a></td>
+<td><a href="02_models_messages/02.html">Message content</a></td>
+<td><a href="02_models_messages/03.html">Prompts/context</a></td>
+<td><a href="02_models_messages/04.html">Streaming/async/batch</a></td>
+</tr>
+<tr>
+<td>03 Structured output</td>
+<td><a href="03_structured_output/01.html">Schemas</a></td>
+<td><a href="03_structured_output/02.html">Typed model/agent output</a></td>
+<td><a href="03_structured_output/03.html">Composition</a></td>
+<td><a href="03_structured_output/04.html">Failures/limits</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Applications and measured quality</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Lesson 1</th>
+<th>Lesson 2</th>
+<th>Lesson 3</th>
+<th>Lesson 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>04 Tools/agents</td>
+<td><a href="04_tools_agents/01.html">Tool schemas</a></td>
+<td><a href="04_tools_agents/02.html">Request versus execution</a></td>
+<td><a href="04_tools_agents/03.html">Agent loop</a></td>
+<td><a href="04_tools_agents/04.html">Inspect failures</a></td>
+</tr>
+<tr>
+<td>05 Memory/context</td>
+<td><a href="05_memory_context/01.html">History versus weights</a></td>
+<td><a href="05_memory_context/02.html">Threads versus stores</a></td>
+<td><a href="05_memory_context/03.html">Context selection</a></td>
+<td><a href="05_memory_context/04.html">Isolation/minimization</a></td>
+</tr>
+<tr>
+<td>06 Retrieval</td>
+<td><a href="06_retrieval/01.html">Documents/provenance</a></td>
+<td><a href="06_retrieval/02.html">Chunking</a></td>
+<td><a href="06_retrieval/03.html">Embeddings/search</a></td>
+<td><a href="06_retrieval/04.html">Filters/index updates</a></td>
+</tr>
+<tr>
+<td>07 RAG</td>
+<td><a href="07_rag/01.html">Two-step baseline</a></td>
+<td><a href="07_rag/02.html">Support/abstention</a></td>
+<td><a href="07_rag/03.html">Measured improvement</a></td>
+<td><a href="07_rag/04.html">Agentic retrieval</a></td>
+</tr>
+<tr>
+<td>08 Evaluation</td>
+<td><a href="08_evaluation/01.html">Traces</a></td>
+<td><a href="08_evaluation/02.html">Datasets/splits</a></td>
+<td><a href="08_evaluation/03.html">Evaluators/feedback</a></td>
+<td><a href="08_evaluation/04.html">Offline/live monitoring</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Explicit control and integration</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Lesson 1</th>
+<th>Lesson 2</th>
+<th>Lesson 3</th>
+<th>Lesson 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>09 Graphs</td>
+<td><a href="09_graph_workflows/01.html">State/nodes/edges</a></td>
+<td><a href="09_graph_workflows/02.html">Routing/termination</a></td>
+<td><a href="09_graph_workflows/03.html">Reducers/updates</a></td>
+<td><a href="09_graph_workflows/04.html">Parallel branches</a></td>
+</tr>
+<tr>
+<td>10 Durable approval</td>
+<td><a href="10_durable_approval/01.html">Checkpoints/threads</a></td>
+<td><a href="10_durable_approval/02.html">Interrupt/resume</a></td>
+<td><a href="10_durable_approval/03.html">Replay/idempotency</a></td>
+<td><a href="10_durable_approval/04.html">Stores/state inspection</a></td>
+</tr>
+<tr>
+<td>11 Security</td>
+<td><a href="11_middleware_security/01.html">Middleware</a></td>
+<td><a href="11_middleware_security/02.html">Policies/budgets</a></td>
+<td><a href="11_middleware_security/03.html">Injection/privilege</a></td>
+<td><a href="11_middleware_security/04.html">Authorization/redaction</a></td>
+</tr>
+<tr>
+<td>12 Multi-agent</td>
+<td><a href="12_multi_agent/01.html">Baseline/cost</a></td>
+<td><a href="12_multi_agent/02.html">Patterns</a></td>
+<td><a href="12_multi_agent/03.html">Context/handoffs</a></td>
+<td><a href="12_multi_agent/04.html">Comparison/errors</a></td>
+</tr>
+<tr>
+<td>13 MCP</td>
+<td><a href="13_mcp/01.html">Protocol roles</a></td>
+<td><a href="13_mcp/02.html">Real local server</a></td>
+<td><a href="13_mcp/03.html">Auth/lifecycle</a></td>
+<td><a href="13_mcp/04.html">Failure/disconnect</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Operations and transfer</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Lesson 1</th>
+<th>Lesson 2</th>
+<th>Lesson 3</th>
+<th>Lesson 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>14 Production</td>
+<td><a href="14_production/01.html">Application/config</a></td>
+<td><a href="14_production/02.html">Concurrency/deadlines</a></td>
+<td><a href="14_production/03.html">Storage/data handling</a></td>
+<td><a href="14_production/04.html">Deploy/rollback</a></td>
+</tr>
+<tr>
+<td>15 Capstone</td>
+<td><a href="15_capstone/01.html">Specify architecture</a></td>
+<td><a href="15_capstone/02.html">Run/recover/review</a></td>
+<td><a href="15_capstone/03.html">Evaluate/improve</a></td>
+<td><a href="15_capstone/04.html">Transfer/teach</a></td>
+</tr>
+</tbody>
+</table>
+<h2>How to practice</h2>
+<ol>
+<li>Answer the retrieval warm-up before seeing corrections.</li>
+<li>Run the small worked example and inspect intermediate representations.</li>
+<li>Attempt the module exercise with a changed constraint; documentation lookup is allowed.</li>
+<li>Diagnose the named failure from evidence before opening the solution.</li>
+<li>Explain why the repair addresses the cause and what remains unverified.</li>
+<li>Revisit a fresh conceptual/coding variation later; record mastery only after actual learner evidence.</li>
+</ol>
+<p>Model-free <code>--check</code> paths never claim generated-answer quality. <code>--live</code> requires a real configured provider and explicit spending consent. Optional advanced tracks remain described in the roadmap and are not substitutes for core module gates.</p></main></body></html>

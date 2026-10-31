@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 11 — security boundaries and real middleware</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 11 — security boundaries and real middleware</h1>
+<p>Setup: <code>uv sync --locked</code>; <a href="../../lessons/11_middleware_security/01.html">lessons</a>; Python &gt;=3.14 and <a href="../../uv.lock">exact versions</a>. <a href="https://docs.langchain.com/oss/python/langchain/middleware/custom">Custom middleware</a> and <a href="https://docs.langchain.com/oss/python/langchain/tools">tools</a>, checked 2026-10-12.</p>
+<pre><code class="language-sh">uv run python labs/11_middleware_security/main.py --check
+uv run python labs/11_middleware_security/main.py --live
+</code></pre>
+<p>Check uses real temporary durable workflows for alice/bob, retrieves MALICIOUS from the corpus, confirms finance exclusion for alice, checks authorized status projection, denies cross-owner inspection, extra owner arguments, secret reading and approval capabilities, and inspects actual zero action counts. It also runs a deliberately unsafe non-model fixture: document text grants permission and releases ONLY a committed synthetic marker. This counterexample is not a model leakage observation and never reads credentials.</p>
+<p>Live additionally invokes actual <code>create_agent</code> with AuthorizationMiddleware, ModelCallLimitMiddleware and ToolCallLimitMiddleware. Provider config/consent and tool calling are required. Inspect all model/tool messages: an unattempted attack, an attempted-and-denied tool call and a model refusal are different evidence. No fake model or fallback exists. The secure tool has no identity argument and receives immutable trusted runtime context; the domain function and workflow repeat ownership checks independently of middleware.</p>
+<h2>Gate report</h2>
+<p>For each case record requested capability, trusted actor, exact synthetic source/input, actual tool execution outcome, action count, versioned model/prompt configuration and declared trial count. Prove denied operations cannot produce effects. Evaluate semantic contamination separately: valid source IDs or no unauthorized actions do not prove grounded wording. Minimize/redact before provider calls; final-display redaction cannot undo upstream disclosure. Never upload private traces without permission.</p>
+<p><code>--check</code> proves deterministic boundaries but does not traverse live model middleware. <code>--live</code> proves whatever actual messages show, not immunity against every injection. The synthetic secret is not available to secure model context or tool capabilities; this is least privilege rather than successful detection of every secret-request phrasing. Local identity arguments are trusted demonstrations, not login credentials.</p>
+<p><strong>Evidence status:</strong> <a href="../../docs/VERIFICATION.html">verification</a> records actual local commands/outcomes separately from unavailable live proof. Installed baseline: Python 3.14.0, LangChain 1.4.4, langchain-core 1.6.9, LangGraph 1.2.14, langchain-openai 1.7.0, Pydantic 2.14.1. Temporary state is removed after connections close. <a href="../../exercises/11_middleware_security.html">Independent exercise</a>, <a href="../../solutions/11_middleware_security.html">reasoned solution</a>.</p></main></body></html>

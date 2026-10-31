@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>04.1 — Make a tool contract enforceable</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>04.1 — Make a tool contract enforceable</h1>
+<h2>Objective and prerequisites</h2>
+<p>Support the <a href="../../MISSION.html">mission</a> by defining a tool whose arguments are validated before local execution. After Module 03, explain why a valid JSON object can still contain an impossible business request. Warm-up: does a type hint validate an ordinary Python call? Does a tool description grant filesystem permission? Attempt both before reading the corrections below.</p>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/tools">LangChain tools</a>, consulted 2026-10-12. Python 3.14 and locked local tool checks are exercised; see <a href="../../docs/VERIFICATION.html">versions and limits</a>. Local calls need no credentials. Agent tool selection remains a live gate requiring a configured tool-capable model, consent, and possible charges.</p>
+<h2>Mental model: three distinct checks</h2>
+<p>A description helps the model choose a capability. The input schema constrains its arguments. The function enforces catalog invariants. None substitutes for the others. Our capability surface is only lookup and quote: there is no file-writing tool, checkout operation or arbitrary expression evaluator.</p>
+<table>
+<thead>
+<tr>
+<th>Boundary</th>
+<th>Input</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Schema</td>
+<td><code>item_id</code>, optional quote <code>quantity</code></td>
+<td>Exact ID shape; reject unknown fields; strict integer 1–20</td>
+</tr>
+<tr>
+<td>Data loader</td>
+<td>Actual JSON records</td>
+<td>Validate records and unique identifiers</td>
+</tr>
+<tr>
+<td>Quote body</td>
+<td>Valid quantity and found item</td>
+<td>Check stock; multiply integer cents</td>
+</tr>
+</tbody>
+</table>
+<p><a href="../../src/langchain_learning/catalog.py"><code>catalog.py</code></a> uses explicit Pydantic models. <code>QuoteInput</code> extends <code>LookupInput</code>, and the LangChain tools receive these models through <code>args_schema</code>. The domain functions validate again because direct Python and MCP callers also exist. This deliberate boundary check is not a compatibility shim.</p>
+<h2>Worked example</h2>
+<p>Run the <a href="../../labs/04_tools_agents/README.html">lab</a>, or inspect this smaller fragment:</p>
+<pre><code class="language-python">from langchain_learning.catalog import catalog_tools
+lookup, quote = catalog_tools()
+print(quote.args_schema.model_json_schema())
+print(quote.invoke({&quot;item_id&quot;: &quot;notebook&quot;, &quot;quantity&quot;: 2}))
+</code></pre>
+<p>The fixture contains a notebook at 1299 USD cents. Two units therefore quote 2598 cents; this is a calculation from committed data, <strong>not an observed execution transcript</strong>. <code>True</code>, <code>"2"</code>, <code>1.5</code>, zero and 21 are invalid quantities. Strictness avoids surprising coercion, including Python's boolean-as-integer behavior.</p>
+<h2>Complete, vary, diagnose</h2>
+<p>Guided completion: remove the stock comparison from a copy of <code>quote_total</code>; supply it before multiplication. Explain why a range-valid quantity can still exceed stock. Independent variation: attempt the stock-boundary cases in the <a href="../../exercises/04_tools_agents.html">exercise</a> before opening its solution.</p>
+<p>Predict what happens with an extra <code>path</code> argument. Inspect the validation error category, not just its rendered string. A schema rejection differs from <code>found=false</code>, which is a valid lookup outcome. Likewise, insufficient stock is a domain result, not a provider outage.</p>
+<h2>Exit and review</h2>
+<p>Demonstrate a valid quote and one invalid input; explain both validation layers and identify the stage that failed. Revisit strict integer behavior during Module 13's MCP exposure. Warm-up corrections: Python hints alone do not validate ordinary calls; docstrings are model guidance, never authorization. Reference: <a href="../../reference/API_MAP.html">API map</a>, <a href="02.html">next lesson</a>. Focused follow-up: which invariant must remain true when the same function is exposed through another transport?</p></main></body></html>

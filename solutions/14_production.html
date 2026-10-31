@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 14 solutions — visible failure beats fake availability</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 14 solutions — visible failure beats fake availability</h1>
+<p>Attempt <a href="../exercises/14_production.html">the exercises</a> first. The <a href="../labs/14_production/README.html">runbook</a> supplies routes/configuration; <a href="../docs/VERIFICATION.html">verification</a> supplies observed scope.</p>
+<h2>1. Reproducibility and readiness</h2>
+<p>Use the committed lockfile with the configured index and the required interpreter. <code>import langchain</code> must resolve to the external library, not the old course package. Presence booleans are safe operational configuration evidence; secret values are not. Health indicates the process responds; readiness checks required local resources. Neither proves a provider model is reachable or answers correctly. The labs require the source checkout because course data and lesson entry points live there.</p>
+<h2>2. HTTP evidence</h2>
+<p>The smoke starts a real localhost server and sends actual requests. It tests unauthenticated rejection, body identity rejection, cross-user denial, concurrent manual starts, owned persistence across server restart, repeat approval producing one local action, rejection producing none, actual disconnect, and bounded deadline handling. Inspect both response and state: status 200 alone is not approval or successful delivery.</p>
+<h2>3. Ownership</h2>
+<p>Bearer tokens map to synthetic users outside request bodies. A valid Alice token cannot operate on Bob's thread; body-provided <code>user_id</code> is rejected rather than trusted. Reopening a thread with the same owner returns its stored state instead of overwriting the question/draft. Public health is not an authenticated user-state endpoint. Private tokens must not appear in example outputs, logs, commits, or shared traces.</p>
+<h2>4. Cancellation and idempotency</h2>
+<p>Terminating work on disconnect/deadline limits further execution; it does not roll back an action already committed. Inspect the persistent thread/action before choosing a retry. Repeating the same terminal decision returns the existing result; changing a final approval into rejection is a conflict, not a harmless retry. A local unique action record proves local idempotency only; an external sender would need its own delivery/transaction contract.</p>
+<h2>5. Live permission boundary</h2>
+<p>Validate model configuration and consent before persisting a new model-driven thread, even if retrieval would return empty evidence. The regression arose because deterministic empty-evidence abstention bypassed the later model constructor; the fixed workflow checks live intent first. This is a permission boundary, not a special-case question or relaxed HTTP assertion. A real provider outage test requires credentials/consent and intentionally unreachable transport; missing configuration is a different failure.</p>
+<h2>6. Operations</h2>
+<p>The service is localhost-only with bounded workers/deadlines, POSIX locking, SQLite checkpoints/actions, and sanitized error categories. Cooperating requests serialize graph mutation against the local sink. The request-status registry is transient while workflow state is durable. Graceful shutdown stops workers and releases resources; inspect state before restart/replay. Document backup/restore/schema compatibility and test measured targets before proposing multi-host or public deployment. Do not infer cloud readiness from this lab.</p></main></body></html>

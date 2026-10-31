@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 05 lab — Thread state, explicit preference and visible context</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 05 lab — Thread state, explicit preference and visible context</h1>
+<h2>Setup and local path</h2>
+<p>Prerequisites: Module 04 and <a href="../../lessons/05_memory_context/01.html">memory lesson 01</a>. From the repository root:</p>
+<pre><code class="language-text">uv sync --locked
+uv run python labs/05_memory_context/main.py --check
+</code></pre>
+<p>Default behavior is <code>--check</code>. It uses a real <code>StateGraph</code>, <code>MessagesState</code>, <code>InMemorySaver</code>, <code>InMemoryStore</code>, and <code>trim_messages</code>; no fake chat model or canned generated answer exists. The graph accumulates actual human messages and selects a preference from the real store. This local path passed; <code>uv.lock</code>, preflight, and the centralized <a href="../../docs/VERIFICATION.html">verification record</a> identify exercised versions, outcomes, and unverified live gates.</p>
+<h2>What the deterministic path demonstrates</h2>
+<ul>
+<li>Alice's same-thread messages accumulate; Bob's separate thread contains only Bob input.</li>
+<li>A new Alice thread has no Alice-shopping history but selects Alice's explicitly consented short-style preference.</li>
+<li>Bob's preference selection remains empty; his attempt to access an owned Alice thread is rejected before graph access.</li>
+<li>A graph reconstructed against the same saver retains checkpoints; a new in-memory saver does not. This is not process-restart durability.</li>
+<li>Consent-free preference writes fail. Store deletion works, but a previous checkpoint retains the preference snapshot selected at that time.</li>
+<li>A long unrelated human message causes approximate-budget trimming to retain only the latest complete request. Full, trimmed and <strong>human-authored</strong> summary contexts are printed and labelled.</li>
+<li>A real local catalog quote demonstrates that memory state and deterministic current facts remain separate.</li>
+</ul>
+<p>The <code>Sessions</code> ownership dictionary is a single-process teaching guard, not authentication, concurrent service isolation or a durable ownership registry. Synthetic caller IDs are selected by application code. Never expose the underlying graph directly to arbitrary callers.</p>
+<h2>Real memory and summarization path</h2>
+<p>Configure <code>OPENAI_API_KEY</code>, a tool-capable <code>COURSE_MODEL</code> and explicit <code>COURSE_ALLOW_LIVE=1</code> as described in Module 00. This run makes multiple model calls, including one summarization call and three context-comparison agents; agree to their cost before starting.</p>
+<pre><code class="language-text">uv run python labs/05_memory_context/main.py --live
+</code></pre>
+<p>The real <code>create_agent</code> receives a checkpointer, store and <code>SessionContext</code>. Dynamic prompt middleware reads only the exact user's response-style namespace and emits the actual supplied system context. Four conversations/turns establish Alice's temporary 3000-cent shopping budget, follow up in the same thread, inspect Bob's absent budget and inspect a new Alice thread. Every run streams intermediate model/tool messages.</p>
+<p>Then the program supplies the same follow-up to three fresh real catalog agents: full history, approximate-budget trimmed history and a real model-generated summary plus question. Fresh agents prevent hidden checkpoint memory from contaminating the comparison. Input messages and summary input/output are printed for review. Generated summary accuracy, remembered budget, tool-supported totals and final abstentions require semantic human review; message counts alone do not establish them.</p>
+<h2>Retention, reset and caveats</h2>
+<p>All state is held in process memory. Ending the process releases these local objects; no <code>.course</code> database is created by this lab. Do not confuse that with deletion of provider/optional hosted-trace records. Trimming selects a request copy, not stored-history erasure. Long-term describes cross-thread store scope here, not restart durability. Preference deletion does not erase old checkpoint snapshots.</p>
+<p>The token counter is approximate and does not guarantee fit for every provider. Complete tool-call/result pairing must survive selection. Summaries can omit facts, introduce mistakes or carry untrusted instructions; they cannot grant permission. Use synthetic data only and do not upload traces without considering consent/retention.</p>
+<p>Complete the <a href="../../exercises/05_memory_context.html">exercise</a> before opening the <a href="../../solutions/05_memory_context.html">solution</a>. No live run or learner mastery is claimed when model credentials/consent are unavailable. Sources consulted 2026-10-12: <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">short-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/long-term-memory">long-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/middleware/custom">custom middleware</a>.</p></main></body></html>

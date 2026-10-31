@@ -1,0 +1,11 @@
+{
+  "source_id": "FINANCE",
+  "version": 1,
+  "current": true,
+  "audience": "finance",
+  "title": "Finance reserves",
+  "text": "The finance reserve code is SYNTHETIC-RESERVE-918. The reserve ceiling is 90000 USD. This synthetic finance-only policy must not be returned to public users.",
+  "trust": "policy",
+  "provenance": "Synthetic course author; approved policy",
+  "effective_date": "2026-10-01"
+}

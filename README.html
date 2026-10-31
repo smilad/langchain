@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LangChain learning lab</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="lessons/README.html">Lesson index</a></nav><h1>LangChain learning lab</h1>
+<p>A Python learning repository for understanding LangChain from foundations to advanced applications—and creating detailed resources that other learners can reuse.</p>
+<p><strong>Implementation status:</strong> sixteen modules, sixty-four lessons, sixteen runnable labs, separate exercises/solutions, and Projects A/B/C/capstone are authored. All sixteen local lab checks pass. Bounded live OpenAI-Codex checks have exercised real generation and tools; JSON-schema output and embeddings remain provider-dependent limits. The user explicitly waived advisor review; the session-only advisor is disabled. See <a href="docs/VERIFICATION.html">verification and limits</a>.</p>
+<h2>Start here</h2>
+<ol>
+<li>Read <a href="MISSION.html">MISSION.md</a> for the learning goal and current assumptions.</li>
+<li>Attempt the <a href="ROADMAP.html#2-prerequisite-diagnostic">prerequisite diagnostic</a>.</li>
+<li>Follow <a href="ROADMAP.html">ROADMAP.md</a>: sixteen core modules, four projects, practical mastery gates, and optional advanced tracks.</li>
+<li>Use <a href="RESOURCES.html">RESOURCES.md</a> for annotated official documentation, courses, teaching research, and skill recommendations.</li>
+<li>Open the <a href="lessons/README.html">lesson index</a>, then attempt each module's exercises before reading its separate solution.</li>
+<li>Use <a href="docs/TEACHING_GUIDE.html">the teaching guide</a> for teach-back and delayed review. The <a href="docs/superpowers/plans/2026-10-12-langchain-learning-resources.html">implementation plan</a> records delivered artifacts and remaining live/learner evidence, not a learner-completion certificate.</li>
+</ol>
+<h2>Run the course</h2>
+<p>From this checkout with Python 3.14 and <code>uv</code>:</p>
+<pre><code class="language-bash">uv sync --locked --system-certs
+uv run --locked langchain-learning list
+uv run --locked langchain-learning check
+uv run --locked langchain-learning run 00 --check
+</code></pre>
+<p>Continue with <code>run 01 --check</code> through <code>run 15 --check</code>, or use each lab's direct Python command. Checks exercise real local schemas, tools, retrieval, graph/store persistence, MCP, and localhost HTTP where relevant; they do not substitute fake model output. Each lab README explains what its check does and does not prove.</p>
+<p>For paid/live work, copy <code>.env.example</code> to a private <code>.env</code> only if none exists, then set an actual <code>OPENAI_API_KEY</code>, an accessible <code>COURSE_MODEL</code>, and deliberate <code>COURSE_ALLOW_LIVE=1</code>. Semantic/hybrid retrieval additionally needs <code>COURSE_EMBEDDING_MODEL</code>. OpenAI is the implemented provider baseline; compatible endpoints must support the specific API/capability used, including the Responses API in Module 01. Model IDs and prices are not hardcoded.</p>
+<pre><code class="language-bash">uv run --locked langchain-learning run 01 --live
+</code></pre>
+<p>Never commit <code>.env</code>, local state, bearer tokens, or private traces. Hosted LangSmith uploads and paid deployment are separate optional decisions. Missing live prerequisites produce visible errors, not canned successes.</p>
+<h2>Learning progression</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Modules</th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Foundations</td>
+<td>00–03</td>
+<td>Reproducible environment, model calls, messages, typed outputs</td>
+</tr>
+<tr>
+<td>Applications</td>
+<td>04–08</td>
+<td>Tool assistant, memory, retrieval/RAG, traces, evaluation</td>
+</tr>
+<tr>
+<td>Advanced control</td>
+<td>09–13</td>
+<td>Graph workflows, durable approval, security, multi-agent and MCP boundaries</td>
+</tr>
+<tr>
+<td>Production and transfer</td>
+<td>14–15</td>
+<td>Operational application, measured capstone, reusable tutorial</td>
+</tr>
+</tbody>
+</table>
+<p>Suggested core effort: <strong>91–127 hours</strong>, adaptable to prior knowledge. Progress depends on demonstration, not watching every video.</p>
+<h2>Projects you will build</h2>
+<ul>
+<li><strong>A — Catalog assistant:</strong> real local read-only lookup and calculation tools.</li>
+<li><strong>B — Policy-document assistant:</strong> retrieval, source-supported answers, abstention, evaluation.</li>
+<li><strong>C — Approval workflow:</strong> explicit graph state, persistent pause/resume, safe synthetic side effects.</li>
+<li><strong>Capstone — Support assistant:</strong> combine grounding, evaluation, approval, and operational checks; teach another learner to reproduce it.</li>
+</ul>
+<h2>Environment decisions</h2>
+<p>The course distribution/package is now <code>langchain-learning</code> / <code>langchain_learning</code>; external <code>import langchain</code> resolves to the installed library. The original user-authored <code>neuron</code> function is preserved in the renamed package; the generated greeting is replaced by the course CLI, without legacy aliases.</p>
+<p>Python 3.14.0, the lockfile, real MCP calls, and persistent local workflows were exercised together. The configured package index is the Tsinghua TUNA mirror: PyPI artifact DNS was unreachable during setup, while this mirror supported the observed locked install. Hashes remain in <code>uv.lock</code>; review index/network policy before intentionally changing resolution. Labs run from the source checkout because lessons, corpora, and entry points are repository resources—not a claimed standalone wheel bundle.</p>
+<h2>Teaching principles</h2>
+<ul>
+<li>Official sources and version-aware examples, not a collection of outdated tutorials.</li>
+<li>Short explanations followed by worked examples, guided practice, independent variations, and failure diagnosis.</li>
+<li>Retrieval practice and delayed review; keep solutions separate from exercise prompts.</li>
+<li>Trace actual execution and measure results; a fluent answer is not proof of correctness.</li>
+<li>Record demonstrated understanding rather than marking topics learned because they were covered.</li>
+</ul>
+<p>Research and execution baseline: <strong>2026-10-12</strong>. Consult <a href="RESOURCES.html#freshness-and-gaps">resource freshness</a>, <a href="docs/VERIFICATION.html">tested versions and blockers</a>, and <a href="reference/TROUBLESHOOTING.html">troubleshooting</a>. Authored content and passing checks do not establish learner mastery.</p></main></body></html>

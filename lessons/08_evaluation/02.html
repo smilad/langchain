@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>08.2 — Design and freeze an evaluation dataset</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>08.2 — Design and freeze an evaluation dataset</h1>
+<h2>Objective and prerequisites</h2>
+<p><a href="../../MISSION.html">course mission</a>: Validate the exact case distribution and keep held-out examples outside development tuning.</p>
+<p>Prerequisite check: Lesson 01; distinguish question, expected evidence and answer rubric.</p>
+<h2>Sources and execution status</h2>
+<p>Primary: <a href="https://docs.langchain.com/langsmith/evaluate-rag-tutorial">RAG evaluation tutorial</a>. Also consult the <a href="https://docs.langchain.com/oss/python/langchain/models">model interface</a> and <a href="https://reference.langchain.com/python/langchain-core/vectorstores/in_memory/InMemoryVectorStore">vector-store reference</a> where relevant. Documentation checked 2026-10-12. Installed baseline: Python 3.14.0, LangChain 1.4.4, core 1.6.9, OpenAI integration 1.7.0, Pydantic 2.14.1. Installation is not execution evidence; consult <a href="../../docs/VERIFICATION.html">verification</a>. Local lexical/check paths need no credentials. Live paths require explicit consent and paid provider access; semantic search additionally requires an embedding model, generation requires structured-output capability, and agentic comparison requires tool calling.</p>
+<h2>Recall before reading</h2>
+<p>Does an expected source ID specify an exact answer? Why does repeated held-out feedback invalidate a comparison? Attempt both questions before consulting the mental model; compare your reasoning afterward rather than copying definitions.</p>
+<h2>Mental model</h2>
+<p>data/evaluations/rag.jsonl contains exactly twenty synthetic cases with stable IDs. Eight are answerable, four unanswerable, four conflicting/outdated, and four adversarial/access cases. Twelve are development and eight held_out. The development allocation is 5/2/2/3 across those categories, and the held-out allocation is 3/2/2/1; each category appears in both sets without pretending tiny counts are statistically balanced. Dataset bytes are pinned by SHA-256 in evaluation.py, preventing accidental edits to the benchmark during tuning.</p>
+<p>Each case carries user identity, question, expected_source_ids, expected_abstained and a semantic_rubric. Source IDs describe evidence that should be retrieved, not pre-generated model answers. Empty expected evidence does not prove retrieved passages are irrelevant; unanswerable personal-detail questions may retrieve a general policy and still require abstention. Conflict cases expect both active notices so a reviewer can detect disagreement. Old revisions stay in ingestion history but must not become retrieval candidates.</p>
+<p>Develop a retrieval change using only dev cases. --freeze-config exclusively creates an experiment record including strategy, k, trial count, model, embedding model, corpus and dataset fingerprints. A held-out run requires --config and exact settings matching that frozen record. For a comparison, register both strategies beforehand. The evaluator generates reports but does not modify prompts, tune thresholds, or regenerate answers in response to grades.</p>
+<p>This is a teaching split, not access-controlled secret benchmark storage; learners can technically open the file. The methodological obligation is to avoid inspecting held-out outcomes while choosing a design. After final review, write down limitations and regressions. If the corpus changes, do not silently reuse the same benchmark/config as if it measured the same system.</p>
+<h2>Data/control flow</h2>
+<p><code>Development questions → one chosen configuration → frozen record → held-out single review → per-case report</code></p>
+<h2>Worked example</h2>
+<p>Run from the repository root after <code>uv sync --locked</code>. This is implemented code/command guidance, <strong>not an observed output</strong>:</p>
+<pre><code class="language-python"># Freeze on development (deterministic demonstration):
+# uv run python labs/08_evaluation/main.py --check --freeze-config .course/dev-config.json
+# uv run python labs/08_evaluation/main.py --check --split held_out \
+#   --config .course/dev-config.json --output .course/retrieval-heldout.json
+</code></pre>
+<p>Use the <a href="../../labs/08_evaluation/README.html">module lab</a> to inspect actual intermediate values. Predict the result first and preserve any disagreement as a diagnostic clue.</p>
+<h2>Guided completion and failure investigation</h2>
+<p>Count category/split pairs without reading held-out question wording. Declare trials and the single changed variable before opening the final outcomes.</p>
+<p>Hint ladder: first name the failed stage and expected input/output; then inspect its evidence or metadata; only after your attempt read the <a href="../../solutions/08_evaluation.html">reasoned solution</a>. Repair the boundary rather than changing unrelated prompts.</p>
+<h2>Independent transfer and exit check</h2>
+<p>Take a changed constraint from the <a href="../../exercises/08_evaluation.html">exercise</a> without copying the worked example. Explain source labels versus semantic rubric, prove a changed config is rejected, and document a final report without tuning on its failures.</p>
+<h2>Delayed review</h2>
+<p>Reuse pre-registration for the Module 15 capstone comparison. Revisit next session and about a week later with a fresh question; those intervals are a practice policy, not evidence of mastery. Use the <a href="../../reference/GLOSSARY.html">glossary</a> and <a href="../../reference/API_MAP.html">API map</a> for focused lookup. Record only actual learner evidence, never progress inferred from reading this lesson.</p></main></body></html>

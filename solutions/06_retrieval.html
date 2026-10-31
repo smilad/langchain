@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 06 solutions — retrieved text must be inspectable</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 06 solutions — retrieved text must be inspectable</h1>
+<p>Attempt <a href="../exercises/06_retrieval.html">the exercises</a> first. These are reasoning guides, not fabricated transcript screenshots. See <a href="../docs/VERIFICATION.html">verification</a> for exercised paths.</p>
+<h2>1. Provenance</h2>
+<p><code>PolicyIndex.refresh()</code> reads policy JSON into actual LangChain <code>Document</code> instances. The source ID groups versions; <code>version</code> distinguishes policy revisions; <code>current</code> selects active records; <code>audience</code> controls eligible identities; <code>trust</code> distinguishes policy authority from an untrusted fixture. The path maps back to the file. <code>content_sha256</code> changes when source text changes. <code>chunk_id</code> is source ID + version + ordinal; neither a low ordinal nor a hash implies reliability. A chunk's page content is the evidence to read, not merely its ID.</p>
+<h2>2. Ranking and misses</h2>
+<p>The local index uses actual TF-IDF cosine relevance, not pretend embeddings. <code>returns</code> and an exact <code>SHIP-42</code> identifier can share useful tokens with sources. A reimbursement paraphrase can miss because synonyms do not share tokens; a lunar-habitat question can yield no evidence. Read the actual ranked passages before declaring either method successful. A learned embedding requires a real embedding request; retrieving k passages is not proof any passage answers the question.</p>
+<h2>3. Splitting</h2>
+<p>The transparent splitter uses character windows, overlap, and a nearby sentence break. Compare the whole condition-bearing passage with fragments at the smaller limit. Too-small chunks can lose the relationship between eligibility and deadline; overlap can preserve it but increases duplication. Choose a chunk size from actual question/evidence behavior, not a universal magic number. Preserve metadata on every resulting chunk.</p>
+<h2>4. Freshness</h2>
+<p>The lab edits a temporary copy from thirty to thirty-seven days and verifies no retrieved current return chunk retains the old text. Refresh hashes file payloads, replaces the document set, and clears vector-store caches on change; it does not append another stale set. Removing a current file leaves the obsolete file excluded because its flag remains false. Duplicate source versions or two current records for the same source are explicit ingestion errors. Do not modify the frozen benchmark to improve a score.</p>
+<h2>5. Access</h2>
+<p><code>authorized_documents()</code> restricts to current records and the caller's authorized audiences before ranking or creating the embedding store. Alice/Bob cannot retrieve finance-only sources; finance can. Unknown IDs fail closed. A public irrelevant hit is not a confidentiality leak, but is still poor relevance. Embedding confidential text first and filtering the final list later would disclose content to an external service before the permission decision.</p>
+<h2>6. Semantic comparison</h2>
+<p>Use explicit consent, key, and embedding-model ID. Compare exact identifiers and paraphrases with the same corpus and k. Report relevance, misses, timing and provider usage availability; hybrid reciprocal-rank fusion changes ranking, not authorization. Without credentials, the valid conclusion is local retrieval/provenance/access verified and learned semantic behavior unverified.</p></main></body></html>

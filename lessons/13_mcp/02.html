@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>13.2 — Connect using the current beta adapter</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>13.2 — Connect using the current beta adapter</h1>
+<p><strong>Mission/objective:</strong> meet <a href="../../MISSION.html">the mission</a> by launching the real local server through the current <code>MCPAdapter</code> API, then using the same adapted tools in a real agent.</p>
+<p><strong>Prerequisites:</strong> <a href="01.html">MCP roles</a>, async context managers, and <code>create_agent</code>. Check: explain why an awaited tool call differs from blocking Python I/O.</p>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/mcp">MCP quickstart/transports</a> and <a href="https://docs.langchain.com/oss/python/langchain/mcp/connections">connections</a>, checked 2026-10-12. Python 3.14.0; LangChain 1.4.4 and FastMCP 4.1.0. The <code>langchain.mcp</code> namespace requires <code>langchain[mcp]&gt;=1.4</code> and is beta; do not substitute older <code>langchain_mcp_adapters</code> examples. Actual run evidence belongs in <a href="../../docs/VERIFICATION.html">verification</a>.</p>
+<h2>Warm-up</h2>
+<p>What should survive tool-result serialization? What could a malicious tool description do? After attempting: retain typed data/provenance; descriptions can influence model selection but cannot be treated as an authorization policy.</p>
+<h2>Worked connection</h2>
+<p>The lab's core API shape is:</p>
+<pre><code class="language-python">from pathlib import Path
+from langchain.mcp import MCPAdapter
+
+async with MCPAdapter(Path(server_script)) as adapter:
+    tools = await adapter.list_tools()
+    # Call a discovered tool, or pass tools to create_agent.
+</code></pre>
+<p>A <code>Path</code> means a local script launched over stdio. A string means an HTTP(S) URL; do not let untrusted configuration choose arbitrary executable paths. The course uses an absolute repository-owned path and its locked interpreter. The server imports the installed course package, so <code>uv sync --locked</code> is required before launching it outside the IDE.</p>
+<p>The adapter's tools carry a client and are reentrant. Closing discovery does not permanently invalidate them: a later invocation can reconnect. The lab keeps the context open around its calls so one session spans discovery and execution.</p>
+<h2>Guided practice</h2>
+<p>Run <code>uv run python labs/13_mcp/main.py --check</code>, inspect tool names and actual artifacts, then predict the live agent's message sequence. With provider consent, run <code>--live</code>; it requires at least one actual MCP ToolMessage rather than labeling a plain model reply as integration proof. No generated answer is fabricated when credentials are absent.</p>
+<h2>Failure and independent variation</h2>
+<p>Replace a <code>Path</code> with a non-URL string in a private copy and identify the client-side configuration failure before changing prompts. Independently inspect quote behavior for sold-out stock using <a href="../../exercises/13_mcp.html">the exercise</a>.</p>
+<h2>Exit and review</h2>
+<p>Explain how the server process, adapter context, and agent loop fit together. Distinguish a beta API warning from a broken call without suppressing it. Revisit imports against <a href="../../reference/API_MAP.html">the API map</a> during the capstone; use <a href="../../solutions/13_mcp.html">solutions</a> only after recording an attempt.</p></main></body></html>

@@ -1,0 +1,11 @@
+{
+  "source_id": "REMOTE",
+  "version": 1,
+  "current": false,
+  "audience": "public",
+  "title": "Remote work",
+  "text": "Remote work is limited to 1 day per week.",
+  "trust": "policy",
+  "provenance": "Synthetic course author; approved policy",
+  "effective_date": "2025-01-01"
+}

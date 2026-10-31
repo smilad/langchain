@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>04.4 — Inspect intermediate messages and classify failures</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>04.4 — Inspect intermediate messages and classify failures</h1>
+<h2>Objective and prerequisites</h2>
+<p>Advance the <a href="../../MISSION.html">mission</a> by producing an evidence-backed diagnosis of a catalog-agent failure. Prerequisite: <a href="03.html">bounded loops</a>. Warm-up: does <code>found=false</code> mean an exception? Can a final answer be factual when no matching tool result exists? Attempt before reading the review corrections.</p>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/agents">Agents: invocation and streaming</a> and <a href="https://docs.langchain.com/oss/python/langchain/messages">messages</a>, consulted 2026-10-12. <a href="../../docs/VERIFICATION.html">Verification</a> records Python 3.14 local checks and actual normal quote-agent node/tool messages. Additional cases remain separate evidence gates. Live traces require compatible private access, explicit consent, and approved charges; use only synthetic data.</p>
+<h2>Mental model: evidence before repair</h2>
+<p>An agent trace is a sequence of state updates, not a collection of final prose. The lab's <code>stream_mode="updates"</code> prints actual node updates through the shared JSON emitter. An AI message may have empty text but meaningful <code>tool_calls</code>. A tool message carries returned content and the matching call ID. Neither should be discarded because it does not resemble a friendly sentence.</p>
+<table>
+<thead>
+<tr>
+<th>Observation</th>
+<th>Category</th>
+<th>Next diagnostic step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strict quantity rejected</td>
+<td>Input/schema</td>
+<td>Inspect arguments and error type</td>
+</tr>
+<tr>
+<td>Valid ID absent</td>
+<td>Domain unavailable</td>
+<td>Confirm <code>found=false</code>; stop inventing</td>
+</tr>
+<tr>
+<td>Quantity exceeds stock</td>
+<td>Business constraint</td>
+<td>Compare quantity to actual stock</td>
+</tr>
+<tr>
+<td>Repeated requests, no finish</td>
+<td>Control flow</td>
+<td>Inspect partial trace and step bound</td>
+</tr>
+<tr>
+<td>HTTP/auth/timeout failure</td>
+<td>Environment/provider</td>
+<td>Inspect safe error; never print key</td>
+</tr>
+<tr>
+<td>Final total conflicts with tool</td>
+<td>Unsupported generation</td>
+<td>Map claim back to integer-cent result</td>
+</tr>
+</tbody>
+</table>
+<h2>Worked investigation</h2>
+<pre><code class="language-text">uv run python labs/04_tools_agents/main.py --check
+uv run python labs/04_tools_agents/main.py --live --case missing
+</code></pre>
+<p>These commands are implemented; the local schema/data path is exercised in <a href="../../docs/VERIFICATION.html">verification</a>. The live command tests how the real model handles a missing item and remains unverified without its prerequisites. Wording is variable; acceptance is evidence-grounded unavailability, not a particular sentence.</p>
+<p>Make a three-column trace worksheet: model-requested arguments; actual returned fields; final claims. For every numerical claim, point to <code>unit_price_cents</code>, <code>quantity</code> and <code>total_cents</code>. If the final response includes tax, delivery or a purchase receipt, those claims are outside the tool contract even when the subtotal is correct.</p>
+<h2>Complete and vary</h2>
+<p>Guided completion: leave the failure-category column blank for a negative quantity and an absent ID, then fill it from the inspected boundary. Independent variation: change only the prompt to ask for 4 desk lamps. Explain why quantity four passes the 1–20 schema but fails stock three. Use the <a href="../../exercises/04_tools_agents.html">exercise</a>, then compare reasoning with its separate solution.</p>
+<p>Do not hide an unsupported answer by overwriting it with canned success text. Preserve failures and record which boundary held. Do not upload even these traces to hosted tooling without understanding consent and retention.</p>
+<h2>Exit and review</h2>
+<p>Pass the Module 04 gate with successful lookup, unavailable item, invalid tool input and bounded run; identify requested versus executed operations. A missing live configuration is an unverified live gate, not learner failure or fake success. Corrections: unavailability is a valid result; a final assertion alone is not evidence. Review failure categories in Module 08, and context leakage in Module 05. Reference: <a href="../../reference/TROUBLESHOOTING.html">troubleshooting</a>. Focused follow-up: which layer should change when an answer invents shipping costs despite a correct quote tool?</p></main></body></html>

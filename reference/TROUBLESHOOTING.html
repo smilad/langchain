@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Troubleshooting the course</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Troubleshooting the course</h1>
+<p>Start with the failing boundary and observed values, not random prompt changes. Use <a href="API_MAP.html">the API map</a> to locate a component and <a href="../docs/VERIFICATION.html">the verification report</a> to separate exercised paths from unverified live behavior.</p>
+<h2>Observed environment issues during implementation</h2>
+<h3>Package download host does not resolve</h3>
+<p>The initial PyPI-backed <code>uv lock</code> timed out fetching wheel metadata from <code>files.pythonhosted.org</code>; an IPv4 header diagnostic also timed out during DNS resolution. This was a connectivity problem, not evidence of an incompatible LangChain dependency graph.</p>
+<p>The Tsinghua TUNA mirror was reachable. Resolution and installation succeeded there; <code>pyproject.toml</code> declares that default index and <code>uv.lock</code> records its artifact URLs and hashes. Normal course commands therefore use <code>uv sync --locked</code> without silently changing indexes on every run.</p>
+<p>If your network can use PyPI and you prefer it, deliberately re-resolve with your chosen index configuration, review the resulting versions/hash sources, then re-exercise the course. Do not hand-edit lockfile URLs or disable certificate verification. Choosing a new index can change the environment; it is not a pass/fail workaround for application tests.</p>
+<h3>Provider configuration is absent</h3>
+<p>No OpenAI, Anthropic, Google, or LangSmith credential was configured in the implementation session; no model ID was selected and no local Ollama executable was installed. Model-free local paths remain meaningful: schemas, catalog tools, retrieval permissions, actual graphs, persistence, local action records, HTTP, and MCP can be investigated without claiming generated-model evidence.</p>
+<p>For a live run, configure <code>.env</code> from <code>.env.example</code>, choose an accessible model and budget, and set <code>COURSE_ALLOW_LIVE=1</code> only after consent. Semantic retrieval additionally needs <code>COURSE_EMBEDDING_MODEL</code>. <code>--live</code> must fail explicitly if required configuration is missing; never add a fake answer or silent fallback to make it appear successful.</p>
+<h3>Gateway generation works but JSON-schema output fails</h3>
+<p>The actual OpenAI-Codex gateway returned natural text or an invalid enum on JSON-schema requests; tool/function-calling paths succeeded. A credential and successful text response do not establish every capability. Keep validation strict and select a compatible endpoint/model privately; do not repair output into fake success. SDK parsing may raise before an <code>include_raw</code> envelope exists. The HTTP service reports generated-output failures as <code>502 / ModelOutputError</code>, not malformed caller input. Embeddings separately need a real accessible embedding model.</p>
+<h3>Advisor review is waived</h3>
+<p>The user explicitly skipped advisor review and disabled its session-only setting. No sign-off is claimed and no replacement review is required.</p>
+<h2>Boundary-oriented diagnosis for learner experiments</h2>
+<p>The following are investigative procedures, not claims that every listed failure occurred during implementation.</p>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Inspect first</th>
+<th>Corrective action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>import langchain</code> finds course code</td>
+<td><code>langchain.__file__</code>, interpreter, project distribution name</td>
+<td>The course is <code>langchain_learning</code>; synchronize the locked environment and select the same IDE interpreter.</td>
+</tr>
+<tr>
+<td>Live request exits before contacting a provider</td>
+<td>Key/model/consent booleans from preflight</td>
+<td>Supply missing configuration privately; do not print keys or bypass consent.</td>
+</tr>
+<tr>
+<td>Authentication/404/capability error from provider</td>
+<td>Endpoint/model access and provider error class</td>
+<td>Verify the account/model and documented feature support. Schema prompting does not create missing native capabilities.</td>
+</tr>
+<tr>
+<td>Structured output parses but is false</td>
+<td>Source/input evidence and semantic rubric</td>
+<td>Separate shape validation from factual support; abstain or correct the evidence/prompt based on a diagnosed cause.</td>
+</tr>
+<tr>
+<td>Agent does not use a tool</td>
+<td>Tool description/schema, requested calls, actual result messages</td>
+<td>Inspect the real conversation/trace; a tool-call request is not execution proof.</td>
+</tr>
+<tr>
+<td>Quote total is wrong or quantity fails</td>
+<td>Catalog stock and integer-cent arithmetic</td>
+<td>Fix the input or deterministic calculation; avoid arbitrary expression evaluation.</td>
+</tr>
+<tr>
+<td>Retrieval misses a paraphrase</td>
+<td>Actual retrieved passages, lexical versus semantic strategy</td>
+<td>Measure the miss; configure real semantic embeddings for that comparison rather than renaming lexical vectors “semantic.”</td>
+</tr>
+<tr>
+<td>Old document appears</td>
+<td>Source ID/current/version metadata and index rebuild</td>
+<td>Rebuild from the changed corpus; do not leave old duplicate chunks active.</td>
+</tr>
+<tr>
+<td>Citation exists but does not support claim</td>
+<td>Claim-to-passage mapping</td>
+<td>Review semantic support, not only source-ID membership.</td>
+</tr>
+<tr>
+<td>Resume cannot find pending state</td>
+<td>Same state directory, thread ID, stored owner, checkpoint status</td>
+<td>Select the original owned thread; in-memory checkpoints cannot recover across processes.</td>
+</tr>
+<tr>
+<td>Another user can inspect/resume</td>
+<td>Authentication binding and persisted thread ownership</td>
+<td>Deny at execution/data boundaries, independently of model instructions.</td>
+</tr>
+<tr>
+<td>Repeated decision conflicts</td>
+<td>Existing persisted terminal decision/action</td>
+<td>Matching retry is idempotent; a different terminal decision is not a new request. Use a fresh thread for a new proposal.</td>
+</tr>
+<tr>
+<td>Client disconnects/deadline expires</td>
+<td>Server request outcome and persisted thread/action</td>
+<td>Cancellation may occur after commit. Inspect before retry; do not assume rollback or external exactly-once delivery.</td>
+</tr>
+<tr>
+<td>MCP call fails</td>
+<td>Script path, process stderr, adapter lifecycle and transport</td>
+<td>Fix the actual connection/tool schema; a connected server is not automatically trusted.</td>
+</tr>
+<tr>
+<td>Evaluation looks too good</td>
+<td>Dataset split, frozen configuration, per-case checks and human support review</td>
+<td>Remove leakage and weak citation-only scoring; disclose small-sample/stochastic limits.</td>
+</tr>
+</tbody>
+</table>
+<h2>Safe resets</h2>
+<p>Use a fresh <code>COURSE_STATE_DIR</code> for disposable experiments. Stop the server/workflow before removing any local database directory. Keep synthetic fixture sources separate from generated state. Do not delete a persistence directory to hide a failed replay/ownership investigation; capture evidence and diagnose the cause first.</p>
+<p><strong>Sources:</strong> <a href="https://docs.astral.sh/uv/concepts/indexes/">uv indexes</a>, <a href="https://docs.langchain.com/oss/python/langgraph/interrupts">interrupts</a>, <a href="https://docs.langchain.com/langsmith/evaluation-concepts">evaluation concepts</a>.</p></main></body></html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>02.3 — Render inputs explicitly before calling the model</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>02.3 — Render inputs explicitly before calling the model</h1>
+<p><strong>Mission/objective:</strong> Advance the <a href="../../MISSION.html">mission</a> by rendering a prompt and inspecting the separation between instructions and user data. Prerequisite: <a href="02.html">02.2</a>; distinguish a human message from a tool result.</p>
+<p><strong>Sources/version:</strong> <a href="https://reference.langchain.com/python/langchain-core/prompts/chat/ChatPromptTemplate">ChatPromptTemplate reference</a>, <a href="https://docs.langchain.com/oss/python/langchain/messages">messages</a>. Checked 2026-10-12; installed authoring snapshot Python 3.14.0/langchain-core 1.6.9. Exact resolution is in <code>uv.lock</code>; actual execution evidence is in <a href="../../docs/VERIFICATION.html">verification</a>. Rendering is local; only the subsequent model invocation can incur cost.</p>
+<h2>Retrieval warm-up</h2>
+<p>What is the model's input context in the baseline? Does a role make untrusted input safe? Try before <a href="../../solutions/02_models_messages.html">feedback</a>.</p>
+<h2>Mental model and flow</h2>
+<p>A template is a deterministic mapping from named values to a prompt value. It is not a model response. In this lab, a fixed system instruction defines the classifier and a human placeholder contains the learner's text. We inspect this intermediate representation before transport so missing variables cannot masquerade as model errors.</p>
+<pre><code class="language-python">prompt = ChatPromptTemplate.from_messages([
+    (&quot;system&quot;, instructions), (&quot;human&quot;, &quot;{text}&quot;),
+])
+rendered = prompt.invoke({&quot;text&quot;: &quot;I was charged twice.&quot;})
+messages = rendered.to_messages()
+</code></pre>
+<p>The boundary is <code>dict[str, str] → ChatPromptValue → list[BaseMessage] → model</code>. <code>invoke</code> on a template renders; <code>invoke</code> on a model sends a request. Same interface name, different component responsibility. Naming every stage prevents accidental paid calls while debugging.</p>
+<h2>Worked example and fading</h2>
+<p>Run the <a href="../../labs/02_models_messages/main.py">check</a>. It passes a user string containing literal braces <code>{quantity}</code> and an instruction-like phrase. Values inserted into the <code>{text}</code> slot are not recursively formatted as template syntax, so those braces remain user data. This prevents a formatting error, not prompt injection. The lab also invokes the template with <code>wrong_name</code> and catches the missing-variable KeyError before any remote client exists.</p>
+<p>Complete a guided template with a second named <code>context</code> variable, render it locally, and inspect where the context is placed. Do not concatenate secrets or mix application policy into a user-provided string. If a history placeholder is introduced later, validate which messages are admitted rather than accepting arbitrary roles from untrusted users.</p>
+<h2>Failure investigation and independent variation</h2>
+<p>Predict whether changing <code>{text}</code> to <code>{request}</code> without migrating callers fails during template rendering or provider transport. Identify the actual required variable list rather than tweaking model temperature. Attempt the changed-label rubric and missing-input tasks in the <a href="../../exercises/02_models_messages.html">exercise</a>.</p>
+<h2>Exit and review</h2>
+<p>Show rendered roles and values, deliberately modify one instruction, and diagnose a missing variable. No live execution is needed for these deterministic boundaries; classification quality remains a separate pending gate. Next session render an unfamiliar prompt without a model, then revisit LCEL stage contracts in Module 03. Reference: <a href="../../reference/API_MAP.html">API map</a>, <a href="../../solutions/02_models_messages.html">solution</a>. Ask which named value should satisfy a missing slot and why it belongs in that role.</p></main></body></html>

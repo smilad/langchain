@@ -1,0 +1,11 @@
+{
+  "source_id": "SHIPPING",
+  "version": 1,
+  "current": true,
+  "audience": "public",
+  "title": "Shipping",
+  "text": "Standard shipping takes 3 to 5 business days after dispatch. Order SHIP-42 qualifies for free standard shipping. Express shipping takes 1 business day after dispatch.",
+  "trust": "policy",
+  "provenance": "Synthetic course author; approved policy",
+  "effective_date": "2026-10-01"
+}

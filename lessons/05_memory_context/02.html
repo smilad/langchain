@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>05.2 — Store one preference explicitly across threads</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../README.html">Lesson index</a></nav><h1>05.2 — Store one preference explicitly across threads</h1>
+<h2>Objective and prerequisites</h2>
+<p>Advance the <a href="../../MISSION.html">mission</a> by storing a synthetic, consented preference separately from conversation history. Prerequisite: <a href="01.html">checkpoint state</a>. Warm-up: which key scopes a conversation? Must every message become a long-term memory? Attempt before the exit corrections.</p>
+<p><strong>Sources/version:</strong> <a href="https://docs.langchain.com/oss/python/langchain/long-term-memory">Long-term memory</a>, <a href="https://docs.langchain.com/oss/python/langgraph/stores">stores</a>, and <a href="https://docs.langchain.com/oss/python/langchain/middleware/custom">custom middleware</a>, consulted 2026-10-12. <a href="../../docs/VERIFICATION.html">Verification</a> records store operations, actual preference-context/model runs, and locked versions. Successful execution is not a general personalization score; live use requires private compatible access, consent, and charges.</p>
+<h2>Mental model: scope and durability are separate</h2>
+<p>The lab's checkpointer stores <strong>thread state</strong>. Its <code>InMemoryStore</code> stores <strong>user-scoped documents across threads</strong>. Both are in memory, so neither survives process exit. Calling the latter “long-term memory” describes the cross-conversation access pattern, not proof of durable storage.</p>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th>Address</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Checkpointer</td>
+<td><code>thread_id</code></td>
+<td>Message history and selected-context snapshots</td>
+</tr>
+<tr>
+<td>Preference store</td>
+<td><code>("preferences", user_id)</code>, key <code>response_style</code></td>
+<td>Exactly <code>{"style": "short"}</code> or <code>{"style": "detailed"}</code></td>
+</tr>
+<tr>
+<td>Invocation context</td>
+<td><code>SessionContext(user_id)</code></td>
+<td>Caller-selected identity for this invocation</td>
+</tr>
+</tbody>
+</table>
+<p>We retain one explicit response-style preference, not arbitrary user text, inferred traits, payment information or a shopping budget. <code>save_preference</code> requires consent and checks its allowed values. It is application-controlled, not a model-exposed write tool. Thus the agent cannot promote any sentence into permanent memory merely by choosing a tool.</p>
+<h2>Worked store operation</h2>
+<pre><code class="language-python"># See executable helpers in labs/05_memory_context/main.py.
+store.put((&quot;preferences&quot;, &quot;alice&quot;), &quot;response_style&quot;, {&quot;style&quot;: &quot;short&quot;})
+item = store.get((&quot;preferences&quot;, &quot;alice&quot;), &quot;response_style&quot;)
+assert item.value == {&quot;style&quot;: &quot;short&quot;}
+assert store.get((&quot;preferences&quot;, &quot;bob&quot;), &quot;response_style&quot;) is None
+</code></pre>
+<p>The actual lab uses validated helper calls rather than trusting arbitrary namespaces. Alice's new thread can access her preference but not her previous thread's messages. Bob receives an empty preference selection. In <code>--live</code>, <code>@dynamic_prompt</code> reads the user's exact namespace and emits the system context actually supplied. This is a narrow personalization hook, not a substitute for authentication.</p>
+<h2>Complete, vary, diagnose</h2>
+<p>Guided completion: fill in the namespace's user component using trusted invocation context, not a user ID suggested in model text. Independent variation: persist Bob's distinct <code>detailed</code> preference with explicit consent and compare two new threads. Follow the <a href="../../exercises/05_memory_context.html">exercise</a>.</p>
+<p>Failure investigation: delete Alice's store entry. The next lookup is empty, but an earlier checkpoint still contains the preference selected then. Deleting a store document does not erase all historical copies, traces or provider logs. The lab exposes this limitation instead of reporting fictional complete erasure.</p>
+<h2>Exit and review</h2>
+<p>Demonstrate a preference shared across one user's threads but absent for another user. Explain namespace, document key and durability. Corrections: <code>thread_id</code> scopes conversation; only a justified, consented minimal fact should be retained. Revisit this boundary in Modules 10, 11 and 14. Reference: <a href="../../reference/API_MAP.html">API map</a>. Focused follow-up: what additional storage and deletion work would be needed to promise restart persistence and comprehensive erasure?</p></main></body></html>

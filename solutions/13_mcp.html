@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 13 solutions — protocol success is observable</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../lessons/README.html">Lesson index</a></nav><h1>Module 13 solutions — protocol success is observable</h1>
+<p>Attempt <a href="../exercises/13_mcp.html">the exercises</a> first. See <a href="../labs/13_mcp/README.html">the runbook</a> and <a href="../docs/VERIFICATION.html">actual verification</a>.</p>
+<h2>1. Roles and API scope</h2>
+<p>The application uses <code>MCPAdapter</code> to discover/adapt server tools. The client sends protocol requests through the transport; the FastMCP server validates arguments and runs catalog functions. The broader protocol supports additional capability types, but this course's current beta LangChain wrapper lesson exercises tools. Keep protocol concepts distinct from this integration's supported interface.</p>
+<h2>2. Actual results</h2>
+<p>The normal check launches the real stdio server, discovers <code>catalog_lookup</code>/<code>catalog_quote</code>, and invokes them. Notebook is 1,299 USD cents per unit; two units total 2,598 cents. A missing ID reports <code>found: false</code>. Quantity zero produces an error <code>ToolMessage</code>, not a made-up quote. The structured result is in the tool message's <code>artifact['structured_content']</code>; inspect status and content rather than assuming every string is successful output.</p>
+<h2>3. Domain versus transport errors</h2>
+<p>A missing item is a successfully executed domain lookup with a negative finding. An unavailable transport cannot establish any catalog finding. Neither authorizes inventing stock or switching to an unreviewed alternate tool. Integer cents avoid binary-floating currency surprises; stock and quantity validation belong in the actual catalog operation, not just its natural-language docstring.</p>
+<h2>4. Lifecycle</h2>
+<p>The unavailable scenario performs a real connection attempt and stops with the observed exception category. The disconnect scenario calls a real server, exits the direct client's context, and then observes failure outside that context. Adapted tools can reconnect on use, so direct-client disconnected semantics must not be applied blindly to every wrapper. Context exit owns cleanup; the explicit experiments do not leave a server to be polled indefinitely.</p>
+<h2>5. Trust</h2>
+<p>Discovery advertises capability, not authorization. Only reviewed read-only catalog tools are exposed. This local subprocess demo does not certify remote authentication or arbitrary server safety. Treat server descriptions/results as untrusted inputs to the model; restrict configured targets outside its output. An explicitly reviewed script path is executable code and deserves review like any subprocess entry point.</p>
+<h2>6. Model integration</h2>
+<p>The live agent uses real adapted tools under bounded model/tool calls. Inspect actual <code>ToolMessage</code> objects and compare the final answer with structured catalog results. Real local protocol smoke can pass without any model call; the agent's tool selection and prose quality remain a separate live gate. The <code>LangChainBetaWarning</code> is expected and accurately documented, not suppressed.</p></main></body></html>

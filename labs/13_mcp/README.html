@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 13 lab — Actual FastMCP stdio integration</title><style>
+:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--bd:#d1d9e0;--code:#f6f8fa;--a:#0969da}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9198a1;--bd:#3d444d;--code:#161b22;--a:#4493f8}}
+body{background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,system-ui,sans-serif;margin:0}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:2rem;border-bottom:1px solid var(--bd);padding-bottom:.3em}
+h2{margin-top:2rem;border-bottom:1px solid var(--bd);padding-bottom:.2em}
+a{color:var(--a)}
+code{background:var(--code);padding:.15em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:1rem;border-radius:8px;overflow-x:auto}
+pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:.4rem .7rem;text-align:left}
+th{background:var(--code)}
+blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--bd);color:var(--mut)}
+nav{font-size:.9rem;color:var(--mut);margin-bottom:1rem}
+</style></head>
+<body><main><nav><a href="../../lessons/README.html">Lesson index</a></nav><h1>Module 13 lab — Actual FastMCP stdio integration</h1>
+<h2>Setup and commands</h2>
+<p>Use the locked environment, not a tutorial's older adapter imports:</p>
+<pre><code class="language-sh">uv sync --locked
+uv run python labs/13_mcp/main.py --check
+uv run python labs/13_mcp/main.py --check --scenario unavailable
+uv run python labs/13_mcp/main.py --check --scenario disconnect
+</code></pre>
+<p>Installed baseline: Python 3.14.0, <code>langchain[mcp]</code> 1.4.4 and FastMCP 4.1.0. <a href="https://docs.langchain.com/oss/python/langchain/mcp">MCPAdapter documentation</a> calls <code>langchain.mcp</code> beta; its warning is intentional, not suppressed. Exact versions/hashes are in <a href="../../uv.lock">uv.lock</a>, actual execution evidence in <a href="../../docs/VERIFICATION.html">verification</a>.</p>
+<p>The real server entrypoint is:</p>
+<pre><code class="language-sh">uv run python -m langchain_learning.mcp_server
+</code></pre>
+<p>That command waits for MCP protocol input. It is not an HTTP endpoint and does not print a catalog as ordinary CLI prose. Usually let the adapter launch the repository-owned script automatically. All server stdout belongs to stdio protocol; use stderr for diagnostics. The server requires no model or credentials.</p>
+<h2>Normal model-free path</h2>
+<p><code>MCPAdapter(Path(...))</code> starts an actual local subprocess and discovers exactly <code>catalog_lookup</code> and <code>catalog_quote</code>. The lab invokes the adapted LangChain tools with real tool-call IDs, inspects ToolMessages and structured artifacts, and checks:</p>
+<ul>
+<li><code>notebook</code> resolves from actual <code>data/catalog.json</code>;</li>
+<li><code>absent</code> is an explicit missing-item result, not an invented record;</li>
+<li>two notebooks quote 2598 USD cents from the fixture;</li>
+<li>zero quantity produces a server-reported error status.</li>
+</ul>
+<p>No in-memory server, fake tool, or generated model answer substitutes for this path. Read-only annotations declare intent; only the actual registered functions enforce capability. Quantity/domain validation also protects direct Python callers.</p>
+<h2>Actual agent path</h2>
+<p>With privately configured key/model and explicit consent:</p>
+<pre><code class="language-sh">uv run python labs/13_mcp/main.py --live
+</code></pre>
+<p>The live agent uses discovered MCP tools, is bounded to four model/three tool calls plus a recursion limit, and must produce at least one actual MCP ToolMessage. Inspect requested arguments, result artifacts, and final prose; a connected tool is not automatically trusted. Prices/stock remain catalog facts, not model guesses. Provider usage/cost and failures are genuine live prerequisites; no remote unreviewed tools or production credentials are needed.</p>
+<h2>Lifecycle and failure cases</h2>
+<p><code>unavailable</code> attempts a real localhost connection at port 1 with a five-second timeout and reports the exception category. If that port unexpectedly hosts MCP, choose an unused endpoint before drawing conclusions. <code>disconnect</code> starts the actual stdio server with a direct FastMCP Client, calls lookup, exits its context, verifies disconnection, and demonstrates a failing direct call afterward. This differs from adapted tools: they can intentionally reconnect after discovery exits.</p>
+<p>Normal mode releases its adapter context after all calls; disconnect mode releases a direct client context. Both exercise real transport cleanup. Neither asserts arbitrary remote-server process shutdown. Tools expose synthetic data only; no persistent state/reset is required. If an interpreter/import fails, run <code>uv sync --locked</code> and inspect the real server stderr rather than hiding it behind a model fallback.</p>
+<p>See <a href="../../lessons/13_mcp/01.html">lessons</a>, <a href="../../exercises/13_mcp.html">exercise</a>, and <a href="../../solutions/13_mcp.html">solutions</a>.</p></main></body></html>
